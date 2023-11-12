@@ -11,11 +11,6 @@ uci commit system
 uci set network.lan.ipaddr="192.168.1.1"
 uci commit network
 
-#root_password="bluedragon12"
-#if [ -n "$root_password" ]; then
-#  (echo "$root_password"; sleep 1; echo "$root_password") | passwd > /dev/null
-#fi
-
 #configure wan interface
 uci set network.wan=interface 
 uci set network.wan.proto='modemmanager'
@@ -41,14 +36,10 @@ uci commit dhcp
 uci set network.lan.delegate="0"
 uci commit network
 /etc/init.d/network restart
-#/etc/init.d/odhcpd restart
-#/etc/init.d/odhcpd disable
 
 #configure WLAN
 uci set wireless.@wifi-device[0].disabled='0'
-#uci set wireless.@wifi-iface[0].encryption='psk2'
 uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
-#uci set wireless.@wifi-iface[0].key='bluedragon12'
 uci set wireless.@wifi-device[0].country='ID'
 uci set wireless.radio0.channel='161'
 uci commit wireless
@@ -58,15 +49,6 @@ uci commit wireless
 sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
 echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic" >> /etc/opkg/customfeeds.conf
 echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/$(cat /etc/os-release | grep OPENWRT_ARCH | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
-
-cat <<'EOF' >/etc/opkg/distfeeds.conf
-src/gz immortalwrt_core https://downloads.immortalwrt.org/releases/21.02.7/targets/bcm27xx/bcm2711/packages
-src/gz immortalwrt_base https://downloads.immortalwrt.org/releases/21.02.7/packages/aarch64_cortex-a72/base
-src/gz immortalwrt_luci https://downloads.immortalwrt.org/releases/21.02.7/packages/aarch64_cortex-a72/luci
-src/gz immortalwrt_packages https://downloads.immortalwrt.org/releases/21.02.7/packages/aarch64_cortex-a72/packages
-src/gz immortalwrt_routing https://downloads.immortalwrt.org/releases/21.02.7/packages/aarch64_cortex-a72/routing
-src/gz immortalwrt_telephony https://downloads.immortalwrt.org/releases/21.02.7/packages/aarch64_cortex-a72/telephony
-EOF
 
 # remove huawei me909s usb-modeswitch
 sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
@@ -181,7 +163,6 @@ chmod +x /usr/bin/mount_hdd
 #uci set hd-idle.@hd-idle[0].enabled='1'
 
 sed -i '/exit 0/i /usr/bin/patchoc.sh' /etc/rc.local
-
 sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
 sed -i 's/\[ -n "$FAILSAFE" \] && cat \/etc\/banner.failsafe/& || \/usr\/bin\/neofetch/' /etc/profile
 
@@ -189,6 +170,8 @@ echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
 echo '0 12 * * * /sbin/sync_time.sh beacon.liveon.id' >> /etc/crontabs/root
 /etc/init.d/cron restart
 
+opkg install /root/luci-app-tinyfm_2.5_all.ipk
+rm /root/luci-app-tinyfm_2.5_all.ipk
 
 opkg install /root/luci-app-openclash_0.45.112-beta_all.ipk --force-reinstall
 rm /root/luci-app-openclash_0.45.112-beta_all.ipk
@@ -199,9 +182,6 @@ rm /root/luci-app-modeminfo_0.1.0-2_all.ipk
 
 opkg install /root/luci-app-oled_1.0_all.ipk
 rm /root/luci-app-oled_1.0_all.ipk
-
-opkg install /root/luci-app-adguardhome_1.8-20221120_all.ipk
-rm /root/luci-app-adguardhome_1.8-20221120_all.ipk
 
 tar -xzvf /root/speedtest.tgz -C /usr/bin/
 chmod +x /usr/bin/speedtest
@@ -218,175 +198,7 @@ uci set nlbwmon.@nlbwmon[0].commit_interval='3h'
 uci set nlbwmon.@nlbwmon[0].refresh_interval='60s'
 uci commit nlbwmon
 
-cat <<'EOF' >/etc/vnstat.conf
-# vnStat 1.18 config file
-##
-
-# default interface
-Interface "eth0"
-
-# location of the database directory
-DatabaseDir "/etc/vnstat"
-
-# locale (LC_ALL) ("-" = use system locale)
-Locale "-"
-
-# on which day should months change
-MonthRotate 1
-
-# date output formats for -d, -m, -t and -w
-# see 'man date' for control codes
-DayFormat    "%x"
-MonthFormat  "%b '%y"
-TopFormat    "%x"
-
-# characters used for visuals
-RXCharacter       "%"
-TXCharacter       ":"
-RXHourCharacter   "r"
-TXHourCharacter   "t"
-
-# how units are prefixed when traffic is shown
-# 0 = IEC standard prefixes (KiB/MiB/GiB/TiB)
-# 1 = old style binary prefixes (KB/MB/GB/TB)
-UnitMode 0
-
-# how units are prefixed when traffic rate is shown
-# 0 = IEC binary prefixes (Kibit/s...)
-# 1 = SI decimal prefixes (kbit/s...)
-RateUnitMode 1
-
-# output style
-# 0 = minimal & narrow, 1 = bar column visible
-# 2 = same as 1 except rate in summary and weekly
-# 3 = rate column visible
-OutputStyle 3
-
-# used rate unit (0 = bytes, 1 = bits)
-RateUnit 1
-
-# number of decimals to use in outputs
-DefaultDecimals 2
-HourlyDecimals 1
-
-# spacer for separating hourly sections (0 = none, 1 = '|', 2 = '][', 3 = '[ ]')
-HourlySectionStyle 2
-
-# try to detect interface maximum bandwidth, 0 = disable feature
-# MaxBandwidth will be used as fallback value when enabled
-BandwidthDetection 1
-
-# maximum bandwidth (Mbit) for all interfaces, 0 = disable feature
-# (unless interface specific limit is given)
-MaxBandwidth 1000
-
-# interface specific limits
-#  example 8Mbit limit for 'ethnone':
-MaxBWethnone 8
-
-# how many seconds should sampling for -tr take by default
-Sampletime 5
-
-# default query mode
-# 0 = normal, 1 = days, 2 = months, 3 = top10
-# 4 = exportdb, 5 = short, 6 = weeks, 7 = hours
-QueryMode 0
-
-# filesystem disk space check (1 = enabled, 0 = disabled)
-CheckDiskSpace 1
-
-# database file locking (1 = enabled, 0 = disabled)
-UseFileLocking 1
-
-# how much the boot time can variate between updates (seconds)
-BootVariation 15
-
-# log days without traffic to daily list (1 = enabled, 0 = disabled)
-TrafficlessDays 1
-
-
-# vnstatd
-##
-
-# switch to given user when started as root (leave empty to disable)
-DaemonUser ""
-
-# switch to given user when started as root (leave empty to disable)
-DaemonGroup ""
-
-# how many minutes to wait during daemon startup for system clock to
-# sync time if most recent database update appears to be in the future
-TimeSyncWait 5
-
-# how often (in seconds) interface data is updated
-UpdateInterval 60
-
-# how often (in seconds) interface status changes are checked
-PollInterval 30
-
-# how often (in minutes) data is saved to file
-SaveInterval 30
-
-# how often (in minutes) data is saved when all interface are offline
-OfflineSaveInterval 30
-
-# how often (in minutes) bandwidth detection is redone when
-# BandwidthDetection is enabled (0 = disabled)
-BandwidthDetectionInterval 5
-
-# force data save when interface status changes (1 = enabled, 0 = disabled)
-SaveOnStatusChange 1
-
-# enable / disable logging (0 = disabled, 1 = logfile, 2 = syslog)
-UseLogging 2
-
-# create dirs if needed (1 = enabled, 0 = disabled)
-CreateDirs 1
-
-# update ownership of files if needed (1 = enabled, 0 = disabled)
-UpdateFileOwner 1
-
-# file used for logging if UseLogging is set to 1
-LogFile "/var/log/vnstat/vnstat.log"
-
-# file used as daemon pid / lock file
-PidFile "/var/run/vnstat/vnstat.pid"
-
-
-# vnstati
-##
-
-# title timestamp format
-HeaderFormat "%x %H:%M"
-
-# show hours with rate (1 = enabled, 0 = disabled)
-HourlyRate 1
-
-# show rate in summary (1 = enabled, 0 = disabled)
-SummaryRate 1
-
-# layout of summary (1 = with monthly, 0 = without monthly)
-SummaryLayout 1
-
-# transparent background (1 = enabled, 0 = disabled)
-TransparentBg 0
-
-# image colors
-CBackground     "FFFFFF"
-CEdge           "AEAEAE"
-CHeader         "606060"
-CHeaderTitle    "FFFFFF"
-CHeaderDate     "FFFFFF"
-CText           "000000"
-CLine           "B0B0B0"
-CLineL          "-"
-CRx             "92CF00"
-CTx             "606060"
-CRxD            "-"
-CTxD            "-"
-EOF
-
-chmod +x /etc/vnstat.conf
+sed -i "s/;DatabaseDir "/var/lib/vnstat"/DatabaseDir "/etc/vnstat"/" /etc/config/vnstat
 
 cat <<'EOF' >/etc/config/vnstat
 config vnstat
