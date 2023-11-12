@@ -71,7 +71,7 @@ jobs:
       - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}
         id: download
         run: |
-          wget $DOWNLOAD_BASE/releases/$VERSION/targets/bcm27xx/bcm2711/$VENDOR-imagebuilder-$VERSION-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+          wget $DOWNLOAD_BASE/releases/$BRANCH/targets/bcm27xx/bcm2711/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64.tar.xz
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
           echo "status=success" >> $GITHUB_OUTPUT
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-imagebuilder-$VERSION-bcm27xx-bcm2711.Linux-x86_64/
