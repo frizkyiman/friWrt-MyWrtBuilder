@@ -61,9 +61,8 @@ jobs:
         run: |
           echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-          echo "ROOTDIR= ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64" >> $GITHUB_ENV
-          echo "BINDIR= ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711" >> $GITHUB_ENV
-          echo "URL= releases/${{ env.BRANCH }}/targets/bcm27xx/bcm2711/${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64.tar.xz" >> $GITHUB_ENV
+          echo "ROOTDIR= ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/" >> $GITHUB_ENV
+          echo "BINDIR= ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/" >> $GITHUB_ENV
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
@@ -74,10 +73,10 @@ jobs:
       - name: Download Image Builder ${{ inputs.source_base }}-${{ env.BRANCH }}
         id: download
         run: |
-          wget -q $DOWNLOAD_BASE/$URL
+          wget -q $DOWNLOAD_BASE/releases/$VERSION/targets/bcm27xx/bcm2711/$VENDOR-imagebuilder-$VERSION-bcm27xx-bcm2711.Linux-x86_64.tar.xz
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
           echo "status=success" >> $GITHUB_OUTPUT
-          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$ROOTDIR/
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$ROOTDIR
       
       - name: Download External Packages
         working-directory: $ROOTDIR
