@@ -36,11 +36,11 @@ on:
           - false
 
 env:
-  DOWNLOAD_URL: https://downloads.${{ inputs.source_base }}.org/releases/$BRANCH/targets/bcm27xx/bcm2711/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+  DOWNLOAD_URL: https://downloads.${{ inputs.source_base }}.org/releases/${{ inputs.source_branch }}/targets/bcm27xx/bcm2711/${{ inputs.source_base }}-imagebuilder-${{ inputs.source_branch }}-bcm27xx-bcm2711.Linux-x86_64.tar.xz
   BASE: ${{ inputs.source_base }}
   BRANCH: ${{ inputs.source_branch }}
-  ROOTDIR: $BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64
-  BINDIR: $BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711
+  ROOTDIR: ${{ inputs.source_base }}-imagebuilder-${{ inputs.source_branch }}-bcm27xx-bcm2711.Linux-x86_64
+  BINDIR: ${{ inputs.source_base }}-imagebuilder-${{ inputs.source_branch }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711
   UPLOAD_ARTIFACTS: false
   TZ: Asia/Jakarta
 
