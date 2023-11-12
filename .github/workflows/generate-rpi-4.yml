@@ -39,6 +39,8 @@ env:
   DOWNLOAD_BASE: https://downloads.${{ inputs.source_base }}.org
   BASE: ${{ inputs.source_base }}
   BRANCH: ${{ inputs.source_branch }}
+  BUILD_SH: build-${{ inputs.source_base }}.sh
+  PATCH_SH: scripts/builder-patch-${{ inputs.source_base }}.sh
   UPLOAD_ARTIFACTS: false
   TZ: Asia/Jakarta
 
@@ -84,7 +86,7 @@ jobs:
       - name: Run Patch and DIY Scripts
         working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         run: |
-          bash scripts/builder-patch-$BASE.sh
+          bash $PATCH_SH
           bash scripts/clash.sh
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
@@ -93,7 +95,7 @@ jobs:
         working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
-          bash build-$BASE.sh
+          bash $BUILD_SH
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
