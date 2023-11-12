@@ -44,7 +44,7 @@ PACKAGES="$PACKAGES docker docker-compose dockerd luci-app-dockerman"
 PACKAGES="$PACKAGES luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2"
 
 # i2c tools
-PACKAGES="$PACKAGES i2c-tools kmod-i2c-core kmod-i2c-gpio kmod-i2c-bcm2835"
+PACKAGES="$PACKAGES i2c-tools kmod-i2c-core kmod-i2c-gpio kmod-i2c-bcm2835 luci-app-oled"
 
 # PHP8
 PACKAGES="$PACKAGES libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ctype php8-mod-fileinfo php8-mod-zip php8-mod-iconv php8-mod-mbstring coreutils-stat zoneinfo-asia"
