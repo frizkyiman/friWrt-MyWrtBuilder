@@ -68,7 +68,7 @@ jobs:
         with: 
           path: origin
 
-      - name: Download Image Builder $BASE-$BRANCH
+      - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}
         id: download
         run: |
           wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/bcm27xx/bcm2711/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64.tar.xz
@@ -77,20 +77,20 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
-        working-directory: $BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         run: |
           cat external-package-urls.txt | xargs wget -qP packages
          
       - name: Run Patch and DIY Scripts
-        working-directory: $BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         run: |
           bash scripts/builder-patch-$BASE.sh
           bash scripts/clash.sh
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
-      - name: Compile Firmware $BASE-$BRANCH
+      - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}
         id: compile
-        working-directory: $BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           bash build-$BASE.sh
@@ -98,7 +98,7 @@ jobs:
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
       - name: Clear server space
-        working-directory: $BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         run: |
           rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
@@ -107,7 +107,7 @@ jobs:
       - name: Organize Files
         id: organize
         if: steps.compile.outputs.status == 'success' && !cancelled()
-        working-directory: $BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/
         run: |
           rm -rf *.json
           echo "status=success" >> $GITHUB_OUTPUT
@@ -116,8 +116,8 @@ jobs:
         uses: actions/upload-artifact@v2
         if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
         with:
-          name: $BASE-$BRANCH-bcm27xx_bcm2711-images-${{ env.DATETIME }}
-          path: $BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
+          name: ${{ env.BASE }}-${{ env.BRANCH }}-bcm27xx_bcm2711-images-${{ env.DATETIME }}
+          path: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -125,9 +125,9 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: $BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
+          file: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: friWrt-RPi-4B-${{ inputs.source_base }}-$BRANCH-${{ env.DATE }}
+          tag: friWrt-RPi-4B-${{ inputs.source_base }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
           body: |
             ### ${{ inputs.source_base }} Image information
