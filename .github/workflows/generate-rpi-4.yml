@@ -92,7 +92,7 @@ jobs:
         working-directory: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
-          bash build-rpi-4.sh
+          bash build-$VENDOR.sh
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
