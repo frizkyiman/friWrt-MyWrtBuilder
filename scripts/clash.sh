@@ -9,5 +9,7 @@ file="clash.meta-linux-arm64-v1.16.0.gz"
 mkdir -p files/etc/openclash/core
 cd files/etc/openclash/core || (echo "Clash core path does not exist! " && exit)
 wget -q $download_url
-tar -zxvf "$file" || gzip -d "$file"
+{ tar -zxvf "$file" && echo "Success!"; } ||
+{ gzip -d "$file" && echo "Success!"; } ||
+echo "Failed to extract file!";
 rm -rf "$file"
