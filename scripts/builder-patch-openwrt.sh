@@ -5,9 +5,6 @@ echo "Current Path: $PWD"
 
 cd $GITHUB_WORKSPACE/$VENDOR-imagebuilder-$VERSION-bcm27xx-bcm2711.Linux-x86_64 || exit
 
-# Remove redundant default packages
-sed -i "/luci-app-cpufreq/d" include/target.mk
-
 # Custom Repository
 #sed -i '12i\src/gz IceG_repo https://github.com/4IceG/Modem-extras/raw/main/myrepo' repositories.conf
 sed -i '12i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic' repositories.conf
