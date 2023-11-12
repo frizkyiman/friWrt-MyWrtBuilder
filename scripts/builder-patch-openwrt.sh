@@ -18,6 +18,7 @@ sed -i 's/option check_signature/# option check_signature/g' repositories.conf
 sed -i "s/CONFIG_TARGET_KERNEL_PARTSIZE=.*/CONFIG_TARGET_KERNEL_PARTSIZE=128/" .config
 sed -i "s/CONFIG_TARGET_ROOTFS_PARTSIZE=.*/CONFIG_TARGET_ROOTFS_PARTSIZE=3700/" .config
 sed -i "s/CONFIG_TARGET_ROOTFS_SQUASHFS=y/# CONFIG_TARGET_ROOTFS_SQUASHFS is not set/" .config
+sed -i "s/CONFIG_PACKAGE_kmod-rtl8821cu=m/CONFIG_PACKAGE_kmod-rtl8821cu=y/" .config
 
 # Not generate ISO images for it is too big
 #sed -i "s/CONFIG_ISO_IMAGES=y/# CONFIG_ISO_IMAGES is not set/" .config
