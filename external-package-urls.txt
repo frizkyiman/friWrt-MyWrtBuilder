@@ -1,2 +1,1 @@
-https://github.com/4IceG/luci-app-modemband/releases/download/1.0.22-20231029/luci-app-modemband_1.0.22-20231029_all.ipk
-https://github.com/4IceG/luci-app-modemband/releases/download/1.0.22-20231029/modemband_20231029_all.ipk
+https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-tinyfm_2.5_all.ipk
