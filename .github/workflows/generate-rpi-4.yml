@@ -102,25 +102,25 @@ jobs:
         run: |
           rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
           df -hT ${PWD}
-          
-      - name: Upload Firmware to Artifacts
-        uses: actions/upload-artifact@v2
-        if: steps.compile.outputs.status == 'success' && !cancelled()
-        with:
-          name: ${{ env.VENDOR }}-${{ env.VERSION }}-bcm27xx_bcm2711-images-${{ env.DATETIME }}
-          path: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/*
 
       - name: Organize Files
         id: organize
-        if: github.event.inputs.release == 'true'
+        if: steps.compile.outputs.status == 'success' && !cancelled()
         working-directory: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711
         run: |
           rm -rf *.json
           echo "status=success" >> $GITHUB_OUTPUT
+          
+      - name: Upload Firmware to Artifacts
+        uses: actions/upload-artifact@v2
+        if: github.event.inputs.release == 'true'
+        with:
+          name: ${{ env.VENDOR }}-${{ env.VERSION }}-bcm27xx_bcm2711-images-${{ env.DATETIME }}
+          path: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/*
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
-        if: steps.organize.outputs.status == 'success' && !cancelled()
+        if: github.event.inputs.release == 'true'
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
@@ -128,6 +128,13 @@ jobs:
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: friWrt-RPi-4B-${{ inputs.source_branch }}-${{ env.VERSION }}-${{ env.DATE }}
           overwrite: true
+          body: |
+            ### ${{ inputs.source_branch }} Image information
+            - Default IP: 192.168.1.1
+            - Default username: root
+            - Default password: none
+            - Default WIFI name: friWrt_5g
+            - Default WIFI password: none
           
       - name: Delete workflow runs
         uses: GitRML/delete-workflow-runs@main
