@@ -83,7 +83,7 @@ jobs:
       - name: Run Patch and DIY Scripts
         working-directory: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64
         run: |
-          bash scripts/builder-patch.sh
+          bash scripts/builder-patch-$VENDOR.sh
           bash scripts/clash.sh
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
