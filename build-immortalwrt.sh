@@ -47,10 +47,10 @@ PACKAGES="$PACKAGES luci-app-internet-detector internet-detector nlbwmon luci-ap
 PACKAGES="$PACKAGES i2c-tools kmod-i2c-core kmod-i2c-gpio kmod-i2c-bcm2835 luci-app-oled"
 
 # PHP8
-PACKAGES="$PACKAGES libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ctype php8-mod-fileinfo php8-mod-zip php8-mod-iconv php8-mod-mbstring coreutils-stat zoneinfo-asia"
+#PACKAGES="$PACKAGES libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ctype php8-mod-fileinfo php8-mod-zip php8-mod-iconv php8-mod-mbstring coreutils-stat zoneinfo-asia"
 
 # Misc
-PACKAGES="$PACKAGES sudo adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop luci-app-watchcat luci-app-speedtest-web bash curl tar unzip unrar jq luci-app-ttyd nano"
+PACKAGES="$PACKAGES sudo adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop luci-app-watchcat bash curl tar unzip unrar jq luci-app-ttyd nano"
 
 # some custom files
 FILES="files"
