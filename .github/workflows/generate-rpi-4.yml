@@ -36,11 +36,9 @@ on:
           - false
 
 env:
-  DOWNLOAD_URL: https://downloads.${{ inputs.source_base }}.org/releases/${{ inputs.source_branch }}/targets/bcm27xx/bcm2711/${{ inputs.source_base }}-imagebuilder-${{ inputs.source_branch }}-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+  DOWNLOAD_BASE: https://downloads.${{ inputs.source_base }}.org
   BASE: ${{ inputs.source_base }}
   BRANCH: ${{ inputs.source_branch }}
-  ROOTDIR: ${{ inputs.source_base }}-imagebuilder-${{ inputs.source_branch }}-bcm27xx-bcm2711.Linux-x86_64
-  BINDIR: ${{ inputs.source_base }}-imagebuilder-${{ inputs.source_branch }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711
   UPLOAD_ARTIFACTS: false
   TZ: Asia/Jakarta
 
@@ -63,6 +61,9 @@ jobs:
         run: |
           echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+          echo "ROOTDIR: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64" >> $GITHUB_ENV
+          echo "BINDIR: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711" >> $GITHUB_ENV
+          echo "URL: /releases/${{ env.BRANCH }}/targets/bcm27xx/bcm2711/${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64.tar.xz" >> $GITHUB_ENV
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
@@ -73,7 +74,7 @@ jobs:
       - name: Download Image Builder ${{ inputs.source_base }}-${{ env.BRANCH }}
         id: download
         run: |
-          wget -q $DOWNLOAD_URL
+          wget -q $DOWNLOAD_BASE$URL
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
           echo "status=success" >> $GITHUB_OUTPUT
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$ROOTDIR/
