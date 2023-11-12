@@ -11,8 +11,8 @@ sed -i "/luci-app-cpufreq/d" include/target.mk
 # Custom Repository
 sed -i '12i\src/gz IceG_repo https://github.com/4IceG/Modem-extras/raw/main/myrepo' repositories.conf
 sed -i '13i\src/gz modemfeed http://openwrt.132lan.ru/packages/21.02/packages/aarch64_cortex-a72/modemfeed' repositories.conf
-sed -i '14i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic' repositories.conf
-sed -i '15i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/aarch64_cortex-a72' repositories.conf
+sed -i '14i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/generic' repositories.conf
+sed -i '15i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/aarch64_cortex-a72' repositories.conf
 sed -i 's/option check_signature/# option check_signature/g' repositories.conf
 
 # Force opkg to overwrite files
