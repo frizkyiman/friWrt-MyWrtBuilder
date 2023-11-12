@@ -100,7 +100,6 @@ jobs:
         working-directory: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         run: |
-          cd $working-directory/
           rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
           df -hT ${PWD}
           
