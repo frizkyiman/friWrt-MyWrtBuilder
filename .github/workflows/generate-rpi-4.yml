@@ -76,7 +76,7 @@ jobs:
           wget -q $DOWNLOAD_BASE/releases/$VERSION/targets/bcm27xx/bcm2711/$VENDOR-imagebuilder-$VERSION-bcm27xx-bcm2711.Linux-x86_64.tar.xz
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
           echo "status=success" >> $GITHUB_OUTPUT
-          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$ROOTDIR
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-imagebuilder-$VERSION-bcm27xx-bcm2711.Linux-x86_64/
       
       - name: Download External Packages
         working-directory: $ROOTDIR
