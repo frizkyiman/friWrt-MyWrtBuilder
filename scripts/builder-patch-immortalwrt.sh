@@ -10,8 +10,8 @@ sed -i "/luci-app-cpufreq/d" include/target.mk
 
 # Custom Repository
 #sed -i '12i\src/gz IceG_repo https://github.com/4IceG/Modem-extras/raw/main/myrepo' repositories.conf
-sed -i '12i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$(echo $BRANCH | awk -F'.' '{print $1"."$2}')/generic' repositories.conf
-sed -i '13i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$(echo $BRANCH | awk -F'.' '{print $1"."$2}')/aarch64_cortex-a72' repositories.conf
+sed -i '12i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic' repositories.conf
+sed -i '13i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/aarch64_cortex-a72' repositories.conf
 sed -i 's/option check_signature/# option check_signature/g' repositories.conf
 
 # Force opkg to overwrite files
