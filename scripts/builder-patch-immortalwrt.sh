@@ -18,8 +18,8 @@ sed -i 's/option check_signature/# option check_signature/g' repositories.conf
 #sed -i "s/install \$(BUILD_PACKAGES)/install \$(BUILD_PACKAGES) --force-overwrite/" Makefile
 
 # Resize Boot and Rootfs partition size
-sed -E "s/CONFIG_TARGET_KERNEL_PARTSIZE=[0-9]/CONFIG_TARGET_KERNEL_PARTSIZE=128/" .config
-sed -E 's/CONFIG_TARGET_ROOTFS_PARTSIZE=[0-9]+/CONFIG_TARGET_ROOTFS_PARTSIZE=3700/' .config
+sed -i "s/CONFIG_TARGET_KERNEL_PARTSIZE=.*/CONFIG_TARGET_KERNEL_PARTSIZE=128/" .config
+sed -i "s/CONFIG_TARGET_ROOTFS_PARTSIZE=.*/CONFIG_TARGET_ROOTFS_PARTSIZE=3700/" .config
 sed -i "s/CONFIG_TARGET_ROOTFS_SQUASHFS=y/# CONFIG_TARGET_ROOTFS_SQUASHFS is not set/" .config
 
 # Not generate ISO images for it is too big
