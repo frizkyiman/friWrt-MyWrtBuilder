@@ -111,6 +111,9 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/
         run: |
+          for file in *-bcm27xx-bcm2711-rpi-4-*.gz; do
+            mv "$file" "fri_$file"
+          done
           rm -rf *.json
           rm -rf *.manifest
 
@@ -131,10 +134,10 @@ jobs:
           file_glob: true
           file: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: friWrt-RPi-4B-${{ inputs.source_base }}-${{ env.BRANCH }}-${{ env.DATE }}
+          tag: rpi-4-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
           body: |
-            ### ${{ inputs.source_base }} Image information
+            ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             - Default IP: 192.168.1.1
             - Default username: root
             - Default password: none
