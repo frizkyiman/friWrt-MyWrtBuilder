@@ -189,6 +189,20 @@ echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
 echo '0 12 * * * /sbin/sync_time.sh beacon.liveon.id' >> /etc/crontabs/root
 /etc/init.d/cron restart
 
+
+opkg install /root/luci-app-openclash_0.45.112-beta_all.ipk --force-reinstall
+rm /root/luci-app-openclash_0.45.112-beta_all.ipk
+/usr/bin/patchoc.sh
+
+opkg install /root/luci-app-modeminfo_0.1.0-2_all.ipk
+rm /root/luci-app-modeminfo_0.1.0-2_all.ipk
+
+opkg install /root/luci-app-oled_1.0_all.ipk
+rm /root/luci-app-oled_1.0_all.ipk
+
+opkg install /root/luci-app-adguardhome_1.8-20221120_all.ipk
+rm /root/luci-app-adguardhome_1.8-20221120_all.ipk
+
 tar -xzvf /root/speedtest.tgz -C /usr/bin/
 chmod +x /usr/bin/speedtest
 rm /root/speedtest.tgz
