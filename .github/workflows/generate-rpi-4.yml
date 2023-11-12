@@ -36,7 +36,7 @@ on:
           - false
 
 env:
-  DOWNLOAD_BASE: https://downloads.${{ inputs.source_base }}.org
+  DOWNLOAD_BASE: https://downloads.${{ inputs.source_base }}.org/releases/${{ inputs.source_branch }}/targets/bcm27xx/bcm2711/${{ inputs.source_base }}-imagebuilder-${{ inputs.source_branch }}-bcm27xx-bcm2711.Linux-x86_64.tar.xz
   BASE: ${{ inputs.source_base }}
   BRANCH: ${{ inputs.source_branch }}
   UPLOAD_ARTIFACTS: false
@@ -71,7 +71,7 @@ jobs:
       - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}
         id: download
         run: |
-          wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/bcm27xx/bcm2711/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+          wget -q $DOWNLOAD_BASE
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64/
           echo "status=success" >> $GITHUB_OUTPUT
@@ -84,7 +84,7 @@ jobs:
       - name: Run Patch and DIY Scripts
         working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         run: |
-          bash scripts/builder-patch-$BASE.sh
+          bash scripts/builder-patch-${{ env.BASE }}.sh
           bash scripts/clash.sh
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
