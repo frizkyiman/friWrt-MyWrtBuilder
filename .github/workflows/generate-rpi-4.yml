@@ -7,16 +7,16 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      source_branch:
-        description: "Select the source branch"
+      source_base:
+        description: "Select the Source Base"
         required: true
         default: "openwrt"
         type: choice
         options:
           - openwrt
           - immortalwrt
-      source_tags:
-        description: "Select the revision"
+      source_branch:
+        description: "Select Branch Revision"
         required: true
         default: "21.02.7"
         type: choice
@@ -27,7 +27,7 @@ on:
           - 23.05.0
           - 23.05.0-rc4
       release:
-        description: "Upload the compiled image to Release"
+        description: "Upload Image to Release"
         required: true
         default: "true"
         type: choice
@@ -36,9 +36,11 @@ on:
           - false
 
 env:
-  DOWNLOAD_BASE: https://downloads.${{ inputs.source_branch }}.org
-  VENDOR: ${{ inputs.source_branch }}
-  VERSION: ${{ inputs.source_tags }}
+  DOWNLOAD_URL: https://downloads.${{ inputs.source_base }}.org/releases/$BRANCH/targets/bcm27xx/bcm2711/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+  BASE: ${{ inputs.source_base }}
+  BRANCH: ${{ inputs.source_branch }}
+  ROOTDIR: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
+  BINDIR: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711
   UPLOAD_ARTIFACTS: false
   TZ: Asia/Jakarta
 
@@ -54,7 +56,7 @@ jobs:
       - name: Initialization Environment
         run: |
           sudo apt-get -qq update
-          sudo apt-get -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip qemu-utils mkisofs
+          sudo apt-get -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip tar qemu-utils mkisofs
           sudo timedatectl set-timezone "$TZ"
 
       - name: Setup Environment Variables
@@ -68,37 +70,37 @@ jobs:
         with: 
           path: origin
 
-      - name: Download Image Builder ${{ inputs.source_branch }}-${{ env.VERSION }}
+      - name: Download Image Builder ${{ inputs.source_base }}-${{ env.BRANCH }}
         id: download
         run: |
-          wget -q $DOWNLOAD_BASE/releases/$VERSION/targets/bcm27xx/bcm2711/$VENDOR-imagebuilder-$VERSION-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+          wget -q $DOWNLOAD_URL
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
           echo "status=success" >> $GITHUB_OUTPUT
-          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$VENDOR-imagebuilder-$VERSION-bcm27xx-bcm2711.Linux-x86_64/
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$ROOTDIR/
       
       - name: Download External Packages
-        working-directory: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: $ROOTDIR
         run: |
           cat external-package-urls.txt | xargs wget -qP packages
          
       - name: Run Patch and DIY Scripts
-        working-directory: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: $ROOTDIR
         run: |
-          bash scripts/builder-patch-$VENDOR.sh
+          bash scripts/builder-patch-$BASE.sh
           bash scripts/clash.sh
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
-      - name: Compile Firmware ${{ inputs.source_branch }}-${{ env.VERSION }}
+      - name: Compile Firmware ${{ inputs.source_base }}-${{ env.BRANCH }}
         id: compile
-        working-directory: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: $ROOTDIR
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
-          bash build-$VENDOR.sh
+          bash build-$BASE.sh
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
       - name: Clear server space
-        working-directory: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: $ROOTDIR
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         run: |
           rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
@@ -107,7 +109,7 @@ jobs:
       - name: Organize Files
         id: organize
         if: steps.compile.outputs.status == 'success' && !cancelled()
-        working-directory: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711
+        working-directory: $BINDIR
         run: |
           rm -rf *.json
           echo "status=success" >> $GITHUB_OUTPUT
@@ -116,8 +118,8 @@ jobs:
         uses: actions/upload-artifact@v2
         if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
         with:
-          name: ${{ env.VENDOR }}-${{ env.VERSION }}-bcm27xx_bcm2711-images-${{ env.DATETIME }}
-          path: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/*
+          name: ${{ env.BASE }}-${{ env.BRANCH }}-bcm27xx_bcm2711-images-${{ env.DATETIME }}
+          path: $BINDIR/*
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -125,12 +127,12 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: ${{ env.VENDOR }}-imagebuilder-${{ env.VERSION }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/*
+          file: $BINDIR/*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: friWrt-RPi-4B-${{ inputs.source_branch }}-${{ env.VERSION }}-${{ env.DATE }}
+          tag: friWrt-RPi-4B-${{ inputs.source_base }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
           body: |
-            ### ${{ inputs.source_branch }} Image information
+            ### ${{ inputs.source_base }} Image information
             - Default IP: 192.168.1.1
             - Default username: root
             - Default password: none
