@@ -55,6 +55,6 @@ PACKAGES="$PACKAGES sudo adb parted losetup resize2fs luci luci-ssl block-mount 
 # some custom files
 FILES="files"
 
-DISABLED_SERVICES="-dnsmasq -automount "
+DISABLED_SERVICES="-dnsmasq -automount -libustream-openssl"
 
 make image PROFILE="$PROFILE" PACKAGES="$PACKAGES $DISABLED_SERVICES" FILES="$FILES"
