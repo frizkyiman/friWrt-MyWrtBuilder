@@ -112,6 +112,8 @@ jobs:
         working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/
         run: |
           rm -rf *.json
+          rm -rf *.manifest
+
           echo "status=success" >> $GITHUB_OUTPUT
           
       - name: Upload Firmware to Artifacts
