@@ -9,18 +9,18 @@ else
     cd $GITHUB_WORKSPACE/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64 || exit
 fi
 
-version=$(echo $BRANCH | cut -d'.' -f1)
+version=$(echo "$BRANCH" | cut -d'.' -f1)
 
 if [ "$version" == "21" ]; then
-    branch_main=$(echo $BRANCH | awk -F'.' '{print $1"."$2}')
+    branch_main=$(echo "$BRANCH" | awk -F'.' '{print $1"."$2}')
 elif [ "$version" == "22" ] || [ "$version" == "23" ] || [ "$BRANCH" == "snapshots" ]; then
     branch_main=main
 fi
 
 if [ "$ROOTFS_SQUASHFS" == "true" ]; then
-    option_squashfs=CONFIG_TARGET_ROOTFS_SQUASHFS=y
+    option_squashfs="CONFIG_TARGET_ROOTFS_SQUASHFS=y"
 else
-    option_squashfs=# CONFIG_TARGET_ROOTFS_SQUASHFS is not set
+    option_squashfs="# CONFIG_TARGET_ROOTFS_SQUASHFS is not set"
 fi
 
 
