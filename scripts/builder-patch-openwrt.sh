@@ -13,6 +13,13 @@ elif [ "$version" == "22" ] || [ "$version" == "23" ] || [ "$BRANCH" == "snapsho
     branch_main=main
 fi
 
+if [ "$ROOTFS_SQUASHFS" == "true" ]; then
+    option_squashfs=CONFIG_TARGET_ROOTFS_SQUASHFS=y
+else
+    option_squashfs=# CONFIG_TARGET_ROOTFS_SQUASHFS is not set
+fi
+
+
 # Custom Repository
 sed -i "13i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic" repositories.conf
 sed -i "14i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/aarch64_cortex-a72" repositories.conf
@@ -24,5 +31,5 @@ sed -i "s/option check_signature/# option check_signature/g" repositories.conf
 # Resize Boot and Rootfs partition size
 sed -i "s/CONFIG_TARGET_KERNEL_PARTSIZE=.*/CONFIG_TARGET_KERNEL_PARTSIZE=128/" .config
 sed -i "s/CONFIG_TARGET_ROOTFS_PARTSIZE=.*/CONFIG_TARGET_ROOTFS_PARTSIZE=3700/" .config
-sed -i "s/CONFIG_TARGET_ROOTFS_SQUASHFS=y/# CONFIG_TARGET_ROOTFS_SQUASHFS is not set/" .config
+sed -i "s/CONFIG_TARGET_ROOTFS_SQUASHFS=y/$option_squashfs/" .config
 sed -i "s/CONFIG_PACKAGE_kmod-rtl8821cu=m/CONFIG_PACKAGE_kmod-rtl8821cu=y/" .config
