@@ -14,8 +14,8 @@ elif [ "$version" == "22" ] || [ "$version" == "23" ] || [ "$BRANCH" == "snapsho
 fi
 
 # Custom Repository
-sed -i "14i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic" repositories.conf
-sed -i "15i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/aarch64_cortex-a72" repositories.conf
+sed -i "13i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic" repositories.conf
+sed -i "14i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/aarch64_cortex-a72" repositories.conf
 sed -i "s/option check_signature/# option check_signature/g" repositories.conf
 
 # Force opkg to overwrite files
