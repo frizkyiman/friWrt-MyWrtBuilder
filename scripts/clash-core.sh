@@ -9,9 +9,11 @@ clash_tun_core="https://github.com/vernesong/OpenClash/blob/core/master/premium/
 file="*-arm64-*.gz"
 
 mkdir -p files/etc/openclash/core
-cd files/etc/openclash/core || (echo "Clash core path does not exist! " && exit)
-wget -q $meta_core $clash_core $clash_tun_core
+cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
+wget -q "$meta_core" "$clash_core" "$clash_tun_core"
+
 { tar -zxvf "$file" && echo "Success using tar!"; } ||
 { gzip -d "$file" && echo "Success using gzip!"; } ||
-echo "Failed to extract file!";
+echo "Failed to extract file!"
+
 rm -rf "$file"
