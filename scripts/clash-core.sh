@@ -10,7 +10,7 @@ file="*-arm64-*.gz"
 
 mkdir -p files/etc/openclash/core
 cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
-wget -q "$meta_core" "$clash_core" "$clash_tun_core"
+wget "$meta_core" "$clash_core" "$clash_tun_core"
 
 { tar -zxvf "$file" && echo "Success using tar!"; } ||
 { gzip -d "$file" && echo "Success using gzip!"; } ||
