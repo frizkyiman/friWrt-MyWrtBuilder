@@ -88,10 +88,17 @@ jobs:
       - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}
         id: download
         run: |
+          if [ "$BRANCH" == "snapshots" ]; then
+          wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/bcm27xx/bcm2711/$BASE-imagebuilder-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+          tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$BASE-imagebuilder-bcm27xx-bcm2711.Linux-x86_64/
+          echo "status=success" >> $GITHUB_OUTPUT
+          else
           wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/bcm27xx/bcm2711/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64.tar.xz
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64/
           echo "status=success" >> $GITHUB_OUTPUT
+          fi
       
       - name: Download External Packages
         working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
