@@ -76,8 +76,8 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
-          echo "DATETIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+          echo "DATE=$(date +%Y.%m.%d)" >> $GITHUB_ENV
+          echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
