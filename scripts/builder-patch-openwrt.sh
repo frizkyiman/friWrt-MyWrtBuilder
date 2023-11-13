@@ -9,7 +9,7 @@ version=$(echo $BRANCH | cut -d'.' -f1)
 
 if [ "$version" == "21" ]; then
     branch_main=$(echo $BRANCH | awk -F'.' '{print $1"."$2}')
-elif [ "$version" == "22" ] || [ "$version" == "23" ]; then
+elif [ "$version" == "22" ] || [ "$version" == "23" ] || [ "$BRANCH" == "snapshots" ]; then
     branch_main=main
 fi
 
