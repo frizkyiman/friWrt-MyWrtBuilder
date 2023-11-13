@@ -101,12 +101,12 @@ jobs:
           fi
       
       - name: Download External Packages
-        working-directory: $${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         run: |
           cat external-package-urls.txt | xargs wget -qP packages
          
       - name: Run Patch and DIY Scripts
-        working-directory: $${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         run: |
           bash $PATCH_SH
           bash scripts/clash.sh
@@ -114,7 +114,7 @@ jobs:
 
       - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}
         id: compile
-        working-directory: $${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           bash $BUILD_SH
@@ -122,7 +122,7 @@ jobs:
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
       - name: Clear server space
-        working-directory: $${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         run: |
           rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
@@ -131,7 +131,7 @@ jobs:
       - name: Organize Files
         id: organize
         if: steps.compile.outputs.status == 'success' && !cancelled()
-        working-directory: $${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/
+        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/
         run: |
           for file in *-bcm27xx-bcm2711-rpi-4-*.gz; do
             mv "$file" "fri_$file"
@@ -145,7 +145,7 @@ jobs:
         if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
         with:
           name: ${{ env.BASE }}-${{ env.BRANCH }}-bcm27xx_bcm2711-images-${{ env.DATETIME }}
-          path: $${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
+          path: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -153,7 +153,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: $${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
+          file: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: rpi-4-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
