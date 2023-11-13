@@ -13,6 +13,13 @@ elif [ "$version" == "22" ] || [ "$version" == "23" ] || [ "$BRANCH" == "snapsho
     branch_main=main
 fi
 
+if [ "$ROOTFS_SQUASHFS" == "true" ]; then
+    option_squashfs=CONFIG_TARGET_ROOTFS_SQUASHFS=y
+else
+    option_squashfs=# CONFIG_TARGET_ROOTFS_SQUASHFS is not set
+fi
+
+
 # Remove redundant default packages
 sed -i "/luci-app-cpufreq/d" include/target.mk
 
@@ -27,5 +34,5 @@ sed -i "s/option check_signature/# option check_signature/g" repositories.conf
 # Resize Boot and Rootfs partition size
 sed -i "s/CONFIG_TARGET_KERNEL_PARTSIZE=.*/CONFIG_TARGET_KERNEL_PARTSIZE=128/" .config
 sed -i "s/CONFIG_TARGET_ROOTFS_PARTSIZE=.*/CONFIG_TARGET_ROOTFS_PARTSIZE=3700/" .config
-sed -i "s/CONFIG_TARGET_ROOTFS_SQUASHFS=y/# CONFIG_TARGET_ROOTFS_SQUASHFS is not set/" .config
+sed -i "s/CONFIG_TARGET_ROOTFS_SQUASHFS=y/$option_squashfs/" .config
 sed -i "s/CONFIG_PACKAGE_kmod-rtl8821cu=m/CONFIG_PACKAGE_kmod-rtl8821cu=y/" .config
