@@ -21,6 +21,7 @@ on:
         default: "21.02.7"
         type: choice
         options:
+          - snapshots
           - 21.02.3
           - 21.02.7
           - 22.03.5
@@ -116,7 +117,6 @@ jobs:
           done
           rm -rf *.json
           rm -rf *.manifest
-
           echo "status=success" >> $GITHUB_OUTPUT
           
       - name: Upload Firmware to Artifacts
@@ -143,9 +143,4 @@ jobs:
             - Default password: none
             - Default WIFI name: friWrt_5g
             - Default WIFI password: none
-          
-      - name: Delete workflow runs
-        uses: GitRML/delete-workflow-runs@main
-        with:
-          retain_days: 1
-          keep_minimum_runs: 3
+  
