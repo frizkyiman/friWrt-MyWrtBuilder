@@ -23,7 +23,6 @@ else
     option_squashfs="# CONFIG_TARGET_ROOTFS_SQUASHFS is not set"
 fi
 
-
 # Remove redundant default packages
 sed -i "/luci-app-cpufreq/d" include/target.mk
 
