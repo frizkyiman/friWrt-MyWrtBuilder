@@ -23,8 +23,12 @@ PACKAGES="$PACKAGES kmod-usb-net-rtl8150 kmod-usb-net-rtl8152 kmod-usb-net-asix 
 # Diskman
 #PACKAGES="$PACKAGES luci-app-diskman"
 
-# OpenClash
-PACKAGES="$PACKAGES luci-compat dnsmasq-full luci-app-openclash"
+# OpenClash iptables and nftables
+if [ "$version" == "21" ]; then
+    PACKAGES="$PACKAGES coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip luci-compat luci luci-base luci-app-openclash"
+else
+    PACKAGES="$PACKAGES coreutils-nohup bash dnsmasq-full curl ca-certificates ipset ip-full libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip kmod-nft-tproxy luci-compat luci luci-base luci-app-openclash"
+fi
 
 # Hard disk hibernation
 PACKAGES="$PACKAGES luci-app-hd-idle luci-app-disks-info smartmontools kmod-usb-storage kmod-usb-storage-uas"
