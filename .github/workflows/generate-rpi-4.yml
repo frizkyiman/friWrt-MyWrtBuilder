@@ -27,6 +27,10 @@ on:
           - 22.03.5
           - 23.05.0
           - 23.05.0-rc4
+      rootfs:
+        description: 'Set Rootfs size'
+        required: true
+        default: '3700'
       squashfs:
         description: "Generate Squashfs image"
         required: true
@@ -50,6 +54,7 @@ env:
   BRANCH: ${{ inputs.source_branch }}
   BUILD_SH: build-${{ inputs.source_base }}.sh
   PATCH_SH: scripts/builder-patch-${{ inputs.source_base }}.sh
+  ROOTFS_SIZE: ${{ inputs.rootfs}}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   UPLOAD_ARTIFACTS: false
   TZ: Asia/Jakarta
