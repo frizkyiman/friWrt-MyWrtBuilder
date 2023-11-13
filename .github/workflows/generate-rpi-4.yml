@@ -27,6 +27,14 @@ on:
           - 22.03.5
           - 23.05.0
           - 23.05.0-rc4
+      squashfs:
+        description: "Generate Squashfs image"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - true
+          - false
       release:
         description: "Upload Image to Release"
         required: true
@@ -42,6 +50,7 @@ env:
   BRANCH: ${{ inputs.source_branch }}
   BUILD_SH: build-${{ inputs.source_base }}.sh
   PATCH_SH: scripts/builder-patch-${{ inputs.source_base }}.sh
+  ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   UPLOAD_ARTIFACTS: false
   TZ: Asia/Jakarta
 
