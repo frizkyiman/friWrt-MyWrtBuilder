@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Custom package
+
+
+
 # Profile info
 make info
 
@@ -25,8 +29,13 @@ PACKAGES="$PACKAGES atinout luci-app-modemband modemband luci-app-mmconfig sms-t
 # Adapter UTL driver
 PACKAGES="$PACKAGES kmod-usb-net-rtl8150 kmod-usb-net-rtl8152 kmod-usb-net-asix kmod-usb-net-asix-ax88179 kmod-rtl8821cu"
 
-# OpenClash iptables
-PACKAGES="$PACKAGES coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip luci-compat luci luci-base"
+# OpenClash iptables and nftables
+if [ "$version" == "21" ]; then
+    openclash= luci-app-openclash coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip luci-compat luci luci-base
+else
+    openclash= luci-app-openclash coreutils-nohup bash dnsmasq-full curl ca-certificates ipset ip-full libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip kmod-nft-tproxy luci-compat luci luci-base
+fi
+PACKAGES="$PACKAGES $openclash"
 
 # Adguardhome
 PACKAGES="$PACKAGES luci-app-adguardhome"
