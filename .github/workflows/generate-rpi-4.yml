@@ -109,7 +109,7 @@ jobs:
         working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
         run: |
           bash $PATCH_SH
-          bash scripts/clash.sh
+          bash scripts/clash-core.sh
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
       - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}
