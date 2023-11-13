@@ -23,7 +23,6 @@ else
     option_squashfs="# CONFIG_TARGET_ROOTFS_SQUASHFS is not set"
 fi
 
-
 # Custom Repository
 sed -i "13i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic" repositories.conf
 sed -i "14i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/aarch64_cortex-a72" repositories.conf
