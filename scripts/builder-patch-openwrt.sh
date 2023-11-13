@@ -3,7 +3,11 @@
 echo "Start Builder Patch !"
 echo "Current Path: $PWD"
 
-cd $imgbuilder || exit
+if [ "$BRANCH" == "snapshots" ]; then
+    cd $GITHUB_WORKSPACE/$BASE-imagebuilder-bcm27xx-bcm2711.Linux-x86_64 || exit
+else
+    cd $GITHUB_WORKSPACE/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64 || exit
+fi
 
 version=$(echo $BRANCH | cut -d'.' -f1)
 
