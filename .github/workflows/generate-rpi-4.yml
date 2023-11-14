@@ -15,6 +15,14 @@ on:
         options:
           - openwrt
           - immortalwrt
+      target:
+        description: "Select Device Target"
+        required: true
+        default: "bcm27xx-bcm2711"
+        type: choice
+        options:
+          - bcm27xx-bcm2711
+          - x86-64
       source_branch:
         description: "Select Branch Revision"
         required: true
@@ -50,6 +58,7 @@ on:
 
 env:
   DOWNLOAD_BASE: https://downloads.${{ inputs.source_base }}.org
+  TARGET: ${{ inputs.target }}
   BASE: ${{ inputs.source_base }}
   BRANCH: ${{ inputs.source_branch }}
   BUILD_SH: build-${{ inputs.source_base }}.sh
@@ -78,6 +87,8 @@ jobs:
         run: |
           echo "DATE=$(date +%Y.%m.%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
+          echo "TARGET_SYSTEM=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcm27xx/bcm2711"; else echo "x86/64"; fi)" >> $GITHUB_ENV
+          echo "TARGET_NAME=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcm27xx-bcm2711"; else echo "x86-64"; fi)" >> $GITHUB_ENV
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
@@ -89,14 +100,14 @@ jobs:
         id: download
         run: |
           if [ "$BRANCH" == "snapshots" ]; then
-              wget -q $DOWNLOAD_BASE/$BRANCH/targets/bcm27xx/bcm2711/$BASE-imagebuilder-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+              wget -q $DOWNLOAD_BASE/$BRANCH/targets/"$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
               tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
-              cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$BASE-imagebuilder-bcm27xx-bcm2711.Linux-x86_64/
+              cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64/
               echo "status=success" >> $GITHUB_OUTPUT
           else
-              wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/bcm27xx/bcm2711/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64.tar.xz
+              wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
               tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
-              cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$BASE-imagebuilder-$BRANCH-bcm27xx-bcm2711.Linux-x86_64/
+              cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64/
               echo "status=success" >> $GITHUB_OUTPUT
           fi
       
