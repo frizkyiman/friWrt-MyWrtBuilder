@@ -19,7 +19,7 @@ sed -i "/luci-app-cpufreq/d" include/target.mk
 
 # Custom Repository
 sed -i "13i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic" repositories.conf
-sed -i "14i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/aarch64_cortex-a72" repositories.conf
+sed -i "14i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/$ARCH" repositories.conf
 sed -i "s/option check_signature/# option check_signature/g" repositories.conf
 
 # Force opkg to overwrite files
