@@ -113,7 +113,7 @@ jobs:
       - name: Download External Packages
         run: |
           cd $WORKING_DIR
-          cat external-package-urls.txt | xargs wget -qP packages
+          cat external-package-urls.txt | xargs wget -q --show-progress -P packages
          
       - name: Run Patch and DIY Scripts
         run: |
