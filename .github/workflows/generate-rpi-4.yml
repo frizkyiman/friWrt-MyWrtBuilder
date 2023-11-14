@@ -155,7 +155,7 @@ jobs:
         if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
         with:
           name: ${{ env.BASE }}-${{ env.BRANCH }}-$TARGET_NAME-images-${{ env.DATETIME }}
-          path: $WORKING_DIR/bin/targets/${{ env.$TARGET_SYSTEM }}//*
+          path: $WORKING_DIR/bin/targets/$TARGET_SYSTEM//*
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -163,7 +163,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: $WORKING_DIR/bin/targets/${{ env.$TARGET_SYSTEM }}//*
+          file: $WORKING_DIR/bin/targets/$TARGET_SYSTEM//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: rpi-4-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
