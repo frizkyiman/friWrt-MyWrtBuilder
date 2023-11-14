@@ -57,14 +57,15 @@ PACKAGES="$PACKAGES libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ct
 # Misc
 PACKAGES="$PACKAGES sudo adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop luci-app-watchcat bash curl tar unzip unrar jq luci-app-ttyd nano"
 
-# some custom files
+# some custom .ipk files
 FILES="files"
+CUSTOM=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "kmod-i2c-bcm2835 kmod-rtl8821cu" )
+#kmod-rtl8821cu
 
-DISABLED_SERVICES=""
-
+# Exclude package
 EXCLUDED="-dnsmasq -automount -libustream-openssl"
 
-# Custom package
-pkg=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "kmod-i2c-bcm2835 kmod-rtl8821cu" )
+# Disable service
+DISABLED_SERVICES=""
 
-make image PROFILE="$PROFILE" PACKAGES="$PACKAGES $pkg $EXCLUDED" FILES="$FILES" DISABLED_SERVICES="$DISABLED_SERVICES"
+make image PROFILE="$PROFILE" PACKAGES="$PACKAGES $CUSTOM $EXCLUDED" FILES="$FILES" DISABLED_SERVICES="$DISABLED_SERVICES"
