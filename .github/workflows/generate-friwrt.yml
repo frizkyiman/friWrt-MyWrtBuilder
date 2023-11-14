@@ -167,7 +167,7 @@ jobs:
           overwrite: true
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
-            Build date: ${{ env.DATETIME }} ${{ env.DATE }}
+            Build date: ${{ env.DATETIME }}
             - Default IP: 192.168.1.1
             - Default username: root
             - Default password: none
