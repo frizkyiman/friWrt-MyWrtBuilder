@@ -101,9 +101,9 @@ jobs:
         id: download
         run: |
           if [ "$BRANCH" == "snapshots" ]; then
-              wget -q --show-progress $DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
+              wget -q $DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
           else
-              wget -q --show-progress $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
+              wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
           fi
 
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
@@ -113,7 +113,7 @@ jobs:
       - name: Download External Packages
         run: |
           cd $WORKING_DIR
-          cat external-package-urls.txt | xargs wget -qP --show-progress packages
+          cat external-package-urls.txt | xargs wget -qP packages
          
       - name: Run Patch and DIY Scripts
         run: |
