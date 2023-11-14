@@ -90,7 +90,7 @@ jobs:
           echo "ARCH=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "aarch64_cortex-a72" || echo "x86_64" )" >> $GITHUB_ENV
           echo "TARGET_SYSTEM=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcm27xx/bcm2711"; else echo "x86/64"; fi)" >> $GITHUB_ENV
           echo "TARGET_NAME=$TARGET" >> $GITHUB_ENV
-          echo "DATE=$(date +%Y.%m.%d)" >> $GITHUB_ENV
+          echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -144,7 +144,7 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
-          for file in *-$TARGET_NAME-*.gz; do mv "$file" "fri_$file"; done
+          for file in *-$TARGET_NAME-*.img.gz; do mv "$file" "fri_${file%.img.gz}_$DATE.img.gz"; done
           rm -rf *.json *.manifest *.bin *-rootfs.*
           echo "status=success" >> $GITHUB_OUTPUT
           
