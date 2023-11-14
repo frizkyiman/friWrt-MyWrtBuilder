@@ -6,12 +6,7 @@ echo "Current Path: $PWD"
 cd $GITHUB_WORKSPACE/$WORKING_DIR || exit
 
 version=$(echo "$BRANCH" | cut -d'.' -f1)
-
-if [ "$version" == "21" ]; then
-    branch_main=$(echo "$BRANCH" | awk -F'.' '{print $1"."$2}')
-elif [ "$version" == "22" ] || [ "$version" == "23" ] || [ "$BRANCH" == "snapshots" ]; then
-    branch_main=main
-fi
+branch_main=$( [ "$version" == "21" ] && echo "$BRANCH" | awk -F'.' '{print $1"."$2}' || echo "main" )
 
 if [ "$ROOTFS_SQUASHFS" == "true" ]; then
     option_squashfs="CONFIG_TARGET_ROOTFS_SQUASHFS=y"
