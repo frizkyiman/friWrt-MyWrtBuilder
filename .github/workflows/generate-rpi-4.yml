@@ -141,7 +141,7 @@ jobs:
       - name: Organize Files
         id: organize
         if: steps.compile.outputs.status == 'success' && !cancelled()
-        working-directory: $WORKING_DIR/bin/targets/${{ env.$TARGET_SYSTEM }}/
+        working-directory: $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
         run: |
           for file in *-bcm27xx-bcm2711-rpi-4-*.gz; do
             mv "$file" "fri_$file"
