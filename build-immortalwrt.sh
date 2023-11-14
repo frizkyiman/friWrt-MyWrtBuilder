@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Custom package
-pkg=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "kmod-i2c-bcm2835 kmod-rtl8821cu" )
-
 # Profile info
 make info
 
@@ -63,6 +60,11 @@ PACKAGES="$PACKAGES sudo adb parted losetup resize2fs luci luci-ssl block-mount 
 # some custom files
 FILES="files"
 
-DISABLED_SERVICES="-dnsmasq -automount -libustream-openssl"
+DISABLED_SERVICES=""
 
-make image PROFILE="$PROFILE" PACKAGES="$PACKAGES $pkg $DISABLED_SERVICES" FILES="$FILES"
+EXCLUDED="-dnsmasq -automount -libustream-openssl"
+
+# Custom package
+pkg=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "kmod-i2c-bcm2835 kmod-rtl8821cu" )
+
+make image PROFILE="$PROFILE" PACKAGES="$PACKAGES $pkg $EXCLUDED" FILES="$FILES" DISABLED_SERVICES="$DISABLED_SERVICES"
