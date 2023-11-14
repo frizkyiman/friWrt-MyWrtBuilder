@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Custom package
+pkg=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "kmod-i2c-bcm2835" )
+
 # Profile info
 make info
 
