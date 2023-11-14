@@ -5,7 +5,6 @@ make info
 
 # Main configuration name
 PROFILE=""
-PROFILE=$( [ "$TARGET" == "rpi-4" ] && echo "$TARGET" || echo "generic" )
 
 PACKAGES=""
 
