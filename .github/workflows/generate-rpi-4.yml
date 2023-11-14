@@ -101,9 +101,9 @@ jobs:
         id: download
         run: |
           if [ "$BRANCH" == "snapshots" ]; then
-              wget -q $DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
+              wget -q --show-progress $DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
           else
-              wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
+              wget -q --show-progress $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
           fi
 
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
@@ -113,7 +113,7 @@ jobs:
       - name: Download External Packages
         run: |
           cd $WORKING_DIR
-          cat external-package-urls.txt | xargs wget -qP packages
+          cat external-package-urls.txt | xargs wget -qP --show-progress packages
          
       - name: Run Patch and DIY Scripts
         run: |
@@ -130,12 +130,6 @@ jobs:
           bash $BUILD_SH
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
-
-      - name: Clear server space
-        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
-        run: |
-          rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
-          df -hT ${PWD}
 
       - name: Organize Files
         id: organize
