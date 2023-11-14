@@ -88,6 +88,7 @@ jobs:
         run: |
           echo "DATE=$(date +%Y.%m.%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
+          echo "PROFILE=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "rpi-4" || echo "generic" )" >> $GITHUB_ENV
           echo "TARGET_SYSTEM=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcm27xx/bcm2711"; else echo "x86/64"; fi)" >> $GITHUB_ENV
           echo "TARGET_NAME=$TARGET" >> $GITHUB_ENV
       
@@ -143,7 +144,7 @@ jobs:
         run: |
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
           for file in *-$TARGET_NAME-*.gz; do mv "$file" "fri_$file"; done
-          rm -rf *.json *.manifest
+          rm -rf *.json *.manifest *.bin *-rootfs.*
           echo "status=success" >> $GITHUB_OUTPUT
           
       - name: Upload Firmware to Artifacts
@@ -161,7 +162,7 @@ jobs:
           file_glob: true
           file: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: rpi-4-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
+          tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
