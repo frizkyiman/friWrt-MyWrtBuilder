@@ -63,6 +63,7 @@ env:
   BRANCH: ${{ inputs.source_branch }}
   BUILD_SH: build-${{ inputs.source_base }}.sh
   PATCH_SH: scripts/builder-patch-${{ inputs.source_base }}.sh
+  WORKING_DIR: ${{ inputs.source_base }}-imagebuilder-${{ inputs.target }}.Linux-x86_64
   ROOTFS_SIZE: ${{ inputs.rootfs}}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   UPLOAD_ARTIFACTS: false
@@ -87,7 +88,7 @@ jobs:
         run: |
           echo "DATE=$(date +%Y.%m.%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
-          echo "TARGET_SYSTEM=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcm27xx/bcm2711"; else echo "x86/64"; fi)" >> $GITHUB_ENV
+          echo "TARGET_SYSTEM=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcmD27xx/bcm2711"; else echo "x86/64"; fi)" >> $GITHUB_ENV
           echo "TARGET_NAME=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcm27xx-bcm2711"; else echo "x86-64"; fi)" >> $GITHUB_ENV
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -101,23 +102,21 @@ jobs:
         run: |
           if [ "$BRANCH" == "snapshots" ]; then
               wget -q $DOWNLOAD_BASE/$BRANCH/targets/"$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
-              tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
-              cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64/
-              echo "status=success" >> $GITHUB_OUTPUT
           else
               wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
-              tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
-              cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64/
-              echo "status=success" >> $GITHUB_OUTPUT
           fi
+          
+          tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
+          echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
-        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.$WORKING_DIR }}
         run: |
           cat external-package-urls.txt | xargs wget -qP packages
          
       - name: Run Patch and DIY Scripts
-        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.$WORKING_DIR }}
         run: |
           bash $PATCH_SH
           bash scripts/clash-core.sh
@@ -125,7 +124,7 @@ jobs:
 
       - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}
         id: compile
-        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.$WORKING_DIR }}
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           bash $BUILD_SH
@@ -133,7 +132,7 @@ jobs:
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
       - name: Clear server space
-        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64
+        working-directory: ${{ env.$WORKING_DIR }}
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         run: |
           rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
@@ -142,7 +141,7 @@ jobs:
       - name: Organize Files
         id: organize
         if: steps.compile.outputs.status == 'success' && !cancelled()
-        working-directory: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711/
+        working-directory: ${{ env.$WORKING_DIR }}/bin/targets/${{ env.$TARGET_SYSTEM }}/
         run: |
           for file in *-bcm27xx-bcm2711-rpi-4-*.gz; do
             mv "$file" "fri_$file"
@@ -155,8 +154,8 @@ jobs:
         uses: actions/upload-artifact@v2
         if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
         with:
-          name: ${{ env.BASE }}-${{ env.BRANCH }}-bcm27xx_bcm2711-images-${{ env.DATETIME }}
-          path: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
+          name: ${{ env.BASE }}-${{ env.BRANCH }}-$TARGET_NAME-images-${{ env.DATETIME }}
+          path: ${{ env.$WORKING_DIR }}/bin/targets/${{ env.$TARGET_SYSTEM }}//*
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -164,7 +163,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: ${{ env.BASE }}-imagebuilder-${{ env.BRANCH }}-bcm27xx-bcm2711.Linux-x86_64/bin/targets/bcm27xx/bcm2711//*
+          file: ${{ env.$WORKING_DIR }}/bin/targets/${{ env.$TARGET_SYSTEM }}//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: rpi-4-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
