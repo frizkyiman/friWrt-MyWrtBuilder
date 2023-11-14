@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Generate RPi-4 OpenWrt Firmware
+name: Generate friWrt Firmware
 
 # Controls when the workflow will run
 on:
@@ -97,7 +97,7 @@ jobs:
         with: 
           path: origin
 
-      - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}
+      - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
         id: download
         run: |
           if [ "$BRANCH" == "snapshots" ]; then
@@ -111,20 +111,26 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
+        id: packages
+        if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          cat external-package-urls.txt | xargs wget -q --show-progress -P packages
+          cat external-package-urls.txt | xargs wget -qP packages
+          echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
+        id: scripts
+        if: steps.packages.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
           bash $PATCH_SH
           bash scripts/clash-core.sh
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
+          echo "status=success" >> $GITHUB_OUTPUT
 
-      - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}
+      - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
         id: compile
-        if: steps.download.outputs.status == 'success' && !cancelled()
+        if: steps.scripts.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
           bash $BUILD_SH
@@ -136,11 +142,8 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
-          for file in *-$TARGET_NAME-*.gz; do
-            mv "$file" "fri_$file"
-          done
-          rm -rf *.json
-          rm -rf *.manifest
+          for file in *-$TARGET_NAME-*.gz; do mv "$file" "fri_$file"; done
+          rm -rf *.json *.manifest
           echo "status=success" >> $GITHUB_OUTPUT
           
       - name: Upload Firmware to Artifacts
@@ -148,7 +151,7 @@ jobs:
         if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
         with:
           name: ${{ env.BASE }}-${{ env.BRANCH }}-$TARGET_NAME-images-${{ env.DATETIME }}
-          path: $WORKING_DIR/bin/targets/$TARGET_SYSTEM//*
+          path: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
