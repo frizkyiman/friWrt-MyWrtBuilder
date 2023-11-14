@@ -86,11 +86,12 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          echo "DATE=$(date +%Y.%m.%d)" >> $GITHUB_ENV
-          echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
           echo "PROFILE=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "rpi-4" || echo "generic" )" >> $GITHUB_ENV
+          echo "ARCH=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "aarch64_cortex-a72" || echo "x86_64" )" >> $GITHUB_ENV
           echo "TARGET_SYSTEM=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcm27xx/bcm2711"; else echo "x86/64"; fi)" >> $GITHUB_ENV
           echo "TARGET_NAME=$TARGET" >> $GITHUB_ENV
+          echo "DATE=$(date +%Y.%m.%d)" >> $GITHUB_ENV
+          echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
