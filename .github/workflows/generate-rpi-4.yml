@@ -111,12 +111,10 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
-        working-directory: ${{ env.WORKING_DIR }
         run: |
           cat external-package-urls.txt | xargs wget -qP packages
          
       - name: Run Patch and DIY Scripts
-        working-directory: ${{ env.WORKING_DIR }
         run: |
           bash $PATCH_SH
           bash scripts/clash-core.sh
@@ -124,7 +122,6 @@ jobs:
 
       - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}
         id: compile
-        working-directory: ${{ env.WORKING_DIR }
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           bash $BUILD_SH
@@ -132,7 +129,6 @@ jobs:
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
       - name: Clear server space
-        working-directory: $WORKING_DIR
         if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
         run: |
           rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
@@ -141,8 +137,8 @@ jobs:
       - name: Organize Files
         id: organize
         if: steps.compile.outputs.status == 'success' && !cancelled()
-        working-directory: $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
         run: |
+          cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
           for file in *-bcm27xx-bcm2711-rpi-4-*.gz; do
             mv "$file" "fri_$file"
           done
