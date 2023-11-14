@@ -101,17 +101,17 @@ jobs:
         id: download
         run: |
           if [ "$BRANCH" == "snapshots" ]; then
-              wget $DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
+              wget -q $DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
           else
-              wget $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
+              wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
           fi
           
-          tar -xJvf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
+          tar -xJvf *-imagebuilder-* -C $WORKING_DIR && sync && rm -f *-imagebuilder-*.tar.xz
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
-        working-directory: $$WORKING_DIR
+        working-directory: $WORKING_DIR
         run: |
           cat external-package-urls.txt | xargs wget -qP packages
          
