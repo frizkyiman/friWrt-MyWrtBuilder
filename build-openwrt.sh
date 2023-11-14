@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Custom package
-pkg=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "kmod-i2c-bcm2835 kmod-rtl8821cu" )
-
+pkg=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "kmod-i2c-bcm2835" )
+#kmod-rtl8821cu
 # Profile info
 make info
 
