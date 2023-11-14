@@ -106,17 +106,17 @@ jobs:
               wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
           fi
 
-          tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR
+          tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
-        working-directory: $WORKING_DIR
+        working-directory: ${{ env.WORKING_DIR }
         run: |
           cat external-package-urls.txt | xargs wget -qP packages
          
       - name: Run Patch and DIY Scripts
-        working-directory: $WORKING_DIR
+        working-directory: ${{ env.WORKING_DIR }
         run: |
           bash $PATCH_SH
           bash scripts/clash-core.sh
@@ -124,7 +124,7 @@ jobs:
 
       - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}
         id: compile
-        working-directory: $WORKING_DIR
+        working-directory: ${{ env.WORKING_DIR }
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           bash $BUILD_SH
