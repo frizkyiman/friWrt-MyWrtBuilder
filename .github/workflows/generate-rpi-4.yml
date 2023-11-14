@@ -101,9 +101,9 @@ jobs:
         id: download
         run: |
           if [ "$BRANCH" == "snapshots" ]; then
-              wget -q $DOWNLOAD_BASE/$BRANCH/targets/"$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
+              wget $DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
           else
-              wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
+              wget $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
           fi
           
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz
