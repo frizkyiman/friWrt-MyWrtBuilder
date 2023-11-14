@@ -105,8 +105,8 @@ jobs:
           else
               wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
           fi
-          
-          tar -xJvf *-imagebuilder-* -C $WORKING_DIR && sync && rm -f *-imagebuilder-*.tar.xz
+
+          tar -xJvf *-imagebuilder-* && sync && mv *-imagebuilder-* $WORKING_DIR && rm -f *-imagebuilder-*.tar.xz
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
       
