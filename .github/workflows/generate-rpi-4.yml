@@ -89,7 +89,7 @@ jobs:
           echo "DATE=$(date +%Y.%m.%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
           echo "TARGET_SYSTEM=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcm27xx/bcm2711"; else echo "x86/64"; fi)" >> $GITHUB_ENV
-          echo "TARGET_NAME=$(if [ "$TARGET" == "bcm27xx-bcm2711" ]; then echo "bcm27xx-bcm2711"; else echo "x86-64"; fi)" >> $GITHUB_ENV
+          echo "TARGET_NAME="$TARGET" >> $GITHUB_ENV
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
@@ -112,10 +112,12 @@ jobs:
       
       - name: Download External Packages
         run: |
+          cd $WORKING_DIR
           cat external-package-urls.txt | xargs wget -qP packages
          
       - name: Run Patch and DIY Scripts
         run: |
+          cd $WORKING_DIR
           bash $PATCH_SH
           bash scripts/clash-core.sh
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
@@ -124,6 +126,7 @@ jobs:
         id: compile
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
+          cd $WORKING_DIR
           bash $BUILD_SH
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
@@ -139,7 +142,7 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
-          for file in *-bcm27xx-bcm2711-rpi-4-*.gz; do
+          for file in *-$TARGET_NAME-*.gz; do
             mv "$file" "fri_$file"
           done
           rm -rf *.json
