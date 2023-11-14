@@ -2,11 +2,17 @@
 
 ### Firmware details
 
-Firmware upstream：ImmortalWrt 21.02.2 Stable version branch
+friWrt Default Image information
 
-Kernel version：5.4.215
+Default IP: 192.168.1.1
 
-login password：root / -
+Default username: root
+
+Default password: none
+
+Default WIFI name: friWrt_5g
+
+Default WIFI password: none
 
 ### Acknowledgments
 
