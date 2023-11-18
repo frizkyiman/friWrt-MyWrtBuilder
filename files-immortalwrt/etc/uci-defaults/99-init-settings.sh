@@ -7,10 +7,6 @@ uci set system.@system[0].zonename='Asia/Jakarta'
 uci commit system
 /etc/init.d/system reload
 
-#configure LAN
-uci set network.lan.ipaddr="192.168.1.1"
-uci commit network
-
 #configure wan interface
 uci set network.wan=interface 
 uci set network.wan.proto='modemmanager'
@@ -44,11 +40,6 @@ uci set wireless.@wifi-device[0].country='ID'
 uci set wireless.radio0.channel='161'
 uci commit wireless
 /etc/init.d/wireless restart
-
-# custom repo and Disable opkg signature check
-sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
-echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic" >> /etc/opkg/customfeeds.conf
-echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/$(cat /etc/os-release | grep OPENWRT_ARCH | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
 
 # remove huawei me909s usb-modeswitch
 sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
