@@ -148,6 +148,7 @@ chmod +x /sbin/free.sh
 chmod +x /usr/bin/patchoc.sh
 chmod +x /usr/bin/neofetch
 chmod +x /usr/bin/clock
+chmod +x /etc/init.d/repair_ro
 chmod +x /usr/bin/repair_ro
 chmod +x /usr/bin/mount_hdd
 
