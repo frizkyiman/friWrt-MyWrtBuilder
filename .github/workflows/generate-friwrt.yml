@@ -127,6 +127,8 @@ jobs:
           cd $WORKING_DIR
           bash $PATCH_SH
           bash scripts/clash-core.sh
+          mv files-$BASE/* files
+          mv packages-$BASE/* packages
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
           echo "status=success" >> $GITHUB_OUTPUT
 
