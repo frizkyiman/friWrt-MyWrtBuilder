@@ -46,7 +46,7 @@ PACKAGES="$PACKAGES samba4-server luci-app-samba4 aria2 ariang luci-app-aria2"
 PACKAGES="$PACKAGES docker docker-compose dockerd luci-app-dockerman"
 
 # Monitoring
-PACKAGES="$PACKAGES luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2"
+PACKAGES="$PACKAGES luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2 luci-app-speedtest-web speedtest-web"
 
 # i2c tools
 PACKAGES="$PACKAGES i2c-tools kmod-i2c-core kmod-i2c-gpio"
