@@ -4,8 +4,8 @@ echo "Start Builder Patch !"
 echo "Current Path: $PWD"
 
 cd $GITHUB_WORKSPACE/$WORKING_DIR || exit
-mv files-$BASE/* files
-mv packages-$BASE/* packages
+mv files-"$BASE"/* files
+mv packages-"$BASE"/* packages
 
 version=$(echo "$BRANCH" | cut -d'.' -f1)
 branch_main=$( [ "$version" == "21" ] && echo "$BRANCH" | awk -F'.' '{print $1"."$2}' || echo "main" )
