@@ -88,8 +88,8 @@ jobs:
         run: |
           echo "PROFILE=$( [ "$TARGET" == "rpi-4" ] && echo "rpi-4" || echo "generic" )" >> $GITHUB_ENV
           echo "ARCH=$( [ "$TARGET" == "rpi-4" ] && echo "aarch64_cortex-a72" || echo "x86_64" )" >> $GITHUB_ENV
-          echo "TARGET_SYSTEM=$(if [ "$TARGET" == "rpi-4" ]; then echo "bcm27xx/bcm2711"; else echo "x86/64"; fi)" >> $GITHUB_ENV
-          echo "TARGET_NAME=$(if [ "$TARGET" == "rpi-4" ]; then echo "bcm27xx-bcm2711"; else echo "x86-64"; fi)" >> $GITHUB_ENV
+          echo "TARGET_SYSTEM=$( [ "$TARGET" == "rpi-4" ] && echo "bcm27xx/bcm2711" || echo "x86/64" )" >> $GITHUB_ENV
+          echo "TARGET_NAME=$( [ "$TARGET" == "rpi-4" ] && echo "bcm27xx-bcm2711" || echo "x86-64" )" >> $GITHUB_ENV
           echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
       
