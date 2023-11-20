@@ -9,7 +9,7 @@ mv packages-"$BASE"/* packages
 
 version=$(echo "$BRANCH" | cut -d'.' -f1)
 branch_main=$( [ "$version" == "21" ] && echo "$BRANCH" | awk -F'.' '{print $1"."$2}' || echo "main" )
-option_squashfs=$( [ $ROOTFS_SQUASHFS" == "true" ] && echo "CONFIG_TARGET_ROOTFS_SQUASHFS=y" || echo "# CONFIG_TARGET_ROOTFS_SQUASHFS is not set" )
+option_squashfs=$( [ "$ROOTFS_SQUASHFS" == "true" ] && echo "CONFIG_TARGET_ROOTFS_SQUASHFS=y" || echo "# CONFIG_TARGET_ROOTFS_SQUASHFS is not set" )
 
 # custom repo and Disable opkg signature check
 sed -i "43i\sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf" /files-openwrt/etc/uci-defaults/99-init-settings.sh
