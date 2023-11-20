@@ -46,7 +46,7 @@ PACKAGES="$PACKAGES samba4-server luci-app-samba4 aria2 ariang luci-app-aria2"
 PACKAGES="$PACKAGES docker docker-compose dockerd luci-app-dockerman"
 
 # Monitoring
-PACKAGES="$PACKAGES luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2"
+PACKAGES="$PACKAGES luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2 luci-app-speedtest-web speedtest-web"
 
 # i2c tools
 PACKAGES="$PACKAGES i2c-tools kmod-i2c-core kmod-i2c-gpio"
@@ -55,7 +55,7 @@ PACKAGES="$PACKAGES i2c-tools kmod-i2c-core kmod-i2c-gpio"
 PACKAGES="$PACKAGES libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ctype php8-mod-fileinfo php8-mod-zip php8-mod-iconv php8-mod-mbstring coreutils-stat zoneinfo-asia"
 
 # Misc
-PACKAGES="$PACKAGES sudo adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop luci-app-watchcat bash curl tar unzip unrar jq luci-app-ttyd nano"
+PACKAGES="$PACKAGES sudo adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-temp-status luci-app-cpu-status-mini luci-app-ramfree htop luci-app-watchcat bash curl tar unzip unrar jq luci-app-ttyd nano"
 
 # some custom .ipk files
 FILES="files"
@@ -63,7 +63,7 @@ CUSTOM=$( [ "$TARGET" == "bcm27xx-bcm2711" ] && echo "kmod-i2c-bcm2835" )
 #kmod-rtl8821cu
 
 # Exclude package
-EXCLUDED="-dnsmasq -automount -libustream-openssl"
+EXCLUDED="-dnsmasq"
 
 # Disable service
 DISABLED_SERVICES=""
