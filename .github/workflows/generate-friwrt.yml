@@ -125,8 +125,6 @@ jobs:
         if: steps.packages.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          mv files-$BASE files
-          mv packages-$BASE/* packages
           bash $PATCH_SH
           bash scripts/clash-core.sh
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
