@@ -59,7 +59,7 @@ PACKAGES="$PACKAGES sudo adb parted losetup resize2fs luci luci-ssl block-mount 
 
 # some custom .ipk files
 FILES="files"
-CUSTOM=$( [ "$TARGET" == "rpi-4" ] && echo "kmod-i2c-bcm2835 kmod-rtl8821cu" )
+CUSTOM=$( [ "$TARGET" == "rpi-4" ] && echo "kmod-i2c-bcm2835" )
 
 # Exclude package
 EXCLUDED="-dnsmasq -automount -libustream-openssl"
