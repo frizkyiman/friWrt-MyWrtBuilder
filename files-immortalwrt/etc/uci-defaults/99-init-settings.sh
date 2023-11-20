@@ -143,14 +143,14 @@ sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-hd-idle.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-disks-info.json
 sed -i 's/services/status/g' /usr/share/luci/menu.d/luci-app-log.json
 
-chmod +x /sbin/sync_time.sh
-chmod +x /sbin/free.sh
-chmod +x /usr/bin/patchoc.sh
-chmod +x /usr/bin/neofetch
-chmod +x /usr/bin/clock
-chmod +x /etc/init.d/repair_ro
-chmod +x /usr/bin/repair_ro
-chmod +x /usr/bin/mount_hdd
+#chmod +x /sbin/sync_time.sh
+#chmod +x /sbin/free.sh
+#chmod +x /usr/bin/patchoc.sh
+#chmod +x /usr/bin/neofetch
+#chmod +x /usr/bin/clock
+#chmod +x /etc/init.d/repair_ro
+#chmod +x /usr/bin/repair_ro
+#chmod +x /usr/bin/mount_hdd
 
 #uci set hd-idle.@hd-idle[0].enabled='1'
 
