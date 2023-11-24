@@ -18,7 +18,7 @@ on:
       target:
         description: "Select Device Target"
         required: true
-        default: "bcm27xx-bcm2711"
+        default: "rpi-4"
         type: choice
         options:
           - rpi-4
@@ -86,6 +86,8 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
+          echo "SNAPSHOTS=$($DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz)" >> $GITHUB_ENV
+          echo "RELEASE=$($DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz)" >> $GITHUB_ENV
           echo "PROFILE=$( [ "$TARGET" == "rpi-4" ] && echo "rpi-4" || echo "generic" )" >> $GITHUB_ENV
           echo "ARCH=$( [ "$TARGET" == "rpi-4" ] && echo "aarch64_cortex-a72" || echo "x86_64" )" >> $GITHUB_ENV
           echo "TARGET_SYSTEM=$( [ "$TARGET" == "rpi-4" ] && echo "bcm27xx/bcm2711" || echo "x86/64" )" >> $GITHUB_ENV
@@ -102,21 +104,18 @@ jobs:
       - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
         id: download
         run: |
-          if [ "$BRANCH" == "snapshots" ]; then
-              wget -q $DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz
-          else
-              wget -q $DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz
-          fi
-
+          [ "$BRANCH" == "snapshots" ] && wget -q $SNAPSHOTS || wget -q $RELEASE
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
       
-      - name: Download External Packages
+      - name: Organize External Files and Packages
         id: packages
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
+          mv files-$BASE files
+          mv packages-$BASE/* packages
           cat external-package-urls.txt | xargs wget -qP packages
           echo "status=success" >> $GITHUB_OUTPUT
          
@@ -173,4 +172,3 @@ jobs:
             - Default password: none
             - Default WIFI name: friWrt_5g
             - Default WIFI password: none
-  
