@@ -34,7 +34,7 @@ else
 fi
 
 # Adguardhome
-PACKAGES="$PACKAGES luci-app-adguardhome"
+PACKAGES="$PACKAGES luci-app-adguardhome ca-certificates ca-bundle curl wget wget-ssl tar unzip bind-tools"
 
 # Hard disk tools
 PACKAGES="$PACKAGES luci-app-diskman luci-app-hd-idle luci-app-disks-info smartmontools kmod-usb-storage kmod-usb-storage-uas ntfs-3g"
