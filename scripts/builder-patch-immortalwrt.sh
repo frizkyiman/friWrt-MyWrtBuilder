@@ -11,7 +11,7 @@ option_squashfs=$( [ "$ROOTFS_SQUASHFS" == "true" ] && echo "CONFIG_TARGET_ROOTF
 # Custom Repository
 #sed -i "13i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic" repositories.conf
 #sed -i "14i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/$ARCH" repositories.conf
-sed -i "s/option check_signature/# option check_signature/g" repositories.conf
+sed -i '\|option check_signature| s|^|#|' repositories.conf
 
 # Force opkg to overwrite files
 #sed -i "s/install \$(BUILD_PACKAGES)/install \$(BUILD_PACKAGES) --force-overwrite/" Makefile
