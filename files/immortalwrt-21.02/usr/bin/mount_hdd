@@ -1,0 +1,30 @@
+#!/bin/sh
+# Created by Frizkyiman
+# Github https://github.com/frizkyiman/
+
+# Configuration variables
+if [ "$#" -ne 2 ]; then
+    echo "Usage: mount_hdd <DEVICE> <MOUNT_POINT>"
+    echo "eg.    mount_hdd /dev/sda1 /nas-storage"
+    exit 1
+fi
+
+DEVICE="$1"
+MOUNT_POINT="$2"
+
+if mount | grep "$DEVICE" > /dev/null; then
+    echo "Device $DEVICE is already mounted. Unmounting..."
+    umount "$DEVICE"
+fi
+
+if [ ! -d "$MOUNT_POINT" ]; then
+    mkdir -p "$MOUNT_POINT"
+fi
+
+    mount -t ntfs-3g "$DEVICE" "$MOUNT_POINT" -o rw,lazytime,noatime,big_writes
+ 
+    if [ $? -eq 0 ]; then
+        echo "HDD successfully mounted at $MOUNT_POINT (using $DEVICE)"
+    else
+        echo "Failed to mount at $MOUNT_POINT"
+    fi

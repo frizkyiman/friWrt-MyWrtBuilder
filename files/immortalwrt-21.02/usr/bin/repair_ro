@@ -1,0 +1,41 @@
+#!/bin/sh
+# Created by Frizkyiman
+# Github https://github.com/frizkyiman/
+
+if [ -n "$1" ]; then
+    root_device="$1"
+    if ! blkid | grep -q "$root_device:"; then
+        echo "Root file system device not found in the system. Unable to repair."
+        exit 1
+    fi
+else
+    root_device=$(blkid -L rootfs -o device)
+fi
+
+if [ -z "$root_device" ]; then
+    echo "Root file system device not found in the system. Unable to repair."
+    exit 1
+fi
+
+ro_status=$(mount | awk '/\/dev\/root/ && /ro,/ {print $6}' | grep -o 'ro' | head -n 1)
+
+if [ "$ro_status" = "ro" ]; then
+    echo "Detected root file system: $root_device"
+    echo "The file system is currently read-only. Initiating repair..."
+
+    if e2fsck -y "$root_device"; then
+        echo "File system repair successful."
+        echo "Mounting $root_device to read-write"
+        mount -o remount,rw "$root_device" /
+        echo "Rebooting the system..."
+        reboot
+    else
+        echo "An error occurred while repairing the file system."
+        echo "Trying to reboot if possible"
+        echo "please try force reboot if nothing happen using reboot -f"
+        reboot
+    fi
+ 
+else
+    echo "The rootfs $root_device is currently in read-write mode."
+fi
