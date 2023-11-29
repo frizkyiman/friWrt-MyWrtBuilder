@@ -201,19 +201,6 @@ echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
 echo '0 12 * * * /sbin/sync_time.sh beacon.liveon.id' >> /etc/crontabs/root
 /etc/init.d/cron restart
 
-opkg install /root/luci-app-tinyfm_2.5_all.ipk
-rm /root/luci-app-tinyfm_2.5_all.ipk
-
-opkg install /root/luci-app-openclash_0.45.112-beta_all.ipk --force-reinstall
-rm /root/luci-app-openclash_0.45.112-beta_all.ipk
-/usr/bin/patchoc.sh
-
-opkg install /root/luci-app-modeminfo_0.1.0-2_all.ipk
-rm /root/luci-app-modeminfo_0.1.0-2_all.ipk
-
-opkg install /root/luci-app-oled_1.0_all.ipk
-rm /root/luci-app-oled_1.0_all.ipk
-
 unzip /root/yacd-*.zip -d /usr/share/openclash/ui
 mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old && mv /usr/share/openclash/ui/yacd-* /usr/share/openclash/ui/yacd
 rm /root/yacd-*.zip
