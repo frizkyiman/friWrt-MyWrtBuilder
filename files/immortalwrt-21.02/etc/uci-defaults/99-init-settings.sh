@@ -220,7 +220,7 @@ config vnstat
 	list interface 'wwan0'
 EOF
 
-cat <<'EOF' >/etc/config/atcmds.user
+cat <<'EOF' >/etc/modem/atcmmds.user
 AT Check;AT
 Modem Info;ATI
 Debug Info;ATI^DEBUG?
