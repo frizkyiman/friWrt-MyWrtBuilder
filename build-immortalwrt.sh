@@ -9,7 +9,7 @@ PROFILE=""
 PACKAGES=""
 
 # Argon Theme
-#PACKAGES="$PACKAGES luci-theme-argon luci-argon-config"
+PACKAGES="$PACKAGES luci-theme-argon luci-argon-config"
 
 # Driver Modem Rakitan
 PACKAGES="$PACKAGES kmod-mii kmod-usb-net kmod-usb-wdm kmod-usb-net-qmi-wwan uqmi luci-proto-qmi \
@@ -20,7 +20,7 @@ kmod-usb-net-huawei-cdc-ncm kmod-usb-net-cdc-ether kmod-usb-net-rndis kmod-usb-n
 kmod-usb-uhci kmod-usb2 kmod-usb-ehci kmod-usb-net-ipheth usbmuxd libusbmuxd-utils libimobiledevice-utils usb-modeswitch kmod-nls-utf8 mbim-utils xmm-modem"
 
 # Modem Tools
-PACKAGES="$PACKAGES atinout luci-app-modemband modemband luci-app-mmconfig sms-tool luci-app-sms-tool picocom minicom"
+PACKAGES="$PACKAGES atinout luci-app-modemband modemband luci-app-mmconfig sms-tool luci-app-sms-tool-js picocom minicom"
 
 # Adapter UTL driver
 PACKAGES="$PACKAGES kmod-usb-net-rtl8150 kmod-usb-net-rtl8152 kmod-usb-net-asix kmod-usb-net-asix-ax88179"
@@ -28,9 +28,11 @@ PACKAGES="$PACKAGES kmod-usb-net-rtl8150 kmod-usb-net-rtl8152 kmod-usb-net-asix 
 # OpenClash iptables and nftables
 version=$(echo $BRANCH | cut -d'.' -f1)
 if [ "$version" == "21" ]; then
-    PACKAGES="$PACKAGES coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun unzip luci-compat luci luci-base luci-app-openclash"
+    # iptables
+	PACKAGES="$PACKAGES coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun unzip luci-compat luci luci-base luci-app-openclash"
 else
-    PACKAGES="$PACKAGES coreutils-nohup bash dnsmasq-full curl ca-certificates ipset ip-full libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip kmod-nft-tproxy luci-compat luci luci-base luci-app-openclash"
+    # nftables
+	PACKAGES="$PACKAGES coreutils-nohup bash dnsmasq-full curl ca-certificates ipset ip-full libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip kmod-nft-tproxy luci-compat luci luci-base luci-app-openclash"
 fi
 
 # Adguardhome
@@ -57,8 +59,11 @@ PACKAGES="$PACKAGES libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ct
 # Misc
 PACKAGES="$PACKAGES sudo adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop luci-app-watchcat bash curl tar unzip unrar jq luci-app-ttyd nano"
 
+# Custom Files
+branch_tag=$( [ "$BRANCH" == "21.02.7" ] && echo -"$BRANCH" | awk -F'.' '{print $1"."$2}' )
+FILES="files/"$BASE""$branch_tag""
+
 # some custom .ipk files
-FILES="files"
 CUSTOM=$( [ "$TARGET" == "rpi-4" ] && echo "kmod-i2c-bcm2835" )
 
 # Exclude package
