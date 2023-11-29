@@ -30,15 +30,14 @@ on:
         type: choice
         options:
           - snapshots
-          - 21.02.3
           - 21.02.7
           - 22.03.5
-          - 23.05.0
-          - 23.05.0-rc4
+          - 23.05.1
+          - 23.05.2
       rootfs:
         description: 'Set Rootfs size'
         required: true
-        default: '3700'
+        default: '3600'
       squashfs:
         description: "Generate Squashfs image"
         required: true
@@ -109,14 +108,13 @@ jobs:
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
       
-      - name: Organize External Files and Packages
+      - name: Download External Packages
         id: packages
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          mv files-$BASE files
-          mv packages-$BASE/* packages
-          cat external-package-urls.txt | xargs wget -qP packages
+          branch_tag=$( [ "$BRANCH" == "21.02.7" ] && echo -"$BRANCH" | awk -F'.' '{print $1"."$2}' )
+          cat external-package-urls"branch_tag".txt | xargs wget -qP packages
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
@@ -126,8 +124,9 @@ jobs:
           cd $WORKING_DIR
           bash $PATCH_SH
           bash scripts/clash-core.sh
-          echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
+          bash scripts/agh-core.sh
           echo "status=success" >> $GITHUB_OUTPUT
+          echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
       - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
         id: compile
