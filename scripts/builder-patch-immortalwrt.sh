@@ -5,18 +5,12 @@ echo "Current Path: $PWD"
 
 cd $GITHUB_WORKSPACE/$WORKING_DIR || exit
 
-version=$(echo "$BRANCH" | cut -d'.' -f1)
-branch_main=$( [ "$version" == "21" ] && echo "$BRANCH" | awk -F'.' '{print $1"."$2}' || echo "main" )
+branch_main=$( [ "$BRANCH" == "21.02.7" ] && echo "$BRANCH" | awk -F'.' '{print $1"."$2}' || echo "main" )
 option_squashfs=$( [ "$ROOTFS_SQUASHFS" == "true" ] && echo "CONFIG_TARGET_ROOTFS_SQUASHFS=y" || echo "# CONFIG_TARGET_ROOTFS_SQUASHFS is not set" )
 
-# custom repo and Disable opkg signature check
-sed -i "43i\sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf" /files/etc/uci-defaults/99-init-settings.sh
-sed -i "44i\echo 'src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic' >> /etc/opkg/customfeeds.conf" /files/etc/uci-defaults/99-init-settings.sh
-sed -i "45i\echo 'src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/$ARCH' >> /etc/opkg/customfeeds.conf" /files/etc/uci-defaults/99-init-settings.sh
-
 # Custom Repository
-sed -i "13i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic" repositories.conf
-sed -i "14i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/$ARCH" repositories.conf
+#sed -i "13i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic" repositories.conf
+#sed -i "14i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/$ARCH" repositories.conf
 sed -i "s/option check_signature/# option check_signature/g" repositories.conf
 
 # Force opkg to overwrite files
