@@ -214,6 +214,8 @@ uci commit nlbwmon
 
 sed -i "s/;DatabaseDir "/var/lib/vnstat"/DatabaseDir "/etc/vnstat"/" /etc/config/vnstat
 
+sed -i '\|/etc/init.d/openclash reload "firewall" >/dev/null 2>&1| s|^|#|' /etc/init.d/openclash
+
 cat <<'EOF' >/etc/config/vnstat
 config vnstat
 	list interface 'br-lan'
