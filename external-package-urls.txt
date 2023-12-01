@@ -16,4 +16,6 @@ https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-log_0.6-2_all.i
 https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-temp-status_0.3-5_all.ipk
 https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-cpu-status-mini_0.1-5_all.ipk
 https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-ramfree_1.0_all.ipk
+https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-argon-config_1.0_all.ipk
+https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-theme-argon_2.3.1_all.ipk
 https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-tinyfm_2.5_all.ipk
