@@ -16,5 +16,5 @@ wget -q https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.41/A
 tar -zxf AdGuardHome_linux_arm64.tar.gz
 
 echo "Configuring AdGuardHome"
-cd $WORKING_DIR
+cd $GITHUB_WORKSPACE/$WORKING_DIR
 cp scripts/AdGuardHome.yaml files/"$BASE""$branch_tag"/opt/AdGuardHome/AdGuardHome.yaml
