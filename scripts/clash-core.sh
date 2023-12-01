@@ -1,8 +1,16 @@
 #!/bin/bash
 
-echo "Start Clash Core Download !"
 echo "Current Path: $PWD"
 
+echo "Start YACD Download !"
+yacd="https://github.com/taamarin/yacd-meta/archive/gh-pages.zip"
+mkdir -p files/usr/share/openclash/ui
+wget --no-check-certificate -nv "$yacd" -O files/usr/share/openclash/ui/yacd.zip
+unzip files/usr/share/openclash/ui/yacd.zip -d files/usr/share/openclash/ui
+mv files/usr/share/openclash/ui/yacd-meta-gh-pages /files/usr/share/openclash/ui/yacd.new
+rm files/usr/share/openclash/ui/yacd.zip
+
+echo "Start Clash Core Download !"
 mkdir -p files/etc/openclash/core
 cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
 
@@ -26,5 +34,5 @@ extract_and_cleanup() {
 }
 
 for ((i=0; i<${#urls[@]}; i++)); do
-  wget -nv "${urls[i]}" && extract_and_cleanup "${urls[i]}" "${targets[i]}" || echo "Failed to download ${urls[i]}"
+  wget --no-check-certificate -nv "${urls[i]}" && extract_and_cleanup "${urls[i]}" "${targets[i]}" || echo "Failed to download ${urls[i]}"
 done
