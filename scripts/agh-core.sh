@@ -15,7 +15,7 @@ wget -q https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.41/A
 tar -zxf AdGuardHome_linux_arm64.tar.gz
 
 echo "Configuring AdGuardHome"
-adguard_home_config=$(cat <<'EOF'
+adguard_home_config="
 http:
   pprof:
     port: 6060
@@ -212,8 +212,7 @@ os:
   user: ""
   rlimit_nofile: 0
 schema_version: 27
-EOF
-)
+"
 
 echo "$adguard_home_config" > files/"$BASE""$branch_tag"/opt/AdGuardHome/AdGuardHome.yaml
 echo "AdGuardHome configuration completed!"
