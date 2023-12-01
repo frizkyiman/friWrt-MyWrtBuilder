@@ -20,7 +20,7 @@ mkdir -p files/sbin/
 mkdir -p files/www/luci-static/resources/view/status/include
 cd files/
 
-wget --no-check-certificate -nv "$urls"
+wget --no-check-certificate -nv "${urls[i]}"
 
 # files/etc/uci-defaults
 mv files/99-init-settings_"$BASE""$branch_main".sh files/etc/uci-defaults/99-init-settings.sh
