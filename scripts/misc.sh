@@ -5,7 +5,7 @@ echo "Current Path: $PWD"
 
 # custom script files urls
 ARCHH=$( [ "$TARGET" == "rpi-4" ] && echo "aarch64" || echo "x86_64" )
-urls=("https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-$ARCHH.tgz"
+urls=("https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCHH.tgz"
       "https://raw.githubusercontent.com/dylanaraps/neofetch/master/neofetch"
       "https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/sbin/sync_time.sh"
       "https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/usr/bin/clock"
@@ -29,7 +29,7 @@ mv files/99-init-settings_"$BASE""$branch_main".sh files/etc/uci-defaults/99-ini
 wget --no-check-certificate -nv https://raw.githubusercontent.com/frizkyiman/fix-read-only/main/etc/init.d/repair_ro -O files/etc/init.d/repair_ro
 
 # files/sbin/
-echo "sync && echo 3 > /proc/sys/vm/drop_caches && rm -rf /tmp/luci* >> files/sbin/free.sh
+echo "sync && echo 3 > /proc/sys/vm/drop_caches && rm -rf /tmp/luci*" >> files/sbin/free.sh
 mv files/sync_time.sh files/sbin/sync_time.sh
 
 # files/usr/bin/
