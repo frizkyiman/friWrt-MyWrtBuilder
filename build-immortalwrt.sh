@@ -9,7 +9,7 @@ PROFILE=""
 PACKAGES=""
 
 # Argon Theme
-PACKAGES="$PACKAGES luci-theme-argon luci-argon-config"
+PACKAGES="$PACKAGES luci-theme-argon luci-app-argon-config"
 
 # Driver Modem Rakitan
 PACKAGES="$PACKAGES kmod-mii kmod-usb-net kmod-usb-wdm kmod-usb-net-qmi-wwan uqmi luci-proto-qmi \
