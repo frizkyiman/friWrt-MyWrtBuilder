@@ -125,6 +125,7 @@ jobs:
           bash $PATCH_SH
           bash scripts/clash-core.sh
           bash scripts/agh-core.sh
+          bash scripts/misc.sh
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
