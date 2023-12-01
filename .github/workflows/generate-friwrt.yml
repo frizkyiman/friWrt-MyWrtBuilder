@@ -85,8 +85,8 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          echo "SNAPSHOTS=\${DOWNLOAD_BASE/\$BRANCH/targets/\$TARGET_SYSTEM/\$BASE-imagebuilder-\$TARGET_NAME.Linux-x86_64.tar.xz}" >> $GITHUB_ENV
-          echo "RELEASE=\${DOWNLOAD_BASE/releases/\$BRANCH/targets/\$TARGET_SYSTEM/\$BASE-imagebuilder-\$BRANCH-\$TARGET_NAME.Linux-x86_64.tar.xz}" >> $GITHUB_ENV
+          echo "SNAPSHOTS=\${"$DOWNLOAD_BASE"/\"$BRANCH"/targets/\"$TARGET_SYSTEM"/\"$BASE"-imagebuilder-\"$TARGET_NAME".Linux-x86_64.tar.xz}" >> $GITHUB_ENV
+          echo "RELEASE=\${"$DOWNLOAD_BASE"/releases/\"$BRANCH"/targets/\"$TARGET_SYSTEM"/\"$BASE"-imagebuilder-\"$BRANCH"-\"$TARGET_NAME".Linux-x86_64.tar.xz}" >> $GITHUB_ENV
           echo "PROFILE=$( [ "$TARGET" == "rpi-4" ] && echo "rpi-4" || echo "generic" )" >> $GITHUB_ENV
           echo "ARCH=$( [ "$TARGET" == "rpi-4" ] && echo "aarch64_cortex-a72" || echo "x86_64" )" >> $GITHUB_ENV
           echo "TARGET_SYSTEM=$( [ "$TARGET" == "rpi-4" ] && echo "bcm27xx/bcm2711" || echo "x86/64" )" >> $GITHUB_ENV
