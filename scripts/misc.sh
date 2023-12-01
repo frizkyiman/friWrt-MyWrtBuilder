@@ -18,10 +18,10 @@ mkdir -p files/etc/init.d
 mkdir -p files/usr/bin/
 mkdir -p files/sbin/
 mkdir -p files/www/luci-static/resources/view/status/include
-cd files/
 
 # download files
-wget --no-check-certificate -nv "${urls[@]}"
+wget --no-check-certificate -nv -P files "${urls[@]}"
+cd files/
 
 # files/etc/uci-defaults
 mv files/99-init-settings_"$BASE""$branch_main".sh files/etc/uci-defaults/99-init-settings.sh
@@ -39,7 +39,7 @@ mv files/clock files/usr/bin/clock
 mv files/repair_ro files/usr/bin/repair_ro
 mv files/mount_hdd files/usr/bin/mount_hdd
 mv files/patchoc.sh files/usr/bin/patchoc.sh
-tar -xzvf files/usr/bin/*-speedtest-*.tgz -C files/usr/bin && rm files/*-speedtest-*.tgz && rm files/usr/bin/speedtest.md
+tar -xzvf files/*-speedtest-*.tgz -C files/usr/bin && rm files/*-speedtest-*.tgz && rm files/usr/bin/speedtest.md
 
 # files/www/luci-static/resources/view/status/include
 mv files/10_system_$BASE.js files/www/luci-static/resources/view/status/include/10_system.js
