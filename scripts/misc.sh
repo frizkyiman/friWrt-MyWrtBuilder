@@ -18,26 +18,25 @@ mkdir -p files/etc/init.d
 mkdir -p files/usr/bin/
 mkdir -p files/sbin/
 mkdir -p files/www/luci-static/resources/view/status/include
+cd files/
 
 wget --no-check-certificate -nv https://raw.githubusercontent.com/frizkyiman/fix-read-only/main/etc/init.d/repair_ro
 mv files//repair_ro files/etc/init.d/repair_ro
-
-cd files/
-
 wget --no-check-certificate -nv "$urls"
 
 tar -xzvf files/usr/bin/*-speedtest-*.tgz -C files/usr/bin
 rm files/*-speedtest-*.tgz
 rm files/usr/bin/speedtest.md
 
+echo "sync && echo 3 > /proc/sys/vm/drop_caches && rm -rf /tmp/luci* >> files/sbin/free.sh
+mv files/sync_time.sh files/sbin/sync_time.sh
 mv files/neofetch files/usr/bin/neofetch
 mv files/clock files/usr/bin/clock
-mv files/sync_time.sh files/sbin/sync_time.sh
 mv files/repair_ro files/usr/bin/repair_ro
 mv files/mount_hdd files/usr/bin/mount_hdd
+mv files/patchoc.sh files/usr/bin/patchoc.sh 
 
 mv files/10_system_$BASE.js files/www/luci-static/resources/view/status/include/10_system.js
-mv files/patchoc.sh files/usr/bin/patchoc.sh 
 mv files/99-init-settings_"$BASE""$branch_main".sh files/etc/uci-defaults/99-init-settings.sh
 
-echo "sync && echo 3 > /proc/sys/vm/drop_caches && rm -rf /tmp/luci* >> files//sbin/free.sh
+
