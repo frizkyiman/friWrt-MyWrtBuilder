@@ -7,7 +7,7 @@ mkdir -p files/etc/openclash/core
 cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
 
 urls=("https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.16.0/clash.meta-linux-arm64-v1.16.0.gz"
-      "https://github.com/vernesong/OpenClash/raw/core/master/premium/clash-linux-arm64-2023.08.17.gz"
+      "https://github.com/vernesong/OpenClash/raw/core/master/premium/clash-linux-arm64-2023.08.17-13-gdcc8d87.gz"
       "https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-arm64.tar.gz")
 targets=("clash_meta" "clash_tun" "clash")
 
