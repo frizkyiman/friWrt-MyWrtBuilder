@@ -89,10 +89,6 @@ jobs:
           echo "ARCH=$( [ "$TARGET" == "rpi-4" ] && echo "aarch64_cortex-a72" || echo "x86_64" )" >> $GITHUB_ENV
           echo "TARGET_SYSTEM=$( [ "$TARGET" == "rpi-4" ] && echo "bcm27xx/bcm2711" || echo "x86/64" )" >> $GITHUB_ENV
           echo "TARGET_NAME=$( [ "$TARGET" == "rpi-4" ] && echo "bcm27xx-bcm2711" || echo "x86-64" )" >> $GITHUB_ENV
-          echo "DEBUG_TARGET_NAME=${{ env.TARGET_NAME }}" >> $GITHUB_ENV
-          echo "DEBUG_TARGET_SYSTEM=${{ env.TARGET_SYSTEM }}" >> $GITHUB_ENV
-          echo "SNAPSHOTS=${DOWNLOAD_BASE}/${BRANCH}/targets/${{ env.TARGET_SYSTEM }}/${BASE}-imagebuilder-${{ env.TARGET_NAME }}.Linux-x86_64.tar.xz" >> $GITHUB_ENV
-          echo "RELEASE=${DOWNLOAD_BASE}/releases/${BRANCH}/targets/${{ env.TARGET_SYSTEM }}/${BASE}-imagebuilder-${BRANCH}-${{ env.TARGET_NAME }}.Linux-x86_64.tar.xz" >> $GITHUB_ENV
           echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
       
@@ -105,6 +101,8 @@ jobs:
       - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
         id: download
         run: |
+          SNAPSHOTS="$DOWNLOAD_BASE"/"$BRANCH"/targets/"$TARGET_SYSTEM"/"$BASE"-imagebuilder-"$TARGET_NAME".Linux-x86_64.tar.xz"
+          RELEASE="$DOWNLOAD_BASE"/releases/"$BRANCH"/targets/"$TARGET_SYSTEM"/"$BASE"-imagebuilder-"$BRANCH"-"$TARGET_NAME".Linux-x86_64.tar.xz"
           [ "$BRANCH" == "snapshots" ] && wget -q $SNAPSHOTS || wget -q $RELEASE
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
