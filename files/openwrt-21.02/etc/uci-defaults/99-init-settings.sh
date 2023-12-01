@@ -203,9 +203,7 @@ echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
 echo '0 12 * * * /sbin/sync_time.sh beacon.liveon.id' >> /etc/crontabs/root
 /etc/init.d/cron restart
 
-unzip /root/yacd-*.zip -d /usr/share/openclash/ui
-mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old && mv /usr/share/openclash/ui/yacd-* /usr/share/openclash/ui/yacd
-rm /root/yacd-*.zip
+mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old && mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
 
 echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
 
