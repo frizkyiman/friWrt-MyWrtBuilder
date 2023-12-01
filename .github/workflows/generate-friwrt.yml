@@ -101,9 +101,9 @@ jobs:
       - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
         id: download
         run: |
-          SNAPSHOTS="$DOWNLOAD_BASE"/"$BRANCH"/targets/"$TARGET_SYSTEM"/"$BASE"-imagebuilder-"$TARGET_NAME".Linux-x86_64.tar.xz"
-          RELEASE="$DOWNLOAD_BASE"/releases/"$BRANCH"/targets/"$TARGET_SYSTEM"/"$BASE"-imagebuilder-"$BRANCH"-"$TARGET_NAME".Linux-x86_64.tar.xz"
-          [ "$BRANCH" == "snapshots" ] && wget -q $SNAPSHOTS || wget -q $RELEASE
+          SNAPSHOTS="$DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz"
+          RELEASE="$DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz"
+          [ "$BRANCH" == "snapshots" ] && wget -q "$SNAPSHOTS" || wget -q "$RELEASE"
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
