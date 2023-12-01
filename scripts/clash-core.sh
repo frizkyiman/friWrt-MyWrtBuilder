@@ -26,5 +26,5 @@ extract_and_cleanup() {
 }
 
 for ((i=0; i<${#urls[@]}; i++)); do
-  wget -q "${urls[i]}" && extract_and_cleanup "${urls[i]}" "${targets[i]}" || echo "Failed to download ${urls[i]}"
+  wget -nv "${urls[i]}" && extract_and_cleanup "${urls[i]}" "${targets[i]}" || echo "Failed to download ${urls[i]}"
 done
