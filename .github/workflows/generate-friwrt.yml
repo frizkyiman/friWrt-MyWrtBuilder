@@ -114,7 +114,7 @@ jobs:
         run: |
           cd $WORKING_DIR
           branch_tag=$( [ "$BRANCH" == "21.02.7" ] && echo -"$BRANCH" | awk -F'.' '{print $1"."$2}' )
-          cat external-package-urls$branch_tag.txt | xargs wget -qP packages
+          cat "external-package-urls$branch_tag.txt" | xargs wget -qP packages
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
