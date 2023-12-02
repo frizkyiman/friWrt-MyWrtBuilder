@@ -8,9 +8,6 @@ cd $GITHUB_WORKSPACE/$WORKING_DIR || exit
 branch_main=$( [ "$BRANCH" == "21.02.7" ] && echo "$BRANCH" | awk -F'.' '{print $1"."$2}' || echo "main" )
 option_squashfs=$( [ "$ROOTFS_SQUASHFS" == "true" ] && echo "CONFIG_TARGET_ROOTFS_SQUASHFS=y" || echo "# CONFIG_TARGET_ROOTFS_SQUASHFS is not set" )
 
-# Custom Repository
-#sed -i "13i\src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/generic" repositories.conf
-#sed -i "14i\src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/$branch_main/$ARCH" repositories.conf
 sed -i '\|option check_signature| s|^|#|' repositories.conf
 
 # Force opkg to overwrite files
