@@ -81,15 +81,6 @@ uci set firewall.adguardhome_dns_53.dest_port='53'
 uci set firewall.adguardhome_dns_53.name='Adguard Home'
 uci commit firewall
 
-mkdir /opt/AdGuardHome
-uci set AdGuardHome.AdGuardHome.workdir='/opt/AdGuardHome'
-uci set AdGuardHome.AdGuardHome.binpath='/opt/AdGuardHome/AdGuardHome'
-uci set AdGuardHome.AdGuardHome.configpath='/opt/AdGuardHome/AdGuardHome.yaml'
-uci set AdGuardHome.AdGuardHome.redirect='exchange'
-uci set AdGuardHome.AdGuardHome.enabled='1'
-uci commit AdGuardHome
-/etc/init.d/AdGuardHome restart
-
 # add cron job for modem rakitan
 echo '#auto renew ip lease for modem rakitan' >> /etc/crontabs/root
 echo '30 3 * * 1,2,3,4,5,6 echo  AT+CFUN=4 | atinout - /dev/ttyUSB0 - && sleep 3 && ifdown wan && sleep 3 && echo  AT+CFUN=1 | atinout - /dev/ttyUSB0 - && sleep 3 && ifup wan' >> /etc/crontabs/root
@@ -128,51 +119,6 @@ uci set firewall.samba_smb_nt.target="NOTRACK"
 uci commit firewall
 /etc/init.d/firewall restart
 
-#samba setting
-cat <<'EOF' >/etc/config/samba4
-config samba
-	option workgroup 'WORKGROUP'
-	option charset 'UTF-8'
-	option description 'Samba on OpenWRT'
-
-config sambashare
-	option name 'NAS-STORAGE'
-	option path '/mnt/sda1'
-	option read_only 'no'
-	option guest_ok 'yes'
-	option create_mask '0777'
-	option dir_mask '0777'
-EOF
-uci commit samba4
-service samba4 restart
-
-#aria setting
-uci set aria2.main=aria2
-uci set aria2.main.bt_enable_lpd='true'
-uci set aria2.main.enable_dht='true'
-uci set aria2.main.follow_torrent='true'
-uci set aria2.main.file_allocation='none'
-uci set aria2.main.save_session_interval='30'
-uci set aria2.main.user='root'
-uci set aria2.main.dir='/mnt/sda1/download'
-uci set aria2.main.config_dir='/etc/aria2'
-uci set aria2.main.rpc_auth_method='none'
-uci set aria2.main.rpc_secure='false'
-uci set aria2.main.enable_proxy='0'
-uci set aria2.main.check_certificate='false'
-uci set aria2.main.http_accept_gzip='true'
-uci set aria2.main.max_connection_per_server='8'
-uci set aria2.main.split='8'
-uci set aria2.main.enable_dht6='false'
-uci set aria2.main.enable_peer_exchange='true'
-uci set aria2.main.disable_ipv6='true'
-uci set aria2.main.enabled='1'
-uci set aria2.main.enable_logging='1'
-uci set aria2.main.log='/var/log/aria2.log'
-uci set aria2.main.log_level='info'
-uci commit aria2
-service aria2 restart
-
 uci set ttyd.@ttyd[0].command='/bin/bash --login'
 uci commit
 
@@ -183,17 +129,6 @@ sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-samba4.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-hd-idle.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-disks-info.json
 sed -i 's/services/status/g' /usr/share/luci/menu.d/luci-app-log.json
-
-#chmod +x /sbin/sync_time.sh
-#chmod +x /sbin/free.sh
-#chmod +x /usr/bin/patchoc.sh
-#chmod +x /usr/bin/neofetch
-#chmod +x /usr/bin/clock
-#chmod +x /etc/init.d/repair_ro
-#chmod +x /usr/bin/repair_ro
-#chmod +x /usr/bin/mount_hdd
-
-#uci set hd-idle.@hd-idle[0].enabled='1'
 
 sed -i '/exit 0/i /usr/bin/patchoc.sh' /etc/rc.local
 sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
@@ -221,37 +156,6 @@ cat <<'EOF' >/etc/config/vnstat
 config vnstat
 	list interface 'br-lan'
 	list interface 'wwan0'
-EOF
-
-cat <<'EOF' >/etc/modem/atcmmds.user
-AT Check;AT
-Modem Info;ATI
-Debug Info;ATI^DEBUG?
-Restart Modem;AT^RESET
-Airplane Mode On;AT+CFUN=4
-Airplane Mode Off;AT+CFUN=1
-Check IMSI SIM;AT+CIMI
-Check IMEI;AT+GSN
-Enable Carrier Aggregation;AT^CA_ENABLE=0
-Disable Carrier Aggregation;AT^CA_ENABLE=1
-Check band Carrier Aggregation;AT^CA_INFO?
-Check signal band neighbour;AT+VZWRSRP?
-Set WCDMA only;AT^SLMODE=1,14
-Set LTE only;AT^SLMODE=1,30
-Set WCDMA & LTE;AT^SLMODE=1,35
-Check USB mode USB 2.0/USB 3.0;AT^USBTYPE
-Check modem CAT;AT^GETLTECAT?
-Disable GPS;AT+GPS=0
-Volt Check;AT+VOLT?
-Temp Check;AT^TEMP?
-Check Lock Band;AT^SLBAND?
-Reset Lock Band;AT^SLBAND
-Lock Band B1;AT^SLBAND=LTE,2,1
-Lock Band B3;AT^SLBAND=LTE,2,3
-Lock Band B8;AT^SLBAND=LTE,2,8
-Lock Band B40;AT^SLBAND=LTE,2,40
-Lock Band B1 & B3;AT^SLBAND=LTE,2,1,3
-Lock Band B1, B3 & B40;AT^SLBAND=LTE,2,1,3,40
 EOF
 
 reboot
