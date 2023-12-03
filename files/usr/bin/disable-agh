@@ -12,8 +12,13 @@ uci -q delete dhcp.lan.dns
 uci set dhcp.@dnsmasq[0].port='53'
 uci commit dhcp
 /etc/init.d/dnsmasq restart
+
+uci delete firewall.adguardhome_dns_53
+uci commit firewall
+
 uci set AdGuardHome.AdGuardHome.enabled='1'
 uci commit AdGuardHome
-/etc/init.d/AdGuardHome restart
+etc/init.d/AdGuardHome stop
+etc/init.d/AdGuardHome disable
 
 echo "AdGuardHome Successfully Disable!"
