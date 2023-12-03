@@ -6,7 +6,7 @@ echo "Start YACD Download !"
 mkdir -p files/usr/share/openclash/ui
 wget --no-check-certificate -nv https://github.com/taamarin/yacd-meta/archive/gh-pages.zip -O files/usr/share/openclash/ui/yacd.zip
 unzip -q files/usr/share/openclash/ui/yacd.zip -d files/usr/share/openclash/ui
-mv files/usr/share/openclash/ui/yacd-* /files/usr/share/openclash/ui/yacd.new
+mv "files/usr/share/openclash/ui/yacd-*" "files/usr/share/openclash/ui/yacd.new"
 rm files/usr/share/openclash/ui/yacd.zip
 
 echo "Start Clash Core Download !"
