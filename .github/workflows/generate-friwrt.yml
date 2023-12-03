@@ -113,8 +113,11 @@ jobs:
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          branch_tag=$( [ "$BRANCH" == "21.02.7" ] && echo -"$BRANCH" | awk -F'.' '{print $1"."$2}' )
-          wget --no-check-certificate -i external-package-urls"$branch_tag".txt -nv -P packages
+          if [[ "$(echo $BRANCH | cut -d'.' -f1)" == "21" ]]; then
+              wget --no-check-certificate -i external-package-urls-21.02.txt -nv -P packages
+          else
+              wget --no-check-certificate -i external-package-urls.txt -nv -P packages
+          fi 
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
