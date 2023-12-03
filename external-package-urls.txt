@@ -1,4 +1,4 @@
-https://github.com/vernesong/OpenClash/releases/download/v0.45.152-beta/luci-app-openclash_0.45.152-beta_all.ipk
+https://github.com/vernesong/OpenClash/releases/download/v0.45.157-beta/luci-app-openclash_0.45.157-beta_all.ipk
 https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-proto-mbim_git-23.137.84224-37176dc_all.ipk
 https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
