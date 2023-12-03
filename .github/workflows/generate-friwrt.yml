@@ -37,7 +37,7 @@ on:
       rootfs:
         description: 'Set Rootfs size'
         required: true
-        default: '3600'
+        default: '7000'
       squashfs:
         description: "Generate Squashfs image"
         required: true
