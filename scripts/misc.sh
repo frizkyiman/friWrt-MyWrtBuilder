@@ -46,4 +46,7 @@ else
     exit 1
 fi
 
+mkdir -p files/root
+cp packages/luci-app-tinyfm_2.5_all.ipk files/root/luci-app-tinyfm_2.5_all.ipk
+
 echo "Download and configuration completed!"
