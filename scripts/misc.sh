@@ -3,6 +3,10 @@
 echo "Start Downloading Misc files !"
 echo "Current Path: $PWD"
 
+# setup login password
+#sed -i '/reboot/ i\echo -e "bluedragon12\nbluedragon12" | passwd' files/etc/uci-defaults/99-init-settings.sh
+
+
 # custom script files urls
 ARCHH=$( [ "$TARGET" == "rpi-4" ] && echo "aarch64" || echo "x86_64" )
 branch_tag=$( [ "$BRANCH" == "21.02.7" ] && echo -"$BRANCH" | awk -F'.' '{print $1"."$2}' )
