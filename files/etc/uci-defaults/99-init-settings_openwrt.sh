@@ -56,9 +56,6 @@ sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
 echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic" >> /etc/opkg/customfeeds.conf
 echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/$(cat /etc/os-release | grep OPENWRT_ARCH | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
 
-# Setup Adguarhome
-bash usr/bin/enable-agh
-
 # add cron job for modem rakitan
 echo '#auto renew ip lease for modem rakitan' >> /etc/crontabs/root
 echo '30 3 * * 1,2,3,4,5,6 echo  AT+CFUN=4 | atinout - /dev/ttyUSB0 - && sleep 3 && ifdown wan && sleep 3 && echo  AT+CFUN=1 | atinout - /dev/ttyUSB0 - && sleep 3 && ifup wan' >> /etc/crontabs/root
@@ -117,8 +114,6 @@ echo '0 12 * * * /sbin/sync_time.sh beacon.liveon.id' >> /etc/crontabs/root
 /etc/init.d/cron restart
 
 mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old && mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
-cp /etc/init.d/openclash /root/openclash.bak
-sed -i '\|/etc/init.d/openclash reload "firewall" >/dev/null 2>&1| s|^|#|' /etc/init.d/openclash
 bash usr/bin/patchoc.sh
 
 echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
