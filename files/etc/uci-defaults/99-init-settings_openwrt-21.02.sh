@@ -136,9 +136,6 @@ config vnstat
 	list interface 'wwan0'
 EOF
 
-opkg install /root/luci-app-tinyfm_2.5_all.ipk
-rm /root/luci-app-tinyfm_2.5_all.ipk
-
 reboot
 
 exit 0
