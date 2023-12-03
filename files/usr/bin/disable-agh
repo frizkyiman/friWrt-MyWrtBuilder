@@ -2,19 +2,26 @@
 
 echo "Disable AdGuardHome"
 
+echo "Reverts AdGuard Home configuration and resets settings to default."
 uci -q delete dhcp.@dnsmasq[0].noresolv
 uci -q delete dhcp.@dnsmasq[0].cachesize
+uci set dhcp.@dnsmasq[0].port='53'
+
+echo "Enable rebind protection."
 uci set dhcp.@dnsmasq[0].rebind_protection='1'
+
+echo "Remove DHCP options for IPv4 and IPv6"
 uci -q delete dhcp.@dnsmasq[0].server
 uci -q delete dhcp.@dnsmasq[0].port
 uci -q delete dhcp.lan.dhcp_option
 uci -q delete dhcp.lan.dns
-uci set dhcp.@dnsmasq[0].port='53'
+
 uci commit dhcp
 /etc/init.d/dnsmasq restart
 
 uci delete firewall.adguardhome_dns_53
 uci commit firewall
+/etc/init.d/firewall restart
 
 uci set AdGuardHome.AdGuardHome.enabled='0'
 uci commit AdGuardHome
