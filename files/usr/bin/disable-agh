@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Disable AdGuardHome
+echo "Disable AdGuardHome"
 
 uci -q delete dhcp.@dnsmasq[0].noresolv
 uci -q delete dhcp.@dnsmasq[0].cachesize
