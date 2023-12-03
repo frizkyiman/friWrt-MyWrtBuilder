@@ -54,7 +54,8 @@ sed -i '/reboot/ i\chmod +x /usr/bin/speedtest' files/etc/uci-defaults/99-init-s
 sed -i '/reboot/ i\chmod +x /usr/bin/enable-agh' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /usr/bin/disable-agh' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\bash /usr/bin/enable-agh' files/etc/uci-defaults/99-init-settings.sh
-sed -i '/reboot/ i\chmod +x /tmp/fix-tinyfm.sh' files/etc/uci-defaults/99-init-settings.sh
-sed -i '/reboot/ i\bash /tmp/fix-tinyfm.sh' files/etc/uci-defaults/99-init-settings.sh
+
+cp packages/luci-app-tinyfm_2.5_all.ipk files/tmp/luci-app-tinyfm_2.5_all.ipk
+sed -i '/reboot/ i\opkg install /tmp/luci-app-tinyfm_2.5_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
 
 echo "Download and configuration completed!"
