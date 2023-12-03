@@ -1,0 +1,34 @@
+#!/bin/bash
+
+echo "Enable AdGuardHome"
+
+uci set dhcp.@dnsmasq[0].noresolv='0'
+uci set dhcp.@dnsmasq[0].cachesize='1000'
+uci set dhcp.@dnsmasq[0].rebind_protection='0'
+uci set dhcp.@dnsmasq[0].port='54'
+uci -q delete dhcp.@dnsmasq[0].server
+uci add_list dhcp.@dnsmasq[0].server='192.168.1.1'
+uci set dhcp.lan.leasetime='24h' 
+uci -q delete dhcp.lan.dhcp_option
+uci -q delete dhcp.lan.dns
+uci add_list dhcp.lan.dhcp_option='6,'192.168.1.1' 
+uci add_list dhcp.lan.dhcp_option='3,'192.168.1.1' 
+uci commit dhcp
+/etc/init.d/dnsmasq restart
+
+uci set firewall.adguardhome_dns_53="redirect"
+uci set firewall.adguardhome_dns_53.src='lan'
+uci set firewall.adguardhome_dns_53.proto='tcp udp'
+uci set firewall.adguardhome_dns_53.src_dport='53'
+uci set firewall.adguardhome_dns_53.dest='lan'
+uci set firewall.adguardhome_dns_53.dest_ip='192.168.1.1'
+uci set firewall.adguardhome_dns_53.dest_port='53'
+uci set firewall.adguardhome_dns_53.name='Adguard Home'
+uci commit firewall
+
+uci set AdGuardHome.AdGuardHome.enabled='1'
+uci commit AdGuardHome
+etc/init.d/AdGuardHome enable
+etc/init.d/AdGuardHome start
+
+echo "AdGuardHome Successfully Enable!"
