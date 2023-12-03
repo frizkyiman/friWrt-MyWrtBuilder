@@ -2,20 +2,54 @@
 
 echo "Enable AdGuardHome"
 
+echo "Get the first IPv4 and IPv6 Address of router."
+NET_ADDR=$(/sbin/ip -o -4 addr list br-lan | awk 'NR==1{ split($4, ip_addr, "/"); print ip_addr[1] }')
+NET_ADDR6=$(/sbin/ip -o -6 addr list br-lan scope global | awk 'NR==1{ split($4, ip_addr, "/"); print ip_addr[1] }')
+ 
+echo "Router IPv4 : ""${NET_ADDR}"
+echo "Router IPv6 : ""${NET_ADDR6}"
+
+echo "Enable dnsmasq to do PTR requests."
 uci set dhcp.@dnsmasq[0].noresolv='0'
+
+echo "Reduce dnsmasq cache size as it will only provide PTR/rDNS info."
 uci set dhcp.@dnsmasq[0].cachesize='1000'
+
+echo "Disable rebind protection."
 uci set dhcp.@dnsmasq[0].rebind_protection='0'
+
+echo "Move dnsmasq to port 54."
 uci set dhcp.@dnsmasq[0].port='54'
+
+echo "Set Ipv4 DNS advertised by option 6 DHCP"
 uci -q delete dhcp.@dnsmasq[0].server
-uci add_list dhcp.@dnsmasq[0].server='192.168.1.1'
+echo "Set Ipv6 DNS advertised by DHCP"
+uci add_list dhcp.@dnsmasq[0].server="${NET_ADDR}"
+
+echo "Set 24hr DHCP Leases"
 uci set dhcp.lan.leasetime='24h' 
+
+echo "Delete existing config ready to install new options."
 uci -q delete dhcp.lan.dhcp_option
 uci -q delete dhcp.lan.dns
-uci add_list dhcp.lan.dhcp_option='6,'192.168.1.1' 
-uci add_list dhcp.lan.dhcp_option='3,'192.168.1.1' 
+
+echo "DHCP option 6: which DNS (Domain Name Server) to include in the IP configuration for name resolution"
+uci add_list dhcp.lan.dhcp_option='6,'"${NET_ADDR}" 
+
+echo "DHCP option 3: default router or last resort gateway for this interface"
+uci add_list dhcp.lan.dhcp_option='3,'"${NET_ADDR}"
+
+echo "Set IPv6 Announced DNS"
+for OUTPUT in $(ip -o -6 addr list br-lan scope global | awk '{ split($4, ip_addr, "/"); print ip_addr[1] }')
+do
+	echo "Adding $OUTPUT to IPV6 DNS"
+	uci add_list dhcp.lan.dns=$OUTPUT
+done
+
 uci commit dhcp
 /etc/init.d/dnsmasq restart
 
+echo "Set Port Forwards"
 uci set firewall.adguardhome_dns_53="redirect"
 uci set firewall.adguardhome_dns_53.src='lan'
 uci set firewall.adguardhome_dns_53.proto='tcp udp'
@@ -25,7 +59,9 @@ uci set firewall.adguardhome_dns_53.dest_ip='192.168.1.1'
 uci set firewall.adguardhome_dns_53.dest_port='53'
 uci set firewall.adguardhome_dns_53.name='Adguard Home'
 uci commit firewall
+/etc/init.d/firewall restart
 
+echo "Configuring AdGuardHome Luci"
 uci set AdGuardHome.AdGuardHome.enabled='1'
 uci commit AdGuardHome
 etc/init.d/AdGuardHome enable
