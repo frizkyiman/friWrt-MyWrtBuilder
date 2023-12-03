@@ -99,7 +99,7 @@ querylog:
   file_enabled: true
 statistics:
   ignored: []
-  interval: 24h
+  interval: 2160h
   enabled: true
 filters:
   - enabled: true
