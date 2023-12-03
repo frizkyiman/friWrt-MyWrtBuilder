@@ -46,7 +46,6 @@ else
     exit 1
 fi
 
-mkdir -p files/root
-cp packages/luci-app-tinyfm_2.5_all.ipk files/root/luci-app-tinyfm_2.5_all.ipk
+sed -i '/reboot/ i\bash /usr\/lib\/opkg\/info\/luci-app-tinyfm.postinst-pkg' files/etc/uci-defaults/99-init-settings.sh
 
 echo "Download and configuration completed!"
