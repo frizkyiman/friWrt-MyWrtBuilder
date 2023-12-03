@@ -16,7 +16,7 @@ uci commit dhcp
 uci delete firewall.adguardhome_dns_53
 uci commit firewall
 
-uci set AdGuardHome.AdGuardHome.enabled='1'
+uci set AdGuardHome.AdGuardHome.enabled='0'
 uci commit AdGuardHome
 etc/init.d/AdGuardHome stop
 etc/init.d/AdGuardHome disable
