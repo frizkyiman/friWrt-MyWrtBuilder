@@ -57,29 +57,7 @@ echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-rep
 echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/$(cat /etc/os-release | grep OPENWRT_ARCH | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
 
 # Setup Adguarhome
-uci set dhcp.@dnsmasq[0].noresolv='0'
-uci set dhcp.@dnsmasq[0].cachesize='1000'
-uci set dhcp.@dnsmasq[0].rebind_protection='0'
-uci set dhcp.@dnsmasq[0].port='54'
-uci -q delete dhcp.@dnsmasq[0].server
-uci add_list dhcp.@dnsmasq[0].server='192.168.1.1'
-uci set dhcp.lan.leasetime='24h' 
-uci -q delete dhcp.lan.dhcp_option
-uci -q delete dhcp.lan.dns
-uci add_list dhcp.lan.dhcp_option='6,'192.168.1.1' 
-uci add_list dhcp.lan.dhcp_option='3,'192.168.1.1' 
-uci commit dhcp
-/etc/init.d/dnsmasq restart
-
-uci set firewall.adguardhome_dns_53="redirect"
-uci set firewall.adguardhome_dns_53.src='lan'
-uci set firewall.adguardhome_dns_53.proto='tcp udp'
-uci set firewall.adguardhome_dns_53.src_dport='53'
-uci set firewall.adguardhome_dns_53.dest='lan'
-uci set firewall.adguardhome_dns_53.dest_ip='192.168.1.1'
-uci set firewall.adguardhome_dns_53.dest_port='53'
-uci set firewall.adguardhome_dns_53.name='Adguard Home'
-uci commit firewall
+bash usr/bin/enable-agh
 
 # add cron job for modem rakitan
 echo '#auto renew ip lease for modem rakitan' >> /etc/crontabs/root
@@ -139,6 +117,9 @@ echo '0 12 * * * /sbin/sync_time.sh beacon.liveon.id' >> /etc/crontabs/root
 /etc/init.d/cron restart
 
 mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old && mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
+cp /etc/init.d/openclash /root/openclash.bak
+sed -i '\|/etc/init.d/openclash reload "firewall" >/dev/null 2>&1| s|^|#|' /etc/init.d/openclash
+bash usr/bin/patchoc.sh
 
 echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
 
@@ -148,9 +129,6 @@ uci set nlbwmon.@nlbwmon[0].refresh_interval='60s'
 uci commit nlbwmon
 
 sed -i "s/;DatabaseDir "/var/lib/vnstat"/DatabaseDir "/etc/vnstat"/" /etc/config/vnstat
-
-cp /etc/init.d/openclash /etc/init.d/openclash.bak
-sed -i '\|/etc/init.d/openclash reload "firewall" >/dev/null 2>&1| s|^|#|' /etc/init.d/openclash
 
 cat <<'EOF' >/etc/config/vnstat
 config vnstat
