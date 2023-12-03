@@ -125,6 +125,7 @@ filters:
 whitelist_filters: []
 user_rules:
   - '@@||pagead2.googlesyndication.com^$important'
+  - '@@||googleadservices.com^$important'
   - ""
 dhcp:
   enabled: false
