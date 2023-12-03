@@ -13,27 +13,23 @@ urls=("https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCHH.
       "https://raw.githubusercontent.com/frizkyiman/fix-read-only/main/usr/bin/repair_ro"
       "https://raw.githubusercontent.com/frizkyiman/auto-mount-hdd/main/mount_hdd")
 
-# dir files
-mkdir -p files/etc/init.d
-mkdir -p files/sbin/
-
-# 99-init-settings.sh
+echo "setup 99-init-settings.sh"
 if [[ -e "files/etc/uci-defaults/99-init-settings_"$BASE""$branch_tag.sh"" ]]; then
      mv "files/etc/uci-defaults/99-init-settings_"$BASE""$branch_tag.sh"" "files/etc/uci-defaults/99-init-settings.sh"
      rm files/etc/uci-defaults/99-init-settings_*.sh
 fi
 
-# 10_system.js
+echo "setup 10_system.js"
 if [[ -e "files/www/luci-static/resources/view/status/include/10_system_$BASE.js" ]]; then
      mv "files/www/luci-static/resources/view/status/include/10_system_$BASE.js" "files/www/luci-static/resources/view/status/include/10_system.js"
      rm files/www/luci-static/resources/view/status/include/10_system_*.js
 fi
 
-# Download files
+echo "Downloading custom script"
+mkdir -p files/etc/init.d
+mkdir -p files/sbin/
 if wget --no-check-certificate -nv -P files "${urls[@]}"; then
-    # files/etc/init.d
     wget --no-check-certificate -nv https://raw.githubusercontent.com/frizkyiman/fix-read-only/main/etc/init.d/repair_ro -O files/etc/init.d/repair_ro
-    
     echo "sync && echo 3 > /proc/sys/vm/drop_caches && rm -rf /tmp/luci*" >> files/sbin/free.sh
     mv files/sync_time.sh files/sbin/sync_time.sh
     mv files/neofetch files/usr/bin/neofetch
