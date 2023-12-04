@@ -59,5 +59,6 @@ sed -i '/reboot/ i\chmod +x /usr/bin/speedtest' files/etc/uci-defaults/99-init-s
 sed -i '/reboot/ i\chmod +x /usr/bin/enable-agh' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /usr/bin/disable-agh' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\bash /usr/bin/enable-agh' files/etc/uci-defaults/99-init-settings.sh
+sed -i '/reboot/ i\exec >/root/first-boot.log 2>&1' files/etc/uci-defaults/99-init-settings.sh
 
 echo "Download and configuration completed!"
