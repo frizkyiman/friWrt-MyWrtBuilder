@@ -115,6 +115,7 @@ mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old && mv /usr/shar
 bash usr/bin/patchoc.sh
 
 echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
+sed -i "s/\(DISTRIB_DESCRIPTION='ImmortalWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
 
 uci set nlbwmon.@nlbwmon[0].database_directory='/etc/nlbwmon'
 uci set nlbwmon.@nlbwmon[0].commit_interval='3h'
