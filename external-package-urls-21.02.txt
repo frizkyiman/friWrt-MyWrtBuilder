@@ -1,6 +1,6 @@
 https://github.com/vernesong/OpenClash/releases/download/v0.45.157-beta/luci-app-openclash_0.45.157-beta_all.ipk
 https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk
-https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-tinyfm_2.6_all.ipk
+https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-tinyfm_2.5_all.ipk
 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-proto-mbim_git-23.262.31484-20add84_all.ipk
 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1.2-0_all.ipk
 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
