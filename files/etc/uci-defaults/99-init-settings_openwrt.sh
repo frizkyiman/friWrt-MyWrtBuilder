@@ -99,7 +99,7 @@ uci commit
 
 mv /www/luci-static/resources/view/status/include/29_temp.js /www/luci-static/resources/view/status/include/17_temp.js
 
-sed -i 's/services/nas/g' /usr/lib/lua/luci/controller/aria2.lua
+sed -i 's/services/nas/g' /usr/lib/lua/luci/controller/aria2.lua || sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-aria2.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-samba4.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-hd-idle.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-disks-info.json
