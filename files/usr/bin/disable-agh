@@ -29,3 +29,15 @@ etc/init.d/AdGuardHome stop
 etc/init.d/AdGuardHome disable
 
 echo "AdGuardHome Successfully Disable!"
+
+if [ -e "/usr/lib/lua/luci/controller/agh.lua" ]; then
+rm/usr/lib/lua/luci/controller/agh.lua
+fi
+
+if [ -e "/usr/lib/lua/luci/view/agh.htm" ]; then
+rm/usr/lib/lua/luci/view/agh.htm
+fi
+
+if [ -e "/www/agh.php" ]; then
+rm /www/agh.php
+fi
