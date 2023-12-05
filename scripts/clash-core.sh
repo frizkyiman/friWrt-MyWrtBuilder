@@ -3,49 +3,44 @@
 echo "Current Path: $PWD"
 
 echo "Start YACD Download !"
-mkdir -p files/usr/share/openclash/ui
-wget --no-check-certificate -nv https://github.com/taamarin/yacd-meta/archive/gh-pages.zip -O files/usr/share/openclash/ui/yacd.zip
-if unzip -qq files/usr/share/openclash/ui/yacd.zip -d files/usr/share/openclash/ui; then
-  mv files/usr/share/openclash/ui/yacd-* files/usr/share/openclash/ui/yacd.new
-  rm files/usr/share/openclash/ui/yacd.zip
+if [ -d files/usr/share/openclash/ui ]; then
+   mkdir -p files/usr/share/openclash/ui
+   if wget --no-check-certificate -nv https://github.com/taamarin/yacd-meta/archive/gh-pages.zip -O files/usr/share/openclash/ui/yacd.zip; then
+      unzip -qq files/usr/share/openclash/ui/yacd.zip -d files/usr/share/openclash/ui
+      mv files/usr/share/openclash/ui/yacd-* files/usr/share/openclash/ui/yacd.new
+      rm files/usr/share/openclash/ui/yacd.zip
+   fi
 fi
+
 
 echo "Start Clash Core Download !"
-mkdir -p files/etc/openclash/core
-cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
+if [ -d files/etc/openclash/core ]; then
+   mkdir -p files/etc/openclash/core
+   cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
 
-if wget -nv -O clash_meta.gz https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.16.0/clash.meta-linux-arm64-v1.16.0.gz; then
-   gzip -d clash_meta.gz
+   echo "Downloading clash_meta.gz..."
+   if wget -nv -O clash_meta.gz https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.16.0/clash.meta-linux-arm64-v1.16.0.gz; then
+      gzip -d clash_meta.gz
+      echo "clash_meta.gz downloaded successfully."
+   else
+      echo "Failed to download clash_meta.gz."
+   fi
+
+   echo "Downloading clash_tun.gz..."
+   if wget -nv -O clash_tun.gz https://github.com/vernesong/OpenClash/raw/core/master/premium/clash-linux-arm64-2023.08.17-13-gdcc8d87.gz; then
+      gzip -d clash_tun.gz
+      echo "clash_tun.gz downloaded successfully."
+   else
+      echo "Failed to download clash_tun.gz."
+   fi
+
+   echo "Downloading clash.tar.gz..."
+   if wget -nv -O clash.tar.gz https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-arm64.tar.gz; then
+      tar -zxf clash.tar.gz
+      rm clash.tar.gz
+      echo "clash.tar.gz downloaded and extracted successfully."
+   else
+      echo "Failed to download clash.tar.gz."
+   fi
 fi
-
-if wget -nv -O clash_tun.gz https://github.com/vernesong/OpenClash/raw/core/master/premium/clash-linux-arm64-2023.08.17-13-gdcc8d87.gz; then
-   gzip -d clash_tun.gz
-fi
-
-if wget -nv -O clash.tar.gz https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-arm64.tar.gz; then
-   tar -zxf clash.tar.gz
-   rm clash.tar.gz
-fi
-
-urls=("https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.16.0/clash.meta-linux-arm64-v1.16.0.gz"
-      "https://github.com/vernesong/OpenClash/raw/core/master/premium/clash-linux-arm64-2023.08.17-13-gdcc8d87.gz"
-      "https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-arm64.tar.gz")
-targets=("clash_meta" "clash_tun" "clash")
-
-extract_and_cleanup() {
-  local extracted_file=$(basename "$1") temp_dir=$(mktemp -d)
-
-  if tar -zxf "$extracted_file" -C "$temp_dir" && mv "$temp_dir"/* "$2"; then
-    echo "Success using tar!"
-  elif gzip -d "$extracted_file" > "$2"; then
-    echo "Success using gzip!"
-  else
-    echo "Failed to extract $extracted_file"
-  fi
-
-  rm -f "$extracted_file" "$temp_dir"/*
-}
-
-for ((i=0; i<${#urls[@]}; i++)); do
-  wget --no-check-certificate -nv "${urls[i]}" && extract_and_cleanup "${urls[i]}" "${targets[i]}" || echo "Failed to download ${urls[i]}"
-done
+echo "All Core Downloaded succesfully"
