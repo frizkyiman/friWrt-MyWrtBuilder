@@ -41,7 +41,7 @@ if wget --no-check-certificate -nv -P files "${urls[@]}"; then
     tar -zxf files/ookla-speedtest-1.2.0-linux-$ARCHH.tgz -C files/usr/bin && rm files/ookla-speedtest-1.2.0-linux-$ARCHH.tgz && rm files/usr/bin/speedtest.md
 fi
 
-cat <<'EOF' >/files/etc/init.d/repair_ro
+cat <<'EOF' >files/etc/init.d/repair_ro
 #!/bin/sh /etc/rc.common
 
 START=99
@@ -51,20 +51,17 @@ start() {
 }
 EOF
 
-cat <<'EOF' >/files/usr/bin/repair_ro
+cat <<'EOF' >files/usr/bin/repair_ro
 #!/bin/sh
 root_device="$1"
 /sbin/repair_ro "$root_device"
 EOF
 
-cat <<'EOF' >/files/etc/config/vnstat
+cat <<'EOF' >files/etc/config/vnstat
 config vnstat
 	list interface 'br-lan'
 	list interface 'wwan0'
 EOF
-
-cp /packages/luci-app-oled_1.0_all.ipk /files/root/luci-app-oled_1.0_all.ipk
-sed -i '/reboot/ i\opkg install /root/luci-app-oled_1.0_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
 
 sed -i '/reboot/ i\chmod +x /root/fix-tinyfm.sh && bash /root/fix-tinyfm.sh' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /sbin/sync_time.sh' files/etc/uci-defaults/99-init-settings.sh
