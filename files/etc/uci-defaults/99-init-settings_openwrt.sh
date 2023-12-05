@@ -128,12 +128,6 @@ uci commit nlbwmon
 
 sed -i "s/;DatabaseDir "/var/lib/vnstat"/DatabaseDir "/etc/vnstat"/" /etc/config/vnstat
 
-cat <<'EOF' >/etc/config/vnstat
-config vnstat
-	list interface 'br-lan'
-	list interface 'wwan0'
-EOF
-
 reboot
 
 exit 0
