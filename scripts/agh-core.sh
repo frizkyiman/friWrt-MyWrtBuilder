@@ -11,7 +11,7 @@ url="$repo_url/download/$latest_version/AdGuardHome_linux_$ARCHHH.tar.gz"
 cd files/opt || { echo "AdGuardHome core path does not exist!"; exit 1; }
 
 if wget -nv "$url"; then
-  echo "AdGuardHome $latest_version"
   echo "extracting core"
   tar -zxf "AdGuardHome_linux_$ARCHHH.tar.gz" && rm "AdGuardHome_linux_$ARCHHH.tar.gz"
+  echo "Done! AdGuardHome version $latest_version"
 fi
