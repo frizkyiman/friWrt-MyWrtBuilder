@@ -9,7 +9,7 @@ option_squashfs=$( [ "$ROOTFS_SQUASHFS" == "true" ] && echo "CONFIG_TARGET_ROOTF
 
 sed -i '\|option check_signature| s|^|#|' repositories.conf
 
-# Force opkg to overwrite files
+# Patch ImageBuilder's Makefile to force-install local packages
 sed -i '/$(OPKG) install $(BUILD_PACKAGES)/ {N;N;N;N;N;s/\($(OPKG) install $(BUILD_PACKAGES)\)/\1\n\t@echo\n\t@echo Force-reinstalling local packages\n\t$$(OPKG) install --force-reinstall --force-downgrade $$(wildcard $$(PACKAGE_DIR)\/\*.ipk)/}' Makefile
 
 # Resize Boot and Rootfs partition size
