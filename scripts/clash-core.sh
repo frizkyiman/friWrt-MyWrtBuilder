@@ -14,6 +14,19 @@ echo "Start Clash Core Download !"
 mkdir -p files/etc/openclash/core
 cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
 
+if wget -nv -O clash_meta.gz https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.16.0/clash.meta-linux-arm64-v1.16.0.gz; then
+   gzip -d clash_meta.gz
+fi
+
+if wget -nv -O clash_tun.gz https://github.com/vernesong/OpenClash/raw/core/master/premium/clash-linux-arm64-2023.08.17-13-gdcc8d87.gz; then
+   gzip -d clash_tun.gz
+fi
+
+if wget -nv -O clash.tar.gz https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-arm64.tar.gz; then
+   tar -zxf clash.tar.gz
+   rm clash.tar.gz
+fi
+
 urls=("https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.16.0/clash.meta-linux-arm64-v1.16.0.gz"
       "https://github.com/vernesong/OpenClash/raw/core/master/premium/clash-linux-arm64-2023.08.17-13-gdcc8d87.gz"
       "https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-arm64.tar.gz")
@@ -24,7 +37,7 @@ extract_and_cleanup() {
 
   if tar -zxf "$extracted_file" -C "$temp_dir" && mv "$temp_dir"/* "$2"; then
     echo "Success using tar!"
-  elif gzip -dc "$extracted_file" > "$2"; then
+  elif gzip -d "$extracted_file" > "$2"; then
     echo "Success using gzip!"
   else
     echo "Failed to extract $extracted_file"
