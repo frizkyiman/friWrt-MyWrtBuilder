@@ -5,7 +5,6 @@ chmod -R 755 /usr/lib/lua/luci/view/*
 chmod -R 755 /www/*
 chmod -R 755 /www/tinyfm/*
 chmod -R 755 /www/tinyfm/assets/*
-[ ! -d /www/tinyfm/rootfs ] && ln -s / /www/tinyfm/rootfs
 # Autofix download index.php, index.html
 if ! grep -q ".php=/usr/bin/php-cgi" /etc/config/uhttpd; then
 	echo -e "  helmilog : system not using php-cgi, patching php config ..."
