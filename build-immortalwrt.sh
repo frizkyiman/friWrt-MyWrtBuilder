@@ -65,7 +65,7 @@ FILES="files"
 CUSTOM=$( [ "$TARGET" == "rpi-4" ] && echo "kmod-i2c-bcm2835" )
 
 # Exclude package
-EXCLUDED="-dnsmasq -automount -libustream-openssl"
+EXCLUDED="-dnsmasq -automount -libustream-openssl -default-settings-chn -luci-i18n-base-zh-cn"
 
 # Disable service
 DISABLED_SERVICES=""
