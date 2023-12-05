@@ -1,14 +1,10 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Generate friWrt Firmware
 
-# Controls when the workflow will run
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       source_base:
-        description: "Select the Source Base"
+        description: "Select Source Base:"
         required: true
         default: "openwrt"
         type: choice
@@ -16,7 +12,7 @@ on:
           - openwrt
           - immortalwrt
       target:
-        description: "Select Device Target"
+        description: "Select Device Target:"
         required: true
         default: "rpi-4"
         type: choice
@@ -24,7 +20,7 @@ on:
           - rpi-4
           - x86-64
       source_branch:
-        description: "Select Branch Revision"
+        description: "Select Branch Revision:"
         required: true
         default: "21.02.7"
         type: choice
@@ -35,11 +31,11 @@ on:
           - 23.05.1
           - 23.05.2
       rootfs:
-        description: 'Set Rootfs size'
+        description: 'Set RootFS Partition Size (Mb):'
         required: true
         default: '5000'
       squashfs:
-        description: "Generate Squashfs image"
+        description: "Generate Squashfs image:"
         required: true
         default: "false"
         type: choice
@@ -47,7 +43,7 @@ on:
           - true
           - false
       release:
-        description: "Upload Image to Release"
+        description: "Upload Image to Release:"
         required: true
         default: "true"
         type: choice
@@ -68,14 +64,10 @@ env:
   UPLOAD_ARTIFACTS: false
   TZ: Asia/Jakarta
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   Generate:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Initialization Environment
         run: |
@@ -92,7 +84,6 @@ jobs:
           echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
       
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
         with: 
