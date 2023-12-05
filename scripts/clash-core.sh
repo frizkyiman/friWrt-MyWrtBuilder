@@ -20,14 +20,23 @@ fi
 echo "Start Clash Core Download !"
 arch=$( [ "$TARGET" == "rpi-4" ] && echo "arm64" || echo "amd64" )
 #core download url
-clash_meta="https://github.com/MetaCubeX/mihomo/releases/download/v1.16.0/clash.meta-linux-$arch-v1.16.0.gz"
-clash_tun="https://github.com/vernesong/OpenClash/raw/core/master/premium/clash-linux-$arch-2023.08.17-13-gdcc8d87.gz"
 clash="https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-$arch.tar.gz"
+clash_meta="https://github.com/MetaCubeX/mihomo/releases/download/v1.16.0/clash.meta-linux-$arch-v1.16.0.gz"
+clash_tun="https://github.com/vernesong/OpenClash/raw/core/master/premium/$(curl -s "https://github.com/vernesong/OpenClash/tree/core/master/premium" | grep -o "clash-linux-$arch-[0-9]*\.[0-9]*\.[0-9]*-[0-9]*-[a-zA-Z0-9]*\.gz" | awk 'NR==1 {print $1}')"
 
 if [ -d files/etc/openclash/core ]; then
    mkdir -p files/etc/openclash/core
    cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
 
+   echo "Downloading clash.tar.gz..."
+   if wget --no-check-certificate-q -O clash.tar.gz $clash; then
+      tar -zxf clash.tar.gz
+      rm clash.tar.gz
+      echo "clash.tar.gz downloaded and extracted successfully."
+   else
+      echo "Failed to download clash.tar.gz."
+   fi
+   
    echo "Downloading clash_meta.gz..."
    if wget --no-check-certificate -q -O clash_meta.gz $clash_meta; then
       gzip -d clash_meta.gz
@@ -42,15 +51,6 @@ if [ -d files/etc/openclash/core ]; then
       echo "clash_tun.gz downloaded successfully."
    else
       echo "Failed to download clash_tun.gz."
-   fi
-
-   echo "Downloading clash.tar.gz..."
-   if wget --no-check-certificate-q -O clash.tar.gz $clash; then
-      tar -zxf clash.tar.gz
-      rm clash.tar.gz
-      echo "clash.tar.gz downloaded and extracted successfully."
-   else
-      echo "Failed to download clash.tar.gz."
    fi
 fi
 echo "All Core Downloaded succesfully"
