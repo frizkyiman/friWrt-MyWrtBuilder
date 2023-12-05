@@ -6,7 +6,6 @@ echo "Current Path: $PWD"
 # setup login password
 #sed -i '/reboot/ i\echo -e "bluedragon12\nbluedragon12" | passwd' files/etc/uci-defaults/99-init-settings.sh
 
-
 # custom script files urls
 ARCHH=$( [ "$TARGET" == "rpi-4" ] && echo "aarch64" || echo "x86_64" )
 branch_tag=$( [ "$BRANCH" == "21.02.7" ] && echo -"$BRANCH" | awk -F'.' '{print $1"."$2}' )
@@ -56,6 +55,12 @@ cat <<'EOF' >/files/usr/bin/repair_ro
 #!/bin/sh
 root_device="$1"
 /sbin/repair_ro "$root_device"
+EOF
+
+cat <<'EOF' >/files/etc/config/vnstat
+config vnstat
+	list interface 'br-lan'
+	list interface 'wwan0'
 EOF
 
 cp /packages/luci-app-oled_1.0_all.ipk /files/root/luci-app-oled_1.0_all.ipk
