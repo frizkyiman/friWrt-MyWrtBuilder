@@ -106,7 +106,7 @@ jobs:
           cd $WORKING_DIR
           tags=$( [ "$BRANCH" == "21.02.7" ] && echo "21.02" || echo "" )
           archs=$( [ "$TARGET" == "rpi-4" ] && echo "arm64" || echo "x86" )  
-          if [ "$BRANCH" == "21.02.7" ]; theni
+          if [ "$BRANCH" == "21.02.7" ]; then
              grep -E "^all-all|^all${tags:+.*$tags}|^$archs${tags:+.*$tags}" external-package-urls.txt | awk '{print $2}' > output_url.txt
           else
              grep -E "^all-all|^all|^$archs" external-package-urls.txt | awk '{print $2}' > output_url.txt
