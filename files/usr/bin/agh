@@ -113,7 +113,7 @@ function enable() {
   fi
 }
 
-function script2() {
+function disable() {
   echo "Disable AdGuardHome"
 
   echo "Reverts AdGuard Home configuration and resets settings to default."
