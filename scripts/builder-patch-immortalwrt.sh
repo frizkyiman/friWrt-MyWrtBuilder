@@ -8,6 +8,7 @@ cd $GITHUB_WORKSPACE/$WORKING_DIR || exit
 # No signature check packages
 sed -i '\|option check_signature| s|^|#|' repositories.conf
 
+echo "Patching Makefile"
 # Force opkg to overwrite files
 sed -i "s/install \$(BUILD_PACKAGES)/install \$(BUILD_PACKAGES) --force-overwrite/" Makefile
 
@@ -23,3 +24,4 @@ sed -i "s/CONFIG_ISO_IMAGES=y/# CONFIG_ISO_IMAGES is not set/" .config
 # Not generate VHDX images
 sed -i "s/CONFIG_VHDX_IMAGES=y/# CONFIG_VHDX_IMAGES is not set/" .config
 fi
+echo "Done!"
