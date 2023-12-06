@@ -107,9 +107,9 @@ jobs:
           tags=$( [ "$BRANCH" == "21.02.7" ] && echo "21.02" )
           archs=$( [ "$TARGET" == "rpi-4" ] && echo "arm64" || echo "x86" )  
           if [ "$BRANCH" == "21.02.7" ]; then
-             grep -E "^all-all|^all-$tags|^$archs-$tags" external-package-urls.txt | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^old-$tags|^$archs-$tags" external-package-urls.txt | awk '{print $2}' > output_url.txt
           else
-             grep -E "^all-all|^all|^$archs" external-package-urls.txt | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^all|^$archs" external-package-urls.txt | grep -vE "^$archs-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
           echo "status=success" >> $GITHUB_OUTPUT
