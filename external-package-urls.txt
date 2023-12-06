@@ -8,9 +8,10 @@
 # "all" is a sign for packages that work on both devices architecture.
 # "arm64" is a sign for packages that work only on arm64 devices architecture.
 # "x86" is a sign for packages that work only on x86 devices architecture.
-# "-21.02" is a sign for 21.02 branch that not need lua-luci-runtime as requaried depedency.
 # "all-all" is a sign for packages that work on both devices architecture and branch version.
-# "old-21.02" is a complate sign, see usage format below.
+# "old-21.02" is a sign for 21.02 branch that not need lua-luci-runtime as requaried depedency.
+# "arm64-21.02" is a sign for 21.02 branch that not need lua-luci-runtime as requaried depedency.
+# "x86-21.02" is a sign for 21.02 branch that not need lua-luci-runtime as requaried depedency.
 #
 ################################################
 #    Usage Format to add custom package urls   #
@@ -24,6 +25,7 @@
 # eg. x86 https://example.com/download/main/luci-app-name-x86-64.ipk
 # eg. old-21.02 https://example.com/download/21.02/luci-app-name-all.ipk
 # eg. arm64-21.02 https://example.com/download/21.02/luci-app-name-aarch64_cortex-a72.ipk
+# eg. x86-21.02 https://example.com/download/21.02/luci-app-name-x86-64.ipk
 #
 ################################################################################
 #             All Branch version custom external package urls list             #
