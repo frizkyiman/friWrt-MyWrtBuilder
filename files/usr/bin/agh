@@ -13,7 +13,7 @@ case "$1" in
 esac
 
 function enable() {
-  echo "Enable AdGuardHome"
+  echo "Enabling AdGuard Home..."
 
   echo "Get the first IPv4 and IPv6 Address of router."
   NET_ADDR=$(/sbin/ip -o -4 addr list br-lan | awk 'NR==1{ split($4, ip_addr, "/"); print ip_addr[1] }')
@@ -31,7 +31,7 @@ function enable() {
   echo "Disable rebind protection."
   uci set dhcp.@dnsmasq[0].rebind_protection='0'
 
-  echo "Move dnsmasq to port 54."
+  echo "Move dnsmasq to port 54 so adguardhome can use port 53."
   uci set dhcp.@dnsmasq[0].port='54'
 
   echo "Set Ipv4 DNS advertised by option 6 DHCP"
@@ -55,26 +55,26 @@ function enable() {
    echo "Set IPv6 Announced DNS"
   for OUTPUT in $(ip -o -6 addr list br-lan scope global | awk '{ split($4, ip_addr, "/"); print ip_addr[1] }')
   do
-	  echo "Adding $OUTPUT to IPV6 DNS"
-	  uci add_list dhcp.lan.dns=$OUTPUT
+	echo "Adding $OUTPUT to IPV6 DNS"
+	uci add_list dhcp.lan.dns=$OUTPUT
   done
 
   uci commit dhcp
   /etc/init.d/dnsmasq restart
 
-  echo "Set Port Forwards"
+  echo "Set Port Forward to 53"
   uci set firewall.adguardhome_dns_53="redirect"
   uci set firewall.adguardhome_dns_53.src='lan'
   uci set firewall.adguardhome_dns_53.proto='tcp udp'
   uci set firewall.adguardhome_dns_53.src_dport='53'
   uci set firewall.adguardhome_dns_53.dest='lan'
-  uci set firewall.adguardhome_dns_53.dest_ip='192.168.1.1'
+  uci set firewall.adguardhome_dns_53.dest_ip='${NET_ADDR}'
   uci set firewall.adguardhome_dns_53.dest_port='53'
-  uci set firewall.adguardhome_dns_53.name='Adguard Home'
+  uci set firewall.adguardhome_dns_53.name='AdGuard Home'
   uci commit firewall
   /etc/init.d/firewall restart
   
-  echo "Configuring AdGuardHome Luci"
+  echo "Configuring AdGuard Home Luci"
   uci set AdGuardHome.AdGuardHome.enabled='1'
   uci commit AdGuardHome
   etc/init.d/AdGuardHome enable
@@ -86,7 +86,7 @@ function enable() {
   cat <<'EOF' >/usr/lib/lua/luci/controller/agh.lua
   module("luci.controller.agh", package.seeall)
   function index()
-  entry({"admin","status","agh"}, template("agh"), _("AdGuardHome Dashboard")).leaf=true
+  entry({"admin","status","agh"}, template("agh"), _("AdGuard Home Dashboard")).leaf=true
   end
   EOF
   fi
@@ -114,7 +114,7 @@ function enable() {
 }
 
 function disable() {
-  echo "Disable AdGuardHome"
+  echo "Disabling AdGuard Home"
 
   echo "Reverts AdGuard Home configuration and resets settings to default."
   uci -q delete dhcp.@dnsmasq[0].noresolv
@@ -142,7 +142,7 @@ function disable() {
   etc/init.d/AdGuardHome stop
   etc/init.d/AdGuardHome disable
 
-  echo "AdGuardHome Successfully Disable!"
+  echo "AdGuard Home Successfully Disable!"
 
   if [ -e "/usr/lib/lua/luci/controller/agh.lua" ]; then
     rm/usr/lib/lua/luci/controller/agh.lua
