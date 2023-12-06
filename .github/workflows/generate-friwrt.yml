@@ -106,7 +106,7 @@ jobs:
           cd $WORKING_DIR
           tags=$( [ "$BRANCH" == "21.02.7" ] && echo "21.02" || echo "" )
           archs=$( [ "$TARGET" == "rpi-4" ] && echo "arm64" || echo "x86" )
-          grep -E "^all${tags:+.*$tags}|^$archs${tags:+.*$tags}" external-package-urls.txt | awk '{print $2}' | wget --no-check-certificate -i -nv -P packages -
+          grep -E "^all${tags:+.*$tags}|^$archs${tags:+.*$tags}" external-package-urls.txt | awk '{print $2}' | wget --no-check-certificate -nv -i -P packages
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
