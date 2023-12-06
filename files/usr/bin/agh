@@ -1,16 +1,12 @@
 #!/bin/bash
 
-case "$1" in
-  "enable")
-    enable
-    ;;
-  "disable")
-    disable
-    ;;
-  *)
-    echo "Pilihan tidak valid. Gunakan 'enable' atau 'disable'."
-    ;;
-esac
+function check_service_status() {
+  if /etc/init.d/AdGuardHome status | grep -q "running"; then
+    return 0
+  else
+    return 1
+  fi
+}
 
 function enable() {
   echo "Enabling AdGuard Home..."
@@ -60,7 +56,7 @@ function enable() {
   done
 
   uci commit dhcp
-  /etc/init.d/dnsmasq restart
+  /etc/init.d/dnsmasq restart >/dev/null 2>&1
 
   echo "Set Port Forward to 53"
   uci set firewall.adguardhome_dns_53="redirect"
@@ -72,7 +68,7 @@ function enable() {
   uci set firewall.adguardhome_dns_53.dest_port='53'
   uci set firewall.adguardhome_dns_53.name='AdGuard Home'
   uci commit firewall
-  /etc/init.d/firewall restart
+  /etc/init.d/firewall restart >/dev/null 2>&1
   
   echo "Configuring AdGuard Home Luci"
   uci set AdGuardHome.AdGuardHome.enabled='1'
@@ -83,33 +79,39 @@ function enable() {
   echo "AdGuardHome Successfully Enable!"
   
   if [ -e "/usr/lib/lua/luci/controller/agh.lua" ]; then
-  cat <<'EOF' >/usr/lib/lua/luci/controller/agh.lua
-  module("luci.controller.agh", package.seeall)
-  function index()
-  entry({"admin","status","agh"}, template("agh"), _("AdGuard Home Dashboard")).leaf=true
-  end
-  EOF
+  {
+cat <<'EOF' >/usr/lib/lua/luci/controller/agh.lua
+module("luci.controller.agh", package.seeall)
+function index()
+entry({"admin","status","agh"}, template("agh"), _("AdGuard Home Dashboard")).leaf=true
+end
+EOF
+  }
   fi
-
+  
   if [ -e "/usr/lib/lua/luci/view/agh.htm" ]; then
-  cat <<'EOF' >/usr/lib/lua/luci/view/agh.htm
-  <%+header%>
-  <div class="cbi-map"><br>
-  <iframe id="agh" style="width: 100%; min-height: 650px; border: none; border-radius: 2px;"></iframe>
-  </div>
-  <script type="text/javascript">
-  document.getElementById("agh").src = "http://" + window.location.hostname + ":3000";
-  </script>
-  <%+footer%>
-  EOF
+     {
+cat <<'EOF' >/usr/lib/lua/luci/view/agh.htm
+<%+header%>
+<div class="cbi-map"><br>
+<iframe id="agh" style="width: 100%; min-height: 650px; border: none; border-radius: 2px;"></iframe>
+</div>
+<script type="text/javascript">
+document.getElementById("agh").src = "http://" + window.location.hostname + ":3000";
+</script>
+<%+footer%>
+     }
+     EOF
   fi
 
   if [ -e "/www/agh.php" ]; then
-  cat <<'EOF' >/www/agh.php
-  <script type="text/javascript">
-  document.getElementById("agh").src = "http://" + window.location.hostname + ":3000";
-  </script>
-  EOF
+  {
+cat <<'EOF' >/www/agh.php
+<script type="text/javascript">
+document.getElementById("agh").src = "http://" + window.location.hostname + ":3000";
+</script>
+EOF
+  }
   fi
 }
 
@@ -129,13 +131,12 @@ function disable() {
   uci -q delete dhcp.@dnsmasq[0].port
   uci -q delete dhcp.lan.dhcp_option
   uci -q delete dhcp.lan.dns
-
   uci commit dhcp
-  /etc/init.d/dnsmasq restart
+  /etc/init.d/dnsmasq restart >/dev/null 2>&1
 
   uci delete firewall.adguardhome_dns_53
   uci commit firewall
-  /etc/init.d/firewall restart
+  /etc/init.d/firewall restart >/dev/null 2>&1
 
   uci set AdGuardHome.AdGuardHome.enabled='0'
   uci commit AdGuardHome
@@ -145,14 +146,30 @@ function disable() {
   echo "AdGuard Home Successfully Disable!"
 
   if [ -e "/usr/lib/lua/luci/controller/agh.lua" ]; then
-    rm/usr/lib/lua/luci/controller/agh.lua
+    rm /usr/lib/lua/luci/controller/agh.lua
   fi
 
   if [ -e "/usr/lib/lua/luci/view/agh.htm" ]; then
-    rm/usr/lib/lua/luci/view/agh.htm
+    rm /usr/lib/lua/luci/view/agh.htm
   fi
 
   if [ -e "/www/agh.php" ]; then
     rm /www/agh.php
   fi
 }
+
+case "$1" in
+  "enable")
+    if check_service_status "AdGuardHome"; then
+      echo "AdGuard Home service is already running. Skipping enable operation."
+    else
+      enable
+    fi
+    ;;
+  "disable")
+    disable
+    ;;
+  *)
+    echo "Invalid option. Use 'enable' or 'disable'."
+    ;;
+esac
