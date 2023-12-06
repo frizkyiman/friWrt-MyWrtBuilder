@@ -9,6 +9,7 @@
 # "arm64" is a sign for packages that work only on arm64 devices architecture.
 # "x86" is a sign for packages that work only on x86 devices architecture.
 # "-21.02" is a sign for 21.02 branch that not need lua-luci-runtime as requaried depedency.
+# "all-all" is a sign for packages that work on both devices architecture and branch version.
 # "all-21.02" is a complate sign, see usage format below.
 #
 ################################################
@@ -28,8 +29,8 @@
 #             All Branch version custom external package urls list             #
 ################################################################################
 #
-all https://github.com/vernesong/OpenClash/releases/download/v0.45.157-beta/luci-app-openclash_0.45.157-beta_all.ipk
-all https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk
+all-all https://github.com/vernesong/OpenClash/releases/download/v0.45.157-beta/luci-app-openclash_0.45.157-beta_all.ipk
+all-all https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk
 #
 ################################################################################
 #  Branch version snapshots 22.03 and 23.05 custom external package urls list  #
