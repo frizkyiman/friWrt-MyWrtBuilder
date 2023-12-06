@@ -41,6 +41,8 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-proto-mbim_git-
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
 arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
 arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a72.ipk
+x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/atinout_0.9.1_x86_64.ipk
+x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/sms-tool_2022-03-21-f07699ab-1_x86_64.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-modemband_1.0.21-20230914_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/modemband_20230914_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-mmconfig_0.0.5-4_all.ipk
@@ -66,6 +68,8 @@ all-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-proto-mb
 all-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1.2-0_all.ipk
 arm64-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
 arm64-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a72/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a72.ipk
+x86-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/x86_64/atinout_0.9.1_x86_64.ipk
+x86-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/x86_64/sms-tool_2022-03-21-f07699ab-1_x86_64.ipk
 all-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-modemband_1.0.21-20230914_all.ipk
 all-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/modemband_20230914_all.ipk
 all-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-mmconfig_0.0.5-4_all.ipk
