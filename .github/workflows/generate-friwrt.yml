@@ -17,6 +17,9 @@ on:
         default: "rpi-4"
         type: choice
         options:
+          - rpi-1
+          - rpi-2
+          - rpi-3
           - rpi-4
           - x86-64
       source_branch:
@@ -77,10 +80,36 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          echo "PROFILE=$( [ "$TARGET" == "rpi-4" ] && echo "rpi-4" || echo "generic" )" >> $GITHUB_ENV
-          echo "ARCH=$( [ "$TARGET" == "rpi-4" ] && echo "aarch64_cortex-a72" || echo "x86_64" )" >> $GITHUB_ENV
-          echo "TARGET_SYSTEM=$( [ "$TARGET" == "rpi-4" ] && echo "bcm27xx/bcm2711" || echo "x86/64" )" >> $GITHUB_ENV
-          echo "TARGET_NAME=$( [ "$TARGET" == "rpi-4" ] && echo "bcm27xx-bcm2711" || echo "x86-64" )" >> $GITHUB_ENV
+          if [ "$TARGET" == "rpi-1" ]; then
+            DEVICE="rpi-1"
+            TARGET_1="bcm27xx/2708"
+            TARGET_2="bcm27xx-2708"
+            ARCHCHITECTURE="armv6l"
+          elif [ "$TARGET" == "rpi-2" ]; then
+            DEVICE="rpi-2"
+            TARGET_1="bcm27xx/2709"
+            TARGET_2="bcm27xx-2709"
+            ARCHCHITECTURE="armv7l"
+          elif [ "$TARGET" == "rpi-3" ]; then
+            DEVICE="rpi-3"
+            TARGET_1="bcm27xx/2710"
+            TARGET_2="bcm27xx-2710"
+            ARCHCHITECTURE="armv7l"
+          elif [ "$TARGET" == "rpi-4" ]; then
+            DEVICE="rpi-4"
+            TARGET_1="bcm27xx/2711"
+            TARGET_2="bcm27xx-2711"
+            ARCHCHITECTURE="aarch64_cortex-a72"
+          elif [ "$TARGET" == "x86-64" ]; then
+            DEVICE="generic"
+            TARGET_1="x86/64"
+            TARGET_2="x86-64"
+            ARCHCHITECTURE=x86_64
+          fi
+          echo "PROFILE=$DEVICE" >> $GITHUB_ENV
+          echo "ARCH=$ARCHITECTURE" >> $GITHUB_ENV
+          echo "TARGET_SYSTEM=$TARGET_1" >> $GITHUB_ENV
+          echo "TARGET_NAME=$TARGET_2" >> $GITHUB_ENV
           echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
       
