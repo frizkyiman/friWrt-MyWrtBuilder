@@ -4,8 +4,15 @@ echo "Start Downloading Misc files !"
 echo "Current Path: $PWD"
 
 # setup login password
-#password=bluedragon
-#sed -i '/reboot/ i\echo -e "$password\n$password" | passwd' files/etc/uci-defaults/99-init-settings.sh
+{
+if [ -z "$LOGIN_PASSWORD" ]; then
+  sed -i "/reboot/ i\echo -e \"$LOGIN_PASSWORD\n$LOGIN_PASSWORD\" | passwd" files/etc/uci-defaults/99-init-settings.sh
+fi
+if [ -z "$WIFI_PASSWORD" ]; then
+  sed -i "/reboot/ i\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
+  sed -i "/reboot/ i\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
+fi
+}
 
 # custom script files urls
 urls=("https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
