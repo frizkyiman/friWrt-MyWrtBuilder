@@ -39,7 +39,7 @@ if wget --no-check-certificate -nv -P files "${urls[@]}"; then
     mv files/clock files/usr/bin/clock
     mv files/repair_ro files/sbin/repair_ro
     mv files/mount_hdd files/usr/bin/mount_hdd
-    tar -zxf files/ookla-speedtest-1.2.0-linux-$ARCHH.tgz -C files/usr/bin && rm files/ookla-speedtest-1.2.0-linux-$ARCHH.tgz && rm files/usr/bin/speedtest.md
+    tar -zxf files/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz -C files/usr/bin && rm files/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz && rm files/usr/bin/speedtest.md
 fi
 }
 
