@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: "Select Device Target:"
+        description: "Select device target:"
         required: true
         default: "rpi-4"
         type: choice
@@ -17,7 +17,7 @@ on:
       release_branch:
         description: "Select the release branch:"
         required: true
-        default: "openwrt:21.02.7"
+        default: "openwrt:23.05.2"
         type: choice
         options:
           - openwrt:snapshots
@@ -28,11 +28,11 @@ on:
           - immortalwrt:21.02.7
           - immortalwrt:23.05.1
       rootfs:
-        description: 'Set RootFS Partition Size (Mb):'
+        description: 'Set rootfs partition size (Mb):'
         required: true
         default: '5000'
       squashfs:
-        description: "Generate Squashfs image:"
+        description: "Generate squashfs image:"
         required: true
         default: "false"
         type: choice
@@ -40,7 +40,7 @@ on:
           - true
           - false
       release:
-        description: "Upload Image to Release:"
+        description: "Upload compiled image to release:"
         required: true
         default: "true"
         type: choice
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Initialization Environment
+      - name: Initialization System Environment
         run: |
           sudo apt-get -qq update
           sudo apt-get -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip tar gzip qemu-utils mkisofs
