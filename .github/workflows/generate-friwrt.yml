@@ -47,12 +47,22 @@ on:
         options:
           - true
           - false
+      login_password: 
+        description: "Set Login password"
+        required: false
+        default: ''
+      wifi_password: 
+        description: "Set WiFi password"
+        required: false
+        default: ''
 
 env:
   TARGET: ${{ inputs.target }}
   RELEASE_BRANCH: ${{ inputs.release_branch }}
   ROOTFS_SIZE: ${{ inputs.rootfs}}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
+  LOGIN_PASSWORD: ${{ inputs.login_password }}
+  WIFI_PASSWORD: ${{ inputs.wifi_password }}
   UPLOAD_ARTIFACTS: false
   TZ: Asia/Jakarta
 
@@ -196,6 +206,6 @@ jobs:
             Build date: ${{ env.DATETIME }}
             - Default IP: 192.168.1.1
             - Default username: root
-            - Default password: none
+            - Default password: ${{ env.LOGIN_PASSWORD || 'none' }}
             - Default WIFI name: friWrt_5g
-            - Default WIFI password: none
+            - Default WIFI password: ${{ env.WIFI_PASSWORD || 'none' }}
