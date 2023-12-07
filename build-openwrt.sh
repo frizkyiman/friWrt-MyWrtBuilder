@@ -56,7 +56,7 @@ PACKAGES="$PACKAGES i2c-tools kmod-i2c-core kmod-i2c-gpio luci-app-oled"
 PACKAGES="$PACKAGES libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ctype php8-mod-fileinfo php8-mod-zip php8-mod-iconv php8-mod-mbstring coreutils-stat zoneinfo-asia"
 
 # Misc
-PACKAGES="$PACKAGES zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-temp-status luci-app-cpu-status-mini luci-app-ramfree htop luci-app-watchcat bash curl tar unzip unrar jq luci-app-ttyd nano"
+PACKAGES="$PACKAGES zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-temp-status luci-app-cpu-status-mini luci-app-ramfree htop luci-app-watchcat bash curl tar unzip unrar jq luci-app-ttyd nano git"
 
 # Custom Files
 FILES="files"
