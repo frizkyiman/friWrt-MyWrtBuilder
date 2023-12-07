@@ -3,14 +3,6 @@ name: Generate friWrt Firmware
 on:
   workflow_dispatch:
     inputs:
-      source_base:
-        description: "Select Source Base:"
-        required: true
-        default: "openwrt"
-        type: choice
-        options:
-          - openwrt
-          - immortalwrt
       target:
         description: "Select Device Target:"
         required: true
@@ -22,17 +14,19 @@ on:
           - rpi-3
           - rpi-4
           - x86-64
-      source_branch:
-        description: "Select Branch Revision:"
+      release_branch:
+        description: "Select the release branch:"
         required: true
-        default: "21.02.7"
+        default: "openwrt:21.02.7"
         type: choice
         options:
-          - snapshots
-          - 21.02.7
-          - 22.03.5
-          - 23.05.1
-          - 23.05.2
+          - openwrt:snapshots
+          - openwrt:21.02.7
+          - openwrt:22.03.5
+          - openwrt:23.05.2
+          - immortalwrt:snapshots
+          - immortalwrt:21.02.7
+          - immortalwrt:23.05.1
       rootfs:
         description: 'Set RootFS Partition Size (Mb):'
         required: true
@@ -57,8 +51,7 @@ on:
 env:
   DOWNLOAD_BASE: https://downloads.${{ inputs.source_base }}.org
   TARGET: ${{ inputs.target }}
-  BASE: ${{ inputs.source_base }}
-  BRANCH: ${{ inputs.source_branch }}
+  RELEASE_BRANCH: ${{ inputs.release_branch }}
   BUILD_SH: build-${{ inputs.source_base }}.sh
   PATCH_SH: scripts/builder-patch-${{ inputs.source_base }}.sh
   WORKING_DIR: ${{ inputs.source_base }}-imagebuilder-${{ inputs.target }}.Linux-x86_64
@@ -111,6 +104,8 @@ jobs:
             ARCH_1="amd64"
             ARCH_2=x86_64
           fi
+          echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
+          echo "BRANCH=${RELEASE_BRANCH#*:}" >> $GITHUB_ENV
           echo "PROFILE=$DEVICE" >> $GITHUB_ENV
           echo "tags=$( [ "$BRANCH" == "21.02.7" ] && echo "21.02" ) >> $GITHUB_ENV
           echo "ARCH=$ARCH_1" >> $GITHUB_ENV
