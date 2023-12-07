@@ -71,26 +71,26 @@ jobs:
         run: |
           if [ "$TARGET" == "rpi-1" ]; then
             DEVICE="rpi-1"
-            TARGET_1="bcm27xx/2708"
-            TARGET_2="bcm27xx-2708"
+            TARGET_1="bcm27xx/bcm2708"
+            TARGET_2="bcm27xx-bcm2708"
             ARCH_1="armv6"
             ARCH_2=""
           elif [ "$TARGET" == "rpi-2" ]; then
             DEVICE="rpi-2"
-            TARGET_1="bcm27xx/2709"
-            TARGET_2="bcm27xx-2709"
+            TARGET_1="bcm27xx/bcm2709"
+            TARGET_2="bcm27xx-bcm2709"
             ARCH_1="armv7"
             ARCH_2=""
           elif [ "$TARGET" == "rpi-3" ]; then
             DEVICE="rpi-3"
-            TARGET_1="bcm27xx/2710"
-            TARGET_2="bcm27xx-2710"
+            TARGET_1="bcm27xx/bcm2710"
+            TARGET_2="bcm27xx-bcm2710"
             ARCH_1="armv7"
             ARCH_2=""
           elif [ "$TARGET" == "rpi-4" ]; then
             DEVICE="rpi-4"
-            TARGET_1="bcm27xx/2711"
-            TARGET_2="bcm27xx-2711"
+            TARGET_1="bcm27xx/bcm2711"
+            TARGET_2="bcm27xx-bcm2711"
             ARCH_1="arm64"
             ARCH_2="aarch64"
           elif [ "$TARGET" == "x86-64" ]; then
