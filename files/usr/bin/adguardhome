@@ -169,7 +169,11 @@ case "$1" in
   "disable")
     disable
     ;;
+  "--force-enable")
+    enable
+    ;;
   *)
     echo "Invalid option. Use 'enable' or 'disable'."
+    echo "Use '--force-enable' to force enable without checking running servce."
     ;;
 esac
