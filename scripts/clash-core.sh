@@ -18,11 +18,10 @@ if [ -d files/usr/share/openclash/ui ]; then
 fi
 
 echo "Start Clash Core Download !"
-arch=$( [ "$TARGET" == "rpi-4" ] && echo "arm64" || echo "amd64" )
 #core download url
-clash="https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-$arch.tar.gz"
-clash_meta="https://github.com/MetaCubeX/mihomo/releases/download/$(curl -sSL "https://github.com/MetaCubeX/mihomo/releases/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1)/mihomo-linux-$arch-$(curl -sSL "https://github.com/MetaCubeX/mihomo/releases/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1).gz"
-clash_tun="https://github.com/vernesong/OpenClash/raw/core/master/premium/$(curl -s "https://github.com/vernesong/OpenClash/tree/core/master/premium" | grep -o "clash-linux-$arch-[0-9]*\.[0-9]*\.[0-9]*-[0-9]*-[a-zA-Z0-9]*\.gz" | awk 'NR==1 {print $1}')"
+clash="https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-$ARCH.tar.gz"
+clash_meta="https://github.com/MetaCubeX/mihomo/releases/download/$(curl -sSL "https://github.com/MetaCubeX/mihomo/releases/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1)/mihomo-linux-$ARCH-$(curl -sSL "https://github.com/MetaCubeX/mihomo/releases/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1).gz"
+clash_tun="https://github.com/vernesong/OpenClash/raw/core/master/premium/$(curl -s "https://github.com/vernesong/OpenClash/tree/core/master/premium" | grep -o "clash-linux-$ARCH-[0-9]*\.[0-9]*\.[0-9]*-[0-9]*-[a-zA-Z0-9]*\.gz" | awk 'NR==1 {print $1}')"
 
 if [ -d files/etc/openclash/core ]; then
    mkdir -p files/etc/openclash/core
