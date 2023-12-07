@@ -189,7 +189,7 @@ jobs:
           file_glob: true
           file: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}
+          tag: ${{ env.TARGET }}-${{ env.BASE }}-${{ env.BRANCH }}
           overwrite: true
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
