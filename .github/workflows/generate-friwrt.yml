@@ -49,12 +49,8 @@ on:
           - false
 
 env:
-  DOWNLOAD_BASE: https://downloads.${{ inputs.source_base }}.org
   TARGET: ${{ inputs.target }}
   RELEASE_BRANCH: ${{ inputs.release_branch }}
-  BUILD_SH: build-${{ inputs.source_base }}.sh
-  PATCH_SH: scripts/builder-patch-${{ inputs.source_base }}.sh
-  WORKING_DIR: ${{ inputs.source_base }}-imagebuilder-${{ inputs.target }}.Linux-x86_64
   ROOTFS_SIZE: ${{ inputs.rootfs}}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   UPLOAD_ARTIFACTS: false
@@ -104,6 +100,10 @@ jobs:
             ARCH_1="amd64"
             ARCH_2=x86_64
           fi
+          echo "DOWNLOAD_BASE: https://downloads.${RELEASE_BRANCH%:*}.org" >> $GITHUB_ENV
+          echo "BUILD_SH: build-${RELEASE_BRANCH%:*}.sh" >> $GITHUB_ENV
+          echo "PATCH_SH: scripts/builder-patch-${RELEASE_BRANCH%:*}.sh" >> $GITHUB_ENV
+          echo "WORKING_DIR: ${RELEASE_BRANCH%:*}-imagebuilder-$TARGET.Linux-x86_64" >> $GITHUB_ENV
           echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
           echo "BRANCH=${RELEASE_BRANCH#*:}" >> $GITHUB_ENV
           echo "PROFILE=$DEVICE" >> $GITHUB_ENV
