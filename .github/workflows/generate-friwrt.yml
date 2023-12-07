@@ -84,30 +84,37 @@ jobs:
             DEVICE="rpi-1"
             TARGET_1="bcm27xx/2708"
             TARGET_2="bcm27xx-2708"
-            ARCHCHITECTURE="armv6l"
+            ARCH_1="armv6"
+            ARCH_2=""
           elif [ "$TARGET" == "rpi-2" ]; then
             DEVICE="rpi-2"
             TARGET_1="bcm27xx/2709"
             TARGET_2="bcm27xx-2709"
-            ARCHCHITECTURE="armv7l"
+            ARCH_1="armv7"
+            ARCH_2=""
           elif [ "$TARGET" == "rpi-3" ]; then
             DEVICE="rpi-3"
             TARGET_1="bcm27xx/2710"
             TARGET_2="bcm27xx-2710"
-            ARCHCHITECTURE="armv7l"
+            ARCH_1="armv7"
+            ARCH_2=""
           elif [ "$TARGET" == "rpi-4" ]; then
             DEVICE="rpi-4"
             TARGET_1="bcm27xx/2711"
             TARGET_2="bcm27xx-2711"
-            ARCHCHITECTURE="aarch64_cortex-a72"
+            ARCH_1="arm64"
+            ARCH_2="aarch64"
           elif [ "$TARGET" == "x86-64" ]; then
             DEVICE="generic"
             TARGET_1="x86/64"
             TARGET_2="x86-64"
-            ARCHCHITECTURE=x86_64
+            ARCH_1="amd64"
+            ARCH_2=x86_64
           fi
           echo "PROFILE=$DEVICE" >> $GITHUB_ENV
-          echo "ARCH=$ARCHITECTURE" >> $GITHUB_ENV
+          echo "tags=$( [ "$BRANCH" == "21.02.7" ] && echo "21.02" ) >> $GITHUB_ENV
+          echo "ARCH=$ARCH_1" >> $GITHUB_ENV
+          echo "ARCH_2=$ARCH_2" >> $GITHUB_ENV
           echo "TARGET_SYSTEM=$TARGET_1" >> $GITHUB_ENV
           echo "TARGET_NAME=$TARGET_2" >> $GITHUB_ENV
           echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
@@ -133,12 +140,10 @@ jobs:
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          tags=$( [ "$BRANCH" == "21.02.7" ] && echo "21.02" )
-          archs=$( [ "$TARGET" == "rpi-4" ] && echo "arm64" || echo "x86" )  
           if [ "$BRANCH" == "21.02.7" ]; then
-             grep -E "^all-all|^old-$tags|^$archs-$tags" external-package-urls.txt | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^old-$tags|^$ARCH-$tags" external-package-urls.txt | awk '{print $2}' > output_url.txt
           else
-             grep -E "^all-all|^all|^$archs" external-package-urls.txt | grep -vE "^$archs-$tags" | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
           echo "status=success" >> $GITHUB_OUTPUT
