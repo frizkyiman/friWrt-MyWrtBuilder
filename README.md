@@ -22,6 +22,7 @@ You can also edit thr package you want by simply edit "make-build.sh" file!
 Want to use custom .ipk packages or custom files?
 Place the link on "external-package-urls.txt" or upload it to "packages" folder, then write down the ipk package name to "make-buil.sh".
 Custom files or configuration on "files" folder.
+Please read instruction given.
 
 ### Firmware details
 
