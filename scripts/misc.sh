@@ -3,17 +3,6 @@
 echo "Start Downloading Misc files !"
 echo "Current Path: $PWD"
 
-# setup login password
-{
-if [ -n "$LOGIN_PASSWORD" ]; then
-  sed -i "/\/bin\/sh/ a\\(echo "$LOGIN_PASSWORD"; sleep 1; echo "$LOGIN_PASSWORD") | passwd > /dev/null\\" files/etc/uci-defaults/99-init-settings.sh
-fi
-if [ -n "$WIFI_PASSWORD" ]; then
-  sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
-  sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
-fi
-}
-
 # custom script files urls
 urls=("https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
       "https://raw.githubusercontent.com/dylanaraps/neofetch/master/neofetch"
@@ -35,6 +24,18 @@ if [[ -e "files/www/luci-static/resources/view/status/include/10_system_$BASE.js
      rm files/www/luci-static/resources/view/status/include/10_system_*.js
 fi
 }
+
+# setup login password
+{
+if [ -n "$LOGIN_PASSWORD" ]; then
+  sed -i "/\/bin\/sh/ a\\(echo "$LOGIN_PASSWORD"; sleep 1; echo "$LOGIN_PASSWORD") | passwd > /dev/null\\" files/etc/uci-defaults/99-init-settings.sh
+fi
+if [ -n "$WIFI_PASSWORD" ]; then
+  sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
+  sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
+fi
+}
+
 {
 echo "Downloading custom script"
 mkdir -p files/etc/init.d
