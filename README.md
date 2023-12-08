@@ -1,7 +1,11 @@
-# friWrt-builder
+# friWrt-builder | OpenWrt and ImmortalWrt
 
 ### What's this?
-This is a openwrt toolchain called Image Builder to build a pre compiled image to ready one firmware. You can customize your own packages adn custom files that suitable for you.
+This is a openwrt toolchain called Image Builder to build a pre compiled image to ready one firmware. You can customize your own packages adn custom files that suitable for you. 
+
+Using [MyWrtBuilder](https://github.com/Revincx/MyWrtBuilder) by Revincx as source base scripts, by adopting and improve it by adding ability to chose Source and Branch, feature to easy change rootfs partition size, flexible target device, improve logic code and much more.
+
+By default, im using Raspberry Pi 4B device with all my preference packages and custom files configuration was placed here.
 
 ### Features of this project
 * Using ImageBuilder to build firmware saves time and effort. It only takes less than half an hour to build once.
@@ -20,21 +24,12 @@ Place the link on "external-package-urls.txt" or upload it to "packages" folder,
 Custom files or configuration on "files" folder.
 
 ### Firmware details
-friWrt Default Image information
 
-Default IP: 192.168.1.1
-
-Default username: root
-
-Default password: (as your settings)
-
-Default WIFI name: friWrt_5g
-
-Default WIFI password: (as your settings)
+you can find my done build on Release.
 
 ### Acknowledgments
 
-Base on [MyWrtBuilder](https://github.com/Revincx/MyWrtBuilder) scripts.
+[MyWrtBuilder](https://github.com/Revincx/MyWrtBuilder)
 
 [OpenWrt](https://github.com/openwrt/openwrt/)
 
