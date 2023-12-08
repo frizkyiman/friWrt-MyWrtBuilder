@@ -64,9 +64,9 @@ FILES="files"
 CUSTOM=$( [ "$TARGET" == "rpi-4" ] && echo "kmod-i2c-bcm2835" )
 
 # Exclude package
-if [ "$1" == "openwrt" ]; then
+if [ "${RELEASE_BRANCH%:*}" == "openwrt" ]; then
     EXCLUDED="-dnsmasq"
-elif [ "$1" == "immortalwrt" ]; then
+elif [ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]; then
     EXCLUDED="-dnsmasq -automount -libustream-openssl -default-settings-chn -luci-i18n-base-zh-cn"
 fi
 
