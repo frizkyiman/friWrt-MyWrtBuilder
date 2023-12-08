@@ -64,7 +64,7 @@ function enable() {
   uci set firewall.adguardhome_dns_53.proto='tcp udp'
   uci set firewall.adguardhome_dns_53.src_dport='53'
   uci set firewall.adguardhome_dns_53.dest='lan'
-  uci set firewall.adguardhome_dns_53.dest_ip='${NET_ADDR}'
+  uci set firewall.adguardhome_dns_53.dest_ip="${NET_ADDR}"
   uci set firewall.adguardhome_dns_53.dest_port='53'
   uci set firewall.adguardhome_dns_53.name='AdGuard Home'
   uci commit firewall
