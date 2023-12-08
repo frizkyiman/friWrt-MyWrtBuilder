@@ -5,10 +5,10 @@ echo "Current Path: $PWD"
 
 # setup login password
 {
-if [ -z "$LOGIN_PASSWORD" ]; then
-  sed -i "/uci commit wireless/ i\echo -e \"$LOGIN_PASSWORD\n$LOGIN_PASSWORD\" | passwd" files/etc/uci-defaults/99-init-settings.sh
+if [ -n "$LOGIN_PASSWORD" ]; then
+  sed -i "/\/bin\/sh/ a\\(echo "$LOGIN_PASSWORD"; sleep 1; echo "$LOGIN_PASSWORD") | passwd > /dev/null\\" files/etc/uci-defaults/99-init-settings.sh
 fi
-if [ -z "$WIFI_PASSWORD" ]; then
+if [ -n "$WIFI_PASSWORD" ]; then
   sed -i "/uci commit wireless/ i\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
   sed -i "/uci commit wireless/ i\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
 fi
