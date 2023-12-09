@@ -7,7 +7,7 @@ echo "Start YACD Download !"
 yacd="https://github.com/taamarin/yacd-meta/archive/gh-pages.zip"
 mkdir -p files/usr/share/openclash/ui
 if wget --no-check-certificate -nv $yacd -O files/usr/share/openclash/ui/yacd.zip; then
-    unzip files/usr/share/openclash/ui/yacd.zip -d files/usr/share/openclash/ui && rm files/usr/share/openclash/ui/yacd.zip
+   unzip -qq files/usr/share/openclash/ui/yacd.zip -d files/usr/share/openclash/ui && rm files/usr/share/openclash/ui/yacd.zip
    mv files/usr/share/openclash/ui/yacd* files/usr/share/openclash/ui/yacd.new
    echo "YACD Dashboard download successfully."
 else
@@ -46,4 +46,5 @@ if wget --no-check-certificate -nv -O clash_tun.gz $clash_tun; then
 else
    echo "Failed to download clash_tun.gz."
 fi
+
 echo "All Core Downloaded succesfully"
