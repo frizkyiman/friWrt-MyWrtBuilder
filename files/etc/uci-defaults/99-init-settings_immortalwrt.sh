@@ -3,7 +3,6 @@
 exec > /root/first-boot.log 2>&1
 
 # Set hostname and Timezone to Asia/Jakarta
-uci set system.@system[0].hostname='friWrt'
 uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
 delete system.ntp.server
