@@ -73,8 +73,8 @@ function enable() {
   echo "Configuring AdGuard Home Luci"
   uci set AdGuardHome.AdGuardHome.enabled='1'
   uci commit AdGuardHome
-  etc/init.d/AdGuardHome enable
-  etc/init.d/AdGuardHome start
+  /etc/init.d/AdGuardHome enable
+  /etc/init.d/AdGuardHome start
 
 cat <<'EOF' >/usr/lib/lua/luci/controller/agh.lua
 module("luci.controller.agh", package.seeall)
@@ -128,8 +128,8 @@ function disable() {
 
   uci set AdGuardHome.AdGuardHome.enabled='0'
   uci commit AdGuardHome
-  etc/init.d/AdGuardHome stop
-  etc/init.d/AdGuardHome disable
+  /etc/init.d/AdGuardHome stop
+  /etc/init.d/AdGuardHome disable
 
   echo "AdGuard Home Successfully Disable!"
 
