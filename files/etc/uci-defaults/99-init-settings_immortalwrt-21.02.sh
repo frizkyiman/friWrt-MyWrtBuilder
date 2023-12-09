@@ -11,7 +11,6 @@ add_list system.ntp.server="pool.ntp.org"
 add_list system.ntp.server="id.pool.ntp.org"
 add_list system.ntp.server="time.google.com"
 uci commit system
-/etc/init.d/system reload
 
 #configure wan interface
 uci set network.wan=interface 
@@ -19,25 +18,11 @@ uci set network.wan.proto='modemmanager'
 uci set network.wan.device='/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1'
 uci set network.wan.apn='internet'
 uci set network.wan.auth='none'
-uci set network.wan.iptype='ipv4'
-uci set network.@device[0].ipv6='0'
+uci set network.wan.iptype='ipv4v6'
 uci commit network
-/etc/init.d/network reload
 
 uci set firewall.@zone[1].network='wan'
 uci commit firewall
-/etc/init.d/firewall reload
-
-uci set network.lan.ipv6=0
-uci set dhcp.lan.dhcpv6=disabled
-uci commit
-uci -q delete dhcp.lan.dhcpv6
-uci -q delete dhcp.lan.ra
-uci commit dhcp
-/etc/init.d/odhcpd reload
-uci set network.lan.delegate="0"
-uci commit network
-/etc/init.d/network restart
 
 #configure WLAN
 uci set wireless.@wifi-device[0].disabled='0'
@@ -45,7 +30,6 @@ uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
 uci set wireless.@wifi-device[0].country='ID'
 uci set wireless.radio0.channel='161'
 uci commit wireless
-/etc/init.d/wireless restart
 
 # remove huawei me909s usb-modeswitch
 sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
@@ -98,7 +82,6 @@ uci set firewall.samba_smb_nt.dest_port="445"
 uci set firewall.samba_smb_nt.proto="tcp"
 uci set firewall.samba_smb_nt.target="NOTRACK"
 uci commit firewall
-/etc/init.d/firewall restart
 
 uci set ttyd.@ttyd[0].command='/bin/bash --login'
 uci commit
