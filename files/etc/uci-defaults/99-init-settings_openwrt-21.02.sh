@@ -6,6 +6,10 @@ exec > /root/first-boot.log 2>&1
 uci set system.@system[0].hostname='friWrt'
 uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
+delete system.ntp.server
+add_list system.ntp.server="pool.ntp.org"
+add_list system.ntp.server="id.pool.ntp.org"
+add_list system.ntp.server="time.google.com"
 uci commit system
 
 #configure wan interface
