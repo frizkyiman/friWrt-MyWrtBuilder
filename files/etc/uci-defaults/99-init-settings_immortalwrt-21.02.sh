@@ -1,6 +1,6 @@
 #!/bin/sh
 
-exec > /root/first-boot.log 2>&1
+exec > /root/setup.log 2>&1
 
 # Set hostname and Timezone to Asia/Jakarta
 uci set system.@system[0].timezone='WIB-7'
