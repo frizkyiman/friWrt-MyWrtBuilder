@@ -21,6 +21,10 @@ uci set network.wan.iptype='ipv4v6'
 uci set network.lan.ipaddr="192.168.1.1"
 uci commit network
 
+uci -q delete dhcp.lan.dhcpv6
+uci -q delete dhcp.lan.ra
+uci commit dhcp
+
 uci set firewall.@zone[1].network='wan'
 uci commit firewall
 
