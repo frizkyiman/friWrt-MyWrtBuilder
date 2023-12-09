@@ -31,7 +31,7 @@ fi
 {
 echo "Downloading custom script" 
 # custom script files urls
-urls=("https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
+urls=("https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$(echo $ARCH_2 | cut -d'_' -f1).tgz"
       "https://raw.githubusercontent.com/dylanaraps/neofetch/master/neofetch"
       "https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/sbin/sync_time.sh"
       "https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/usr/bin/clock"
