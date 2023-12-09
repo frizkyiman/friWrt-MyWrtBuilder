@@ -5,7 +5,7 @@ exec > /root/setup.log 2>&1
 # Set hostname and Timezone to Asia/Jakarta
 uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
-delete system.ntp.server
+uci delete system.ntp.server
 uci add_list system.ntp.server="pool.ntp.org"
 uci add_list system.ntp.server="id.pool.ntp.org"
 uci add_list system.ntp.server="time.google.com"
