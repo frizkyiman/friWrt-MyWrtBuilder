@@ -3,14 +3,6 @@
 echo "Start Downloading Misc files !"
 echo "Current Path: $PWD"
 
-# custom script files urls
-urls=("https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
-      "https://raw.githubusercontent.com/dylanaraps/neofetch/master/neofetch"
-      "https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/sbin/sync_time.sh"
-      "https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/usr/bin/clock"
-      "https://raw.githubusercontent.com/frizkyiman/fix-read-only/main/sbin/repair_ro"
-      "https://raw.githubusercontent.com/frizkyiman/auto-mount-hdd/main/mount_hdd")
-
 {
 echo "setup 99-init-settings.sh"
 if [[ -e "files/etc/uci-defaults/99-init-settings_"$BASE""$tags.sh"" ]]; then
@@ -38,6 +30,14 @@ fi
 
 {
 echo "Downloading custom script" 
+# custom script files urls
+urls=("https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
+      "https://raw.githubusercontent.com/dylanaraps/neofetch/master/neofetch"
+      "https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/sbin/sync_time.sh"
+      "https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/usr/bin/clock"
+      "https://raw.githubusercontent.com/frizkyiman/fix-read-only/main/sbin/repair_ro"
+      "https://raw.githubusercontent.com/frizkyiman/auto-mount-hdd/main/mount_hdd")
+
 mkdir -p files/etc/init.d
 mkdir -p files/sbin/
 if wget --no-check-certificate -nv -P files "${urls[@]}"; then
