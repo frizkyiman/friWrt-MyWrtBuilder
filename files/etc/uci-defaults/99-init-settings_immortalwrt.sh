@@ -19,9 +19,7 @@ uci set network.wan.device='/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0
 uci set network.wan.apn='internet'
 uci set network.wan.auth='none'
 uci set network.wan.iptype='ipv4v6'
-uci set network.@device[0].ipv6='0'
 uci commit network
-/etc/init.d/network reload
 
 uci set firewall.@zone[1].network='wan'
 uci commit firewall
