@@ -1,9 +1,9 @@
 # friWrt-builder | OpenWrt and ImmortalWrt
 
 ### What's this?
-This is a openwrt toolchain called Image Builder to build a pre compiled image to ready one firmware. You can customize your own packages adn custom files that suitable for you. 
+This is a openwrt toolchain called Image Builder to build a pre-compiled image to ready one firmware. You can customize your own packages adn custom files that suitable for you. 
 
-Using [MyWrtBuilder](https://github.com/Revincx/MyWrtBuilder) by Revincx as source base scripts, by adopting and improve it by adding ability to chose Source and Branch, feature to easy change rootfs partition size, flexible target device, improve logic code and much more.
+Using [MyWrtBuilder](https://github.com/Revincx/MyWrtBuilder) from Revincx as source base scripts, by adopting and improve it by adding ability to chose Source and Branch version, feature to easy change rootfs partition size, flexible target device, improve logic code and much more.
 
 By default, im using Raspberry Pi 4B device with all my preference packages and custom files configuration was placed here.
 
@@ -17,10 +17,10 @@ By default, im using Raspberry Pi 4B device with all my preference packages and 
 ### How To
 Select for using Official OpenWrt or ImmortalWrt as a source base and branch version with just one click!
 
-You can also edit thr package you want by simply edit "make-build.sh" file!
+You can also edit the package you want by simply edit "make-build.sh" file!
 
 Want to use custom .ipk packages or custom files?
-Place the link on "external-package-urls.txt" or upload it to "packages" folder, then write down the ipk package name to "make-buil.sh".
+Put the url link on "external-package-urls.txt" or upload it to "packages" folder, then write down the ipk package name on "make-buil.sh".
 Custom files or configuration on "files" folder.
 Please read instruction given.
 
