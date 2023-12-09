@@ -3,14 +3,13 @@
 echo "Current Path: $PWD"
 
 echo "Start YACD Download !"
-#custom yacd download url
-yacd="https://github.com/taamarin/yacd-meta/archive/gh-pages.zip"
 
 if [ -d files/usr/share/openclash/ui ]; then
+   yacd="https://github.com/taamarin/yacd-meta/archive/gh-pages.zip"
    mkdir -p files/usr/share/openclash/ui
-   if wget --no-check-certificate -q $yacd -O files/usr/share/openclash/ui/yacd.zip; then
-      unzip -qq files/usr/share/openclash/ui/yacd.zip -d files/usr/share/openclash/ui && rm files/usr/share/openclash/ui/yacd.zip
-      mv files/usr/share/openclash/ui/yacd-* files/usr/share/openclash/ui/yacd.new
+   if wget --no-check-certificate -nv $yacd -O files/usr/share/openclash/ui/yacd.zip; then
+      unzip files/usr/share/openclash/ui/yacd.zip -d files/usr/share/openclash/ui && rm files/usr/share/openclash/ui/yacd.zip
+      mv files/usr/share/openclash/ui/yacd* files/usr/share/openclash/ui/yacd.new
       echo "YACD Dashboard download successfully."
    else
       echo "Failed to download YACD Dashboard"
@@ -28,7 +27,7 @@ if [ -d files/etc/openclash/core ]; then
    cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
 
    echo "Downloading clash.tar.gz..."
-   if wget --no-check-certificate-q -O clash.tar.gz $clash; then
+   if wget --no-check-certificate -nv -O clash.tar.gz $clash; then
       tar -zxf clash.tar.gz
       rm clash.tar.gz
       echo "clash.tar.gz downloaded and extracted successfully."
@@ -37,7 +36,7 @@ if [ -d files/etc/openclash/core ]; then
    fi
    
    echo "Downloading clash_meta.gz..."
-   if wget --no-check-certificate -q -O clash_meta.gz $clash_meta; then
+   if wget --no-check-certificate -nv -O clash_meta.gz $clash_meta; then
       gzip -d clash_meta.gz
       echo "clash_meta.gz downloaded successfully."
    else
@@ -45,7 +44,7 @@ if [ -d files/etc/openclash/core ]; then
    fi
    
    echo "Downloading clash_tun.gz..."
-   if wget --no-check-certificate -q -O clash_tun.gz $clash_tun; then
+   if wget --no-check-certificate -nv -O clash_tun.gz $clash_tun; then
       gzip -d clash_tun.gz
       echo "clash_tun.gz downloaded successfully."
    else
