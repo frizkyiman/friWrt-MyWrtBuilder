@@ -22,23 +22,19 @@ dns:
   refuse_any: true
   upstream_dns:
     - 8.8.8.8
-    - 8.8.4.4
     - 9.9.9.9
     - 1.1.1.1
-    - 1.0.0.1
+    - 208.67.222.222
   upstream_dns_file: ""
   bootstrap_dns:
     - 8.8.8.8
-    - 8.8.4.4
     - 9.9.9.9
     - 1.1.1.1
-    - 1.0.0.1
   fallback_dns:
-    - 8.8.8.8
-    - 8.8.4.4
-    - 9.9.9.9
-    - 1.1.1.1
+    - 149.112.112.112
     - 1.0.0.1
+    - 8.8.4.4
+    - 208.67.220.220
   all_servers: true
   fastest_addr: false
   fastest_timeout: 1s
@@ -56,7 +52,7 @@ dns:
   cache_ttl_max: 0
   cache_optimistic: true
   bogus_nxdomain: []
-  aaaa_disabled: true
+  aaaa_disabled: false
   enable_dnssec: true
   edns_client_subnet:
     custom_ip: ""
