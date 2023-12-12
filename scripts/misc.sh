@@ -6,25 +6,34 @@ echo "Current Path: $PWD"
 {
 echo "setup 99-init-settings.sh"
 if [[ -e "files/etc/uci-defaults/99-init-settings_"$BASE""$tags.sh"" ]]; then
-     mv "files/etc/uci-defaults/99-init-settings_"$BASE""$tags.sh"" "files/etc/uci-defaults/99-init-settings.sh"
-     rm files/etc/uci-defaults/99-init-settings_*.sh
+    mv "files/etc/uci-defaults/99-init-settings_"$BASE""$tags.sh"" "files/etc/uci-defaults/99-init-settings.sh"
+    rm files/etc/uci-defaults/99-init-settings_*.sh
+else
+    echo "error 99-init-settings.sh not found!"
 fi
 
 echo "setup 10_system.js"
 if [[ -e "files/www/luci-static/resources/view/status/include/10_system_$BASE.js" ]]; then
-     mv "files/www/luci-static/resources/view/status/include/10_system_$BASE.js" "files/www/luci-static/resources/view/status/include/10_system.js"
-     rm files/www/luci-static/resources/view/status/include/10_system_*.js
+    mv "files/www/luci-static/resources/view/status/include/10_system_$BASE.js" "files/www/luci-static/resources/view/status/include/10_system.js"
+    rm files/www/luci-static/resources/view/status/include/10_system_*.js
+else
+    echo "error 10_system.js not found!"
 fi
 }
 
-# setup login password
+# setup login/wifi password
 {
 if [ -n "$LOGIN_PASSWORD" ]; then
-  sed -i "/exec > \/root\/setup.log 2>&1/ a\\(echo "$LOGIN_PASSWORD"; sleep 1; echo "$LOGIN_PASSWORD") | passwd > /dev/null\\" files/etc/uci-defaults/99-init-settings.sh
+    sed -i "/exec > \/root\/setup.log 2>&1/ a\\(echo "$LOGIN_PASSWORD"; sleep 1; echo "$LOGIN_PASSWORD") | passwd > /dev/null\\" files/etc/uci-defaults/99-init-settings.sh
+else
+    echo "Login password not set"
 fi
+
 if [ -n "$WIFI_PASSWORD" ]; then
-  sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
-  sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
+    sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
+    sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
+else
+    echo "Wifi password not set"
 fi
 }
 
