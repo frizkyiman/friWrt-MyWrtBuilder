@@ -106,7 +106,7 @@ echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
 echo '0 12 * * * /sbin/sync_time.sh beacon.liveon.id' >> /etc/crontabs/root
 
 mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old && mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
-bash usr/bin/patchoc.sh
+bash /usr/bin/patchoc.sh
 
 echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
 sed -i "s/\(DISTRIB_DESCRIPTION='OpenWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
@@ -116,7 +116,7 @@ uci set nlbwmon.@nlbwmon[0].commit_interval='3h'
 uci set nlbwmon.@nlbwmon[0].refresh_interval='60s'
 uci commit nlbwmon
 
-sed -i "s/;DatabaseDir "/var/lib/vnstat"/DatabaseDir "/etc/vnstat"/" /etc/config/vnstat
+sed -i 's/DatabaseDir "\/var\/lib\/vnstat"/DatabaseDir "\/etc\/vnstat"/g' /etc/vnstat.conf
 
 reboot
 
