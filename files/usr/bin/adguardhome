@@ -76,14 +76,14 @@ function enable() {
   /etc/init.d/AdGuardHome enable
   /etc/init.d/AdGuardHome start
 
-cat <<'EOF' >/usr/lib/lua/luci/controller/agh.lua
-module("luci.controller.agh", package.seeall)
-function index()
-entry({"admin","status","agh"}, template("agh"), _("AdGuard Home Dashboard")).leaf=true
-end
-EOF
+  if ! grep -q 'entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("AdGuardHome Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua; then
+    echo "setup AdGuardHome Dashboard."
+    sed -i '/Manual Config/ a\entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("AdGuardHome Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua
+  else
+    echo "AdGuardHome Dashboard already setup."
+  fi
 
-cat <<'EOF' >/usr/lib/lua/luci/view/agh.htm
+cat <<'EOF' >/usr/lib/lua/luci/view/AdGuardHome.htm
 <%+header%>
 <div class="cbi-map"><br>
 <iframe id="agh" style="width: 100%; min-height: 650px; border: none; border-radius: 2px;"></iframe>
@@ -132,18 +132,6 @@ function disable() {
   /etc/init.d/AdGuardHome disable
 
   echo "AdGuard Home Successfully Disable!"
-
-  if [ -e "/usr/lib/lua/luci/controller/agh.lua" ]; then
-    rm /usr/lib/lua/luci/controller/agh.lua
-  fi
-
-  if [ -e "/usr/lib/lua/luci/view/agh.htm" ]; then
-    rm /usr/lib/lua/luci/view/agh.htm
-  fi
-
-  if [ -e "/www/agh.php" ]; then
-    rm /www/agh.php
-  fi
 }
 
 case "$1" in
