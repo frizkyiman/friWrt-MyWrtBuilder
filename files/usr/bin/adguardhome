@@ -148,6 +148,7 @@ case "$1" in
     disable
     ;;
   "--force-enable")
+    disable
     enable
     dashboard
     ;;
