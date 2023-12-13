@@ -113,7 +113,7 @@ function disable() {
 function dashboard() {
   if ! grep -q 'entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua; then
     echo "setup AdGuardHome Dashboard."
-    sed -i '/Manual Config/ a\entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("AdGuardHome Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua
+    sed -i '/Manual Config/ a\entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua
   else
     echo "AdGuardHome Dashboard already setup."
   fi
