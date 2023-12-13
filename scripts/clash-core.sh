@@ -17,7 +17,7 @@ fi
 echo "Start Clash Core Download !"
 #core download url
 clash="https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-$ARCH.tar.gz"
-clash_meta="$(meta_api="https://api.github.com/repos/MetaCubeX/mihomo/releases" && meta_file="mihomo-linux-$ARCH" && curl -s ${meta_api} | grep "browser_download_url" | grep -oE "https.*${meta_file}.*.gz" | head -n 1)"
+clash_meta="$(meta_api="https://api.github.com/repos/MetaCubeX/mihomo/releases/latest" && meta_file="mihomo-linux-$ARCH" && curl -s ${meta_api} | grep "browser_download_url" | grep -oE "https.*${meta_file}.*.gz" | head -n 1)"
 clash_tun="https://github.com/vernesong/OpenClash/raw/core/master/premium/$(curl -s "https://github.com/vernesong/OpenClash/tree/core/master/premium" | grep -o "clash-linux-$ARCH-[0-9]*\.[0-9]*\.[0-9]*-[0-9]*-[a-zA-Z0-9]*\.gz" | awk 'NR==1 {print $1}')"
 
 mkdir -p files/etc/openclash/core
