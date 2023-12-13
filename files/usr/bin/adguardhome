@@ -12,7 +12,7 @@ function enable() {
   echo "Enabling AdGuard Home..."
 
   echo "Get the first IPv4 and IPv6 Address of router."
-  NET_ADDR=$(/sbin/ip -o -4 addr list br-lan | awk 'NR==1{ split($4, ip_addr, "/"); print ip_addr[1] }')
+  NET_ADDR=$(uci get network.lan.ipaddr)
   NET_ADDR6=$(/sbin/ip -o -6 addr list br-lan scope global | awk 'NR==1{ split($4, ip_addr, "/"); print ip_addr[1] }')
  
   echo "Router IPv4 : ""${NET_ADDR}"
@@ -76,30 +76,6 @@ function enable() {
   /etc/init.d/AdGuardHome enable
   /etc/init.d/AdGuardHome start
 
-  if ! grep -q 'entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("AdGuardHome Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua; then
-    echo "setup AdGuardHome Dashboard."
-    sed -i '/Manual Config/ a\entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("AdGuardHome Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua
-  else
-    echo "AdGuardHome Dashboard already setup."
-  fi
-
-cat <<'EOF' >/usr/lib/lua/luci/view/AdGuardHome.htm
-<%+header%>
-<div class="cbi-map"><br>
-<iframe id="agh" style="width: 100%; min-height: 650px; border: none; border-radius: 2px;"></iframe>
-</div>
-<script type="text/javascript">
-document.getElementById("agh").src = "http://" + window.location.hostname + ":3000";
-</script>
-<%+footer%>
-EOF
-
-cat <<'EOF' >/www/agh.php
-<script type="text/javascript">
-document.getElementById("agh").src = "http://" + window.location.hostname + ":3000";
-</script>
-EOF
-
   echo "AdGuardHome Successfully Enable!"
 }
 
@@ -134,6 +110,32 @@ function disable() {
   echo "AdGuard Home Successfully Disable!"
 }
 
+function dashboard() {
+  if ! grep -q 'entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua; then
+    echo "setup AdGuardHome Dashboard."
+    sed -i '/Manual Config/ a\entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("AdGuardHome Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua
+  else
+    echo "AdGuardHome Dashboard already setup."
+  fi
+
+cat <<'EOF' >/usr/lib/lua/luci/view/AdGuardHome.htm
+<%+header%>
+<div class="cbi-map"><br>
+<iframe id="agh" style="width: 100%; min-height: 650px; border: none; border-radius: 2px;"></iframe>
+</div>
+<script type="text/javascript">
+document.getElementById("agh").src = "http://" + window.location.hostname + ":3000";
+</script>
+<%+footer%>
+EOF
+
+cat <<'EOF' >/www/agh.php
+<script type="text/javascript">
+document.getElementById("agh").src = "http://" + window.location.hostname + ":3000";
+</script>
+EOF
+}
+
 case "$1" in
   "enable")
     if check_service_status "AdGuardHome"; then
@@ -147,6 +149,7 @@ case "$1" in
     ;;
   "--force-enable")
     enable
+    dashboard
     ;;
   *)
     echo "Invalid option. Use 'enable' or 'disable'."
