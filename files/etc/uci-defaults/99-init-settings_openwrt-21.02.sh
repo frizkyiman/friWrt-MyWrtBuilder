@@ -11,6 +11,16 @@ uci add_list system.ntp.server="id.pool.ntp.org"
 uci add_list system.ntp.server="time.google.com"
 uci commit system
 
+#configure wan interface
+uci set network.wan=interface 
+uci set network.wan.proto='modemmanager'
+uci set network.wan.device='/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1'
+uci set network.wan.apn='internet'
+uci set network.wan.auth='none'
+uci set network.wan.iptype='ipv4v6'
+uci set network.lan.ipaddr="192.168.1.1"
+uci commit network
+
 uci -q delete dhcp.lan.dhcpv6
 uci -q delete dhcp.lan.ra
 uci commit dhcp
