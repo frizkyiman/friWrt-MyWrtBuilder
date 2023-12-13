@@ -21,5 +21,6 @@ if ! grep -q ".php=/usr/bin/php-cgi" /etc/config/uhttpd; then
 	logger "  helmilog : restarting some apps..."
 	/etc/init.d/uhttpd restart
 fi
+/etc/init.d/uhttpd restart
 [ -d /usr/lib/php8 ] && [ ! -d /usr/lib/php ] && ln -sf /usr/lib/php8 /usr/lib/php
 rm "$0"
