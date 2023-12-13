@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Start Downloading Misc files !"
+echo "Start Downloading Misc files and setup configuration!"
 echo "Current Path: $PWD"
 
 {
@@ -25,16 +25,18 @@ fi
 # setup login/wifi password
 {
 if [ -n "$LOGIN_PASSWORD" ]; then
+    echo "Login password was set: $LOGIN_PASSWORD"
     sed -i "/exec > \/root\/setup.log 2>&1/ a\\(echo "$LOGIN_PASSWORD"; sleep 1; echo "$LOGIN_PASSWORD") | passwd > /dev/null\\" files/etc/uci-defaults/99-init-settings.sh
 else
-    echo "Login password not set"
+    echo "Login password is not set, skipping..."
 fi
 
 if [ -n "$WIFI_PASSWORD" ]; then
+    echo "Wifi password was set: $WIFI_PASSWORD"
     sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
     sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
 else
-    echo "Wifi password not set"
+    echo "Wifi password is not set, skipping..."
 fi
 }
 
