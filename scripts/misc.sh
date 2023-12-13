@@ -100,6 +100,9 @@ fi
 }
 
 {
+sed -i '/reboot/ i\chmod +x /etc/openclash/core/clash' files/etc/uci-defaults/99-init-settings.sh
+sed -i '/reboot/ i\chmod +x /etc/openclash/core/clash_tun' files/etc/uci-defaults/99-init-settings.sh
+sed -i '/reboot/ i\chmod +x /etc/openclash/core/clash_meta' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /root/fix-tinyfm.sh && bash /root/fix-tinyfm.sh' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /sbin/sync_time.sh' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /sbin/free.sh' files/etc/uci-defaults/99-init-settings.sh
