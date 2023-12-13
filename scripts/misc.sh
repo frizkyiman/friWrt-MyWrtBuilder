@@ -5,6 +5,7 @@ echo "Current Path: $PWD"
 
 {
 echo "setup 99-init-settings.sh"
+tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "-21.02" )
 if [[ -e "files/etc/uci-defaults/99-init-settings_"$BASE""$tags.sh"" ]]; then
     mv "files/etc/uci-defaults/99-init-settings_"$BASE""$tags.sh"" "files/etc/uci-defaults/99-init-settings.sh"
     rm files/etc/uci-defaults/99-init-settings_*.sh
