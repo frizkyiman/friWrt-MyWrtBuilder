@@ -99,25 +99,29 @@ statistics:
   enabled: true
 filters:
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_7.txt
-    name: Perflyst and Dandelion Sprout's Smart-TV Blocklist
-    id: 1699648208
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_44.txt
-    name: HaGeZi's Threat Intelligence Feeds
-    id: 1699648209
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_27.txt
-    name: OISD Blocklist Big
-    id: 1699648210
+    url: https://big.oisd.nl/
+    name: oisd Blocklist Big
+    id: 1702484663
   - enabled: true
     url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt
-    name: HaGeZi's DoH/VPN/TOR/Proxy Blocklist
-    id: 1699993802
+    name: HaGeZi's Multi PRO
+    id: 1702484664
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_51.txt
-    name: HaGeZi's Pro++ Blocklist
-    id: 1699993803
+    url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.light.txt
+    name: HaGeZi's Threat Intelligence Feeds Light
+    id: 1702484665
+  - enabled: true
+    url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/native.tiktok.txt
+    name: HaGeZi's TikTok Analytic
+    id: 1702484666
+  - enabled: true
+    url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/native.winoffice.txt
+    name: HaGeZi's Microsoft Analytic
+    id: 1702484667
+  - enabled: true
+    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_7.txt
+    name: Perflyst and Dandelion Sprout's Smart-TV Blocklist
+    id: 1702484669
 whitelist_filters: []
 user_rules:
   - '@@||pagead2.googlesyndication.com^$important'
