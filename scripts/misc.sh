@@ -22,7 +22,7 @@ else
 fi
 }
 
-# setup login/wifi password
+# setup login/wifi password information
 {
 if [ -n "$LOGIN_PASSWORD" ]; then
     echo "Login password was set: $LOGIN_PASSWORD"
@@ -31,6 +31,8 @@ else
     echo "Login password is not set, skipping..."
 fi
 
+echo "Wifi SSID was set: $WIFI_SSID"
+
 if [ -n "$WIFI_PASSWORD" ]; then
     echo "Wifi password was set: $WIFI_PASSWORD"
     sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
@@ -38,6 +40,8 @@ if [ -n "$WIFI_PASSWORD" ]; then
 else
     echo "Wifi password is not set, skipping..."
 fi
+
+sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].ssid=\"$WIFI_SSID\"" files/etc/uci-defaults/99-init-settings.sh
 }
 
 {
