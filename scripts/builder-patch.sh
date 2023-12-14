@@ -10,7 +10,7 @@ sed -i '\|option check_signature| s|^|#|' repositories.conf
 
 echo "Patching Makefile"
 # Force opkg to overwrite files
-sed -i "s/install \$(BUILD_PACKAGES)/install \$(BUILD_PACKAGES) --force-overwrite/" Makefile
+sed -i "s/install \$(BUILD_PACKAGES)/install \$(BUILD_PACKAGES) --force-overwrite --force-overwrite/" Makefile
 
 # Resize Boot and Rootfs partition size
 option_squashfs=$( [ "$ROOTFS_SQUASHFS" == "true" ] && echo "CONFIG_TARGET_ROOTFS_SQUASHFS=y" || echo "# CONFIG_TARGET_ROOTFS_SQUASHFS is not set" )
