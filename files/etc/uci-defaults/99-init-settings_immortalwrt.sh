@@ -29,7 +29,6 @@ uci set firewall.@zone[1].network='wan'
 uci commit firewall
 
 #configure WLAN
-uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
 uci set wireless.@wifi-iface[0].mode='ap'
 uci set wireless.@wifi-device[0].disabled='0'
 uci set wireless.@wifi-device[0].country='ID'
