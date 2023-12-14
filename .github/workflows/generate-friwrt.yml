@@ -51,6 +51,10 @@ on:
         description: "Set Login password"
         required: false
         default: ''
+      wifi_ssid: 
+        description: "Set WiFi SSID"
+        required: true
+        default: 'friWrt_5g'
       wifi_password: 
         description: "Set WiFi password"
         required: false
@@ -62,6 +66,7 @@ env:
   ROOTFS_SIZE: ${{ inputs.rootfs}}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   LOGIN_PASSWORD: ${{ inputs.login_password }}
+  WIFI_SSID: ${{ inputs.wifi_ssid }}
   WIFI_PASSWORD: ${{ inputs.wifi_password }}
   UPLOAD_ARTIFACTS: false
   TZ: Asia/Jakarta
@@ -85,30 +90,35 @@ jobs:
             TARGET_2="bcm27xx-bcm2708"
             ARCH_1="armv6"
             ARCH_2="arm_arm1176jzf-s_vfp"
+            ARCH_3=""
           elif [ "$TARGET" == "rpi-2" ]; then
             DEVICE="rpi-2"
             TARGET_1="bcm27xx/bcm2709"
             TARGET_2="bcm27xx-bcm2709"
             ARCH_1="armv7"
             ARCH_2="arm_cortex-a7_neon-vfpv4"
+            ARCH_3=""
           elif [ "$TARGET" == "rpi-3" ]; then
             DEVICE="rpi-3"
             TARGET_1="bcm27xx/bcm2710"
             TARGET_2="bcm27xx-bcm2710"
             ARCH_1="armv7"
-            ARCH_2="aarch64_cortex-a53"
+            ARCH_2="aarch64"
+            ARCH_3="aarch64_cortex-a53"
           elif [ "$TARGET" == "rpi-4" ]; then
             DEVICE="rpi-4"
             TARGET_1="bcm27xx/bcm2711"
             TARGET_2="bcm27xx-bcm2711"
             ARCH_1="arm64"
-            ARCH_2="aarch64_cortex-a72"
+            ARCH_2="aarch64"
+            ARCH_3="aarch64_cortex-a72"
           elif [ "$TARGET" == "x86-64" ]; then
             DEVICE="generic"
             TARGET_1="x86/64"
             TARGET_2="x86-64"
             ARCH_1="amd64"
-            ARCH_2=x86_64
+            ARCH_2="x86_64"
+            ARCH_3=""
           fi
           echo "BUILD_SH=make-build.sh" >> $GITHUB_ENV
           echo "PATCH_SH=scripts/builder-patch.sh" >> $GITHUB_ENV
@@ -122,6 +132,7 @@ jobs:
           echo "TARGET_NAME=$TARGET_2" >> $GITHUB_ENV
           echo "ARCH=$ARCH_1" >> $GITHUB_ENV
           echo "ARCH_2=$ARCH_2" >> $GITHUB_ENV
+          echo "ARCH_3=$ARCH_3" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
       
@@ -207,5 +218,5 @@ jobs:
             - Default IP: 192.168.1.1
             - Default username: root
             - Default password: ${{ env.LOGIN_PASSWORD || 'none' }}
-            - Default WIFI name: friWrt_5g
+            - Default WIFI name: ${{ env.WIFI_SSID }}
             - Default WIFI password: ${{ env.WIFI_PASSWORD || 'none' }}
