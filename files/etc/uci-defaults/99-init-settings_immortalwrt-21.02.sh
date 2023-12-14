@@ -47,9 +47,6 @@ uci set xmm-modem.@xmm-modem[0].enable='0'
 uci commit
 
 # custom repo and Disable opkg signature check
-sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
-echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/generic" >> /etc/opkg/customfeeds.conf
-echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/$(cat /etc/os-release | grep OPENWRT_ARCH | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
 
 # add cron job for modem rakitan
 echo '#auto renew ip lease for modem rakitan' >> /etc/crontabs/root
