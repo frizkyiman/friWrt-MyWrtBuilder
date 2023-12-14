@@ -3,22 +3,28 @@
 echo "Start Downloading Misc files and setup configuration!"
 echo "Current Path: $PWD"
 
+# setup custom repo and Disable opkg signature check
 {
-echo "setup 99-init-settings.sh"
-tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "-21.02" )
-if [[ -e "files/etc/uci-defaults/99-init-settings_"$BASE""$tags.sh"" ]]; then
-    mv "files/etc/uci-defaults/99-init-settings_"$BASE""$tags.sh"" "files/etc/uci-defaults/99-init-settings.sh"
-    rm files/etc/uci-defaults/99-init-settings_*.sh
+if [[ "$(echo "${RELEASE_BRANCH#*:}" | awk -F '.' '{print $1"."$2}')" == "21.02" ]]; then
+    sed -i '/# custom repo/ a\echo "src/gz custom_arch https:\/\/raw.githubusercontent.com\/lrdrdn\/my-opkg-repo\/21.02\/$(cat \/etc\/os-release | grep OPENWRT_ARCH | awk -F '"' '"' '\''{print $2}'"'"')" >> \/etc\/opkg\/customfeeds.conf' files/etc/uci-defaults/99-init-settings.sh
+    sed -i '/# custom repo/ a\echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/generic" >> /etc/opkg/customfeeds.conf' files/etc/uci-defaults/99-init-settings.sh
+    sed -i '/# custom repo/ a\sed -i '\''s/option check_signature/# option check_signature/g'\'' /etc/opkg.conf' files/etc/uci-defaults/99-init-settings.sh
 else
-    echo "error 99-init-settings.sh not found!"
+    sed -i '/# custom repo/ a\echo "src/gz custom_arch https:\/\/raw.githubusercontent.com\/lrdrdn\/my-opkg-repo\/main\/$(cat \/etc\/os-release | grep OPENWRT_ARCH | awk -F '"' '"' '\''{print $2}'"'"')" >> \/etc\/opkg\/customfeeds.conf' files/etc/uci-defaults/99-init-settings.sh
+    sed -i '/# custom repo/ a\echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic" >> /etc/opkg/customfeeds.conf' files/etc/uci-defaults/99-init-settings.sh
+    sed -i '/# custom repo/ a\sed -i '\''s/option check_signature/# option check_signature/g'\'' /etc/opkg.conf' files/etc/uci-defaults/99-init-settings.sh
 fi
+}
 
-echo "setup 10_system.js"
-if [[ -e "files/www/luci-static/resources/view/status/include/10_system_$BASE.js" ]]; then
-    mv "files/www/luci-static/resources/view/status/include/10_system_$BASE.js" "files/www/luci-static/resources/view/status/include/10_system.js"
-    rm files/www/luci-static/resources/view/status/include/10_system_*.js
-else
-    echo "error 10_system.js not found!"
+#setup custom setting for openwrt or immortalwrt
+{
+if [[ "${RELEASE_BRANCH%:*}" == "openwrt" ]]; then
+    sed -i '/reboot/ i\mv \/www\/luci-static\/resources\/view\/status\/include\/29_temp.js \/www\/luci-static\/resources\/view\/status\/include\/17_temp.js' files/etc/uci-defaults/99-init-settings.sh
+    mv "files/www/luci-static/resources/view/status/include/10_system_openwrt.js" "files/www/luci-static/resources/view/status/include/10_system.js"
+    rm files/www/luci-static/resources/view/status/include/10_system_immortalwrt.js
+elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
+    mv "files/www/luci-static/resources/view/status/include/10_system_immortalwrt.js" "files/www/luci-static/resources/view/status/include/10_system.js"
+    rm files/www/luci-static/resources/view/status/include/10_system_openwrt.js
 fi
 }
 
