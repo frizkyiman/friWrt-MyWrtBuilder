@@ -64,42 +64,6 @@ fi
 }
 
 {
-cat <<'EOF' >files/etc/init.d/repair_ro
-#!/bin/sh /etc/rc.common
-
-START=99
-
-start() {
-    /sbin/repair_ro
-}
-EOF
-}
-{
-cat <<'EOF' >files/usr/bin/repair_ro
-#!/bin/sh
-root_device="$1"
-/sbin/repair_ro "$root_device"
-EOF
-}
-{
-cat <<'EOF' >files/etc/config/vnstat
-config vnstat
-	list interface 'br-lan'
-	list interface 'wwan0'
-EOF
-}
-
-{
-if [ "$BRANCH" == "21.02.7" ]; then
-   echo "..."
-else
-   cp packages/luci-app-oled_1.0_all.ipk files/root/luci-app-oled_1.0_all.ipk
-   sed -i '/reboot/ i\opkg install /root/luci-app-oled_1.0_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
-   sed -i '/reboot/ i\rm /root/luci-app-oled_1.0_all.ipk' files/etc/uci-defaults/99-init-settings.sh
-fi
-}
-
-{
 sed -i '/reboot/ i\chmod +x /etc/openclash/core/clash' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /etc/openclash/core/clash_tun' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /etc/openclash/core/clash_meta' files/etc/uci-defaults/99-init-settings.sh
@@ -118,4 +82,4 @@ sed -i '/reboot/ i\chmod +x /usr/bin/adguardhome' files/etc/uci-defaults/99-init
 sed -i '/reboot/ i\bash /usr/bin/adguardhome --force-enable' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\uci set luci.main.mediaurlbase='/luci-static/argon' && uci commit' files/etc/uci-defaults/99-init-settings.sh
 }
-echo "Downloading and configurating completed!"
+echo "Download and configurating completed!"
