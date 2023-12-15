@@ -157,7 +157,7 @@ jobs:
         run: |
           cd $WORKING_DIR
           [ "$ARCH" == "amd64" ] && ARCH=x86
-          if [ "$BRANCH" == "21.02.7" ] || [ "$BRANCH" == "22.03.5" ]; then
+          if [[ "$BRANCH" == "21.02.7" || "$BRANCH" == "22.03.5" ]]; then
              grep -E "^all-all|^old-$tags|^$ARCH-$tags" external-package-urls.txt | awk '{print $2}' > output_url.txt
           else
              grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
