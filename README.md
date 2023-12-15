@@ -26,6 +26,23 @@ Please read instruction given.
 
 ### Firmware details
 
+Login info
+* 192.168.1.1 | user: root | password: friwrt
+* SSID: friWrt_5g | password: friwrt
+
+- AdGuard Home installed and enable (disable using "adguardhome disable" command on terminal, and "adguardhome enable" to enable again),
+- Openclash with latest core and latest MetaCubeX Mihomo core,
+- DOCKER installed, ready to run container,
+- Aria2 download server,
+- SAMBA4 server for sharing storage,
+- TinyFm file manager,
+- Internet Detector and Watchcat,
+- vnstat2 and Nlbwmon for Bandwith Monitoring,
+- Argon Theme with some cool custom login image,
+- Modemmanager protocol for connecting 4g/5g modems (im using Dell DW5821e Snapdragon X20 LTE)
+- OLED Display support (only Raspberrry Pi 4B tested),
+- and other that i forgot to mention ~
+
 you can find my done build on Release.
 
 ### Acknowledgments
