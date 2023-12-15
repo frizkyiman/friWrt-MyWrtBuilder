@@ -9,9 +9,11 @@
 # "arm64" is a sign for packages that work only on arm64 devices architecture.
 # "x86" is a sign for packages that work only on x86 devices architecture.
 # "all-all" is a sign for packages that work on both devices architecture and branch version.
-# "old-21.02" is a sign for 21.02 branch that not need lua-luci-runtime as requaried depedency.
-# "arm64-21.02" is a sign for 21.02 branch that not need lua-luci-runtime as requaried depedency.
-# "x86-21.02" is a sign for 21.02 branch that not need lua-luci-runtime as requaried depedency.
+# "old-21.02" is a sign for 21.02 branch that missing lua-luci-runtime as requaried depedency from source repo.
+# "arm64-21.02" is a sign for 21.02 branch that missing lua-luci-runtime as requaried depedency from source repo.
+# "x86-21.02" is a sign for 21.02 branch that missing lua-luci-runtime as requaried depedency from source repo.
+# 
+# Note: 22.03 branch was same as 21.02 that missing lua-luci-runtime as requaried depedency from source repo, so write same as 21.02 for the sign.
 #
 ################################################
 #    Usage Format to add custom package urls   #
@@ -35,7 +37,7 @@ all-all https://github.com/vernesong/OpenClash/releases/download/v0.45.157-beta/
 all-all https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk
 #
 ################################################################################
-#  Branch version snapshots, 22.03 and 23.05 custom external package urls list #
+#      Branch version snapshots and 23.05 custom external package urls list    #
 ################################################################################
 #
 arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
@@ -62,7 +64,7 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-argon-confi
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-theme-argon_2.3.1_all.ipk
 #
 ################################################################################
-#       Old Branch version 21.02 only custom external package urls list        #
+#     Old Branch version 21.02 and 22.03 custom external package urls list     #
 ################################################################################
 #
 arm64-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
