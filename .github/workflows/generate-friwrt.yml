@@ -47,15 +47,15 @@ on:
           - true
           - false
       login_password: 
-        description: "Set Login password"
+        description: "Set Login password:"
         required: false
         default: ''
       wifi_ssid: 
-        description: "Set WiFi SSID"
+        description: "Set WiFi SSID:"
         required: true
         default: 'friWrt_5g'
       wifi_password: 
-        description: "Set WiFi password"
+        description: "Set WiFi password (8 characters minimum):"
         required: false
         default: ''
 
