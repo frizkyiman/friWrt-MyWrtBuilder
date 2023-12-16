@@ -68,13 +68,13 @@ function enable() {
   uci set firewall.adguardhome_dns_53.dest='lan'
   uci set firewall.adguardhome_dns_53.dest_port='53'
   uci commit firewall
+  /etc/init.d/firewall restart >/dev/null 2>&1
 
   echo "Configuring AdGuard Home Luci"
   uci set AdGuardHome.AdGuardHome.enabled='1'
   uci commit AdGuardHome
   /etc/init.d/AdGuardHome enable
   /etc/init.d/AdGuardHome start
-  sleep 5 && /etc/init.d/firewall restart >/dev/null 2>&1
 
   echo "AdGuardHome Successfully Enable!"
 }
@@ -100,12 +100,12 @@ function disable() {
 
   uci delete firewall.adguardhome_dns_53
   uci commit firewall
+  /etc/init.d/firewall restart >/dev/null 2>&1
 
   uci set AdGuardHome.AdGuardHome.enabled='0'
   uci commit AdGuardHome
   /etc/init.d/AdGuardHome stop
   /etc/init.d/AdGuardHome disable
-  sleep 5 && /etc/init.d/firewall restart >/dev/null 2>&1
 
   echo "AdGuard Home Successfully Disable!"
 }
