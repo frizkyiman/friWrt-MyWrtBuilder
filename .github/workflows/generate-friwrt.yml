@@ -22,7 +22,7 @@ on:
         options:
           - openwrt:snapshots
           - openwrt:21.02.7
-          - openwrt:22.03.5
+          - openwrt:22.03.6
           - openwrt:23.05.2
           - immortalwrt:snapshots
           - immortalwrt:21.02.7
