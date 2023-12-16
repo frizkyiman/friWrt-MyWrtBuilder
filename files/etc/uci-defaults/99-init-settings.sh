@@ -46,6 +46,7 @@ sed -i -e '/413c:81d7/,+5d' /etc/usb-mode.json
 uci set xmm-modem.@xmm-modem[0].enable='0'
 uci commit
 
+# dont delete this line (50)!
 # custom repo and Disable opkg signature check
 
 # add cron job for modem rakitan
@@ -106,7 +107,7 @@ mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old && mv /usr/shar
 bash /usr/bin/patchoc.sh
 
 echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
-sed -i "s/\(DISTRIB_DESCRIPTION='ImmortalWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
+sed -i "s/\(DISTRIB_DESCRIPTION='ImmortalWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release || sed -i "s/\(DISTRIB_DESCRIPTION='OpenWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
 
 uci set nlbwmon.@nlbwmon[0].database_directory='/etc/nlbwmon'
 uci set nlbwmon.@nlbwmon[0].commit_interval='3h'
