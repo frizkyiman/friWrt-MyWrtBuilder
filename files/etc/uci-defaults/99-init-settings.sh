@@ -107,7 +107,17 @@ mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old && mv /usr/shar
 bash /usr/bin/patchoc.sh
 
 echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
-sed -i "s/\(DISTRIB_DESCRIPTION='ImmortalWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release || sed -i "s/\(DISTRIB_DESCRIPTION='OpenWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
+
+# dont remove!
+if grep -q "ImmortalWrt" /etc/openwrt_release; then
+    sed -i "s/\(DISTRIB_DESCRIPTION='ImmortalWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
+    echo "ImmortalWrt version updated."
+elif grep -q "OpenWrt" /etc/openwrt_release; then
+    sed -i "s/\(DISTRIB_DESCRIPTION='OpenWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
+    echo "OpenWrt version updated."
+else
+    echo "No matching distribution found in /etc/openwrt_release."
+fi
 
 uci set nlbwmon.@nlbwmon[0].database_directory='/etc/nlbwmon'
 uci set nlbwmon.@nlbwmon[0].commit_interval='3h'
