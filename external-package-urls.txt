@@ -13,7 +13,6 @@
 # "arm64-21.02" is a sign for 21.02 branch that missing lua-luci-runtime as requaried depedency from source repo.
 # "x86-21.02" is a sign for 21.02 branch that missing lua-luci-runtime as requaried depedency from source repo.
 # 
-# Note: 22.03 branch was same as 21.02 that missing lua-luci-runtime as requaried depedency from source repo, so write same as 21.02 for the sign.
 #
 ################################################
 #    Usage Format to add custom package urls   #
@@ -64,7 +63,7 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-argon-confi
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-theme-argon_2.3.1_all.ipk
 #
 ################################################################################
-#     Old Branch version 21.02 and 22.03 custom external package urls list     #
+#          Old Branch version 21.02 custom external package urls list          #
 ################################################################################
 #
 arm64-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
