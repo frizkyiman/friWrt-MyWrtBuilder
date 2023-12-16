@@ -17,13 +17,19 @@ uci set network.wan.proto='modemmanager'
 uci set network.wan.device='/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1'
 uci set network.wan.apn='internet'
 uci set network.wan.auth='none'
-uci set network.wan.iptype='ipv4v6'
+uci set network.wan.iptype='ipv4'
 uci set network.lan.ipaddr="192.168.1.1"
+uci set network.lan.ipv6=0
+uci set network.lan.delegate="0"
 uci commit network
+/etc/init.d/network restart
 
+uci set dhcp.lan.dhcpv6=disabled
 uci -q delete dhcp.lan.dhcpv6
 uci -q delete dhcp.lan.ra
+uci delete dhcp.lan.ndp
 uci commit dhcp
+/etc/init.d/dnsmasq restart
 
 uci set firewall.@zone[1].network='wan'
 uci commit firewall
