@@ -75,6 +75,7 @@ function enable() {
   uci commit AdGuardHome
   /etc/init.d/AdGuardHome enable
   /etc/init.d/AdGuardHome start
+  /etc/init.d/firewall restart >/dev/null 2>&1
 
   echo "AdGuardHome Successfully Enable!"
 }
@@ -106,6 +107,7 @@ function disable() {
   uci commit AdGuardHome
   /etc/init.d/AdGuardHome stop
   /etc/init.d/AdGuardHome disable
+  /etc/init.d/firewall restart >/dev/null 2>&1
 
   echo "AdGuard Home Successfully Disable!"
 }
