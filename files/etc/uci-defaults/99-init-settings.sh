@@ -19,12 +19,9 @@ uci set network.wan.apn='internet'
 uci set network.wan.auth='none'
 uci set network.wan.iptype='ipv4'
 uci set network.lan.ipaddr="192.168.1.1"
-uci set network.lan.ipv6=0
-uci set network.lan.delegate="0"
 uci commit network
 /etc/init.d/network restart
 
-uci set dhcp.lan.dhcpv6=disabled
 uci -q delete dhcp.lan.dhcpv6
 uci -q delete dhcp.lan.ra
 uci delete dhcp.lan.ndp
