@@ -23,6 +23,11 @@ if [[ "${RELEASE_BRANCH%:*}" == "openwrt" ]]; then
     mv "files/www/luci-static/resources/view/status/include/10_system_openwrt.js" "files/www/luci-static/resources/view/status/include/10_system.js"
     rm files/www/luci-static/resources/view/status/include/10_system_immortalwrt.js
 elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
+    if [[ "$(echo "${RELEASE_BRANCH#*:}" | awk -F '.' '{print $1"."$2}')" == "23.05" ]]; then
+        cp packages/luci-app-oled_1.0_all.ipk files/root/luci-app-oled_1.0_all.ipk
+        sed -i '/reboot/ i\opkg install /root/luci-app-oled_1.0_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
+        sed -i '/reboot/ i\rm /root/luci-app-oled_1.0_all.ipk' files/etc/uci-defaults/99-init-settings.sh
+    fi
     mv "files/www/luci-static/resources/view/status/include/10_system_immortalwrt.js" "files/www/luci-static/resources/view/status/include/10_system.js"
     rm files/www/luci-static/resources/view/status/include/10_system_openwrt.js
 fi
