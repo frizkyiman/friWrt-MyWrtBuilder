@@ -57,7 +57,7 @@ if grep -qE '^VERSION_ID="23' /etc/os-release; then
 elif grep -qE '^VERSION_ID="21' /etc/os-release; then
    sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
    echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/generic" >> /etc/opkg/customfeeds.conf
-   echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/m21.02/$(grep "OPENWRT_ARCH" /etc/os-release | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
+   echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/$(grep "OPENWRT_ARCH" /etc/os-release | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
 fi
 
 # add cron job for modem rakitan
