@@ -3,19 +3,6 @@
 echo "Start Downloading Misc files and setup configuration!"
 echo "Current Path: $PWD"
 
-# setup custom repo and Disable opkg signature check
-{
-if [[ "$(echo "${RELEASE_BRANCH#*:}" | awk -F '.' '{print $1"."$2}')" == "21.02" ]]; then
-    sed -i '/# custom repo/ a\echo "src/gz custom_arch https:\/\/raw.githubusercontent.com\/lrdrdn\/my-opkg-repo\/21.02\/$(cat \/etc\/os-release | grep OPENWRT_ARCH | awk -F '"' '"' '\''{print $2}'"'"')" >> \/etc\/opkg\/customfeeds.conf' files/etc/uci-defaults/99-init-settings.sh
-    sed -i '/# custom repo/ a\echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/generic" >> /etc/opkg/customfeeds.conf' files/etc/uci-defaults/99-init-settings.sh
-    sed -i '/# custom repo/ a\sed -i '\''s/option check_signature/# option check_signature/g'\'' /etc/opkg.conf' files/etc/uci-defaults/99-init-settings.sh
-else
-    sed -i '/# custom repo/ a\echo "src/gz custom_arch https:\/\/raw.githubusercontent.com\/lrdrdn\/my-opkg-repo\/main\/$(cat \/etc\/os-release | grep OPENWRT_ARCH | awk -F '"' '"' '\''{print $2}'"'"')" >> \/etc\/opkg\/customfeeds.conf' files/etc/uci-defaults/99-init-settings.sh
-    sed -i '/# custom repo/ a\echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic" >> /etc/opkg/customfeeds.conf' files/etc/uci-defaults/99-init-settings.sh
-    sed -i '/# custom repo/ a\sed -i '\''s/option check_signature/# option check_signature/g'\'' /etc/opkg.conf' files/etc/uci-defaults/99-init-settings.sh
-fi
-}
-
 #setup custom setting for openwrt or immortalwrt
 {
 if [[ "${RELEASE_BRANCH%:*}" == "openwrt" ]]; then
