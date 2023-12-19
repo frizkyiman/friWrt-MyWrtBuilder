@@ -11,6 +11,17 @@ function check_service_status() {
 function enable() {
   echo "Enabling AdGuard Home..."
 
+  echo "Configuring AdGuardHome.yaml"
+  uci set AdGuardHome.AdGuardHome.httpport='3000'
+  uci set AdGuardHome.AdGuardHome.redirect='exchange'
+  uci set AdGuardHome.AdGuardHome.configpath='/opt/AdGuardHome/AdGuardHome.yaml'
+  uci set AdGuardHome.AdGuardHome.workdir='/opt/AdGuardHome'
+  uci set AdGuardHome.AdGuardHome.logfile='/tmp/AdGuardHome.log'
+  uci set AdGuardHome.AdGuardHome.binpath='/opt/AdGuardHome/AdGuardHome'
+  uci set AdGuardHome.AdGuardHome.verbose='0'
+  uci commit AdGuardHome
+  sed -i '/port: 6060/! s/\(port:\s*\)[0-9]*/\153/' /opt/AdGuardHome/AdGuardHome.yaml
+
   echo "Get the first IPv4 and IPv6 Address of router."
   NET_ADDR=$(uci get network.lan.ipaddr)
   NET_ADDR6=$(/sbin/ip -o -6 addr list br-lan scope global | awk 'NR==1{ split($4, ip_addr, "/"); print ip_addr[1] }')
