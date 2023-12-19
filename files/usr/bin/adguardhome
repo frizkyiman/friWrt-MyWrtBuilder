@@ -72,9 +72,9 @@ function enable() {
      uci commit firewall
      /etc/init.d/firewall restart >/dev/null 2>&1
   elif grep -qE '^VERSION_ID="21' /etc/os-release; then
-    echo -e "iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to "${NET_ADDR}":53" | tee -a /etc/firewall.user
-    echo -e "iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to "${NET_ADDR}":53" | tee -a /etc/firewall.user
-    /etc/init.d/firewall restart >/dev/null 2>&1
+     echo -e "iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to "${NET_ADDR}":53" | tee -a /etc/firewall.user
+     echo -e "iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to "${NET_ADDR}":53" | tee -a /etc/firewall.user
+     /etc/init.d/firewall restart >/dev/null 2>&1
   fi
 
   echo "Configuring AdGuard Home Luci"
@@ -114,6 +114,7 @@ function disable() {
      NET_ADDR=$(uci get network.lan.ipaddr)
      sed -i "/iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to ${NET_ADDR}:53/d" /etc/firewall.user
      sed -i "/iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to ${NET_ADDR}:53/d" /etc/firewall.user
+     /etc/init.d/firewall restart >/dev/null 2>&1
   fi
 
   uci set AdGuardHome.AdGuardHome.enabled='0'
