@@ -59,17 +59,23 @@ function enable() {
   /etc/init.d/dnsmasq restart >/dev/null 2>&1
 
   echo "Set Port Forward to 53"
-  uci set firewall.adguardhome_dns_53="redirect"
-  uci set firewall.adguardhome_dns_53.src='lan'
-  uci set firewall.adguardhome_dns_53.proto='tcp udp'
-  uci set firewall.adguardhome_dns_53.src_dport='53'
-  uci set firewall.adguardhome_dns_53.target='DNAT'
-  uci set firewall.adguardhome_dns_53.name='AdGuard Home'
-  uci set firewall.adguardhome_dns_53.dest='lan'
-  uci set firewall.adguardhome_dns_53.dest_ip="${NET_ADDR}"
-  uci set firewall.adguardhome_dns_53.dest_port='53'
-  uci commit firewall
-  /etc/init.d/firewall restart >/dev/null 2>&1
+  if grep -qE '^VERSION_ID="23' /etc/os-release; then
+     uci set firewall.adguardhome_dns_53="redirect"
+     uci set firewall.adguardhome_dns_53.src='lan'
+     uci set firewall.adguardhome_dns_53.proto='tcp udp'
+     uci set firewall.adguardhome_dns_53.src_dport='53'
+     uci set firewall.adguardhome_dns_53.target='DNAT'
+     uci set firewall.adguardhome_dns_53.name='AdGuard Home'
+     uci set firewall.adguardhome_dns_53.dest='lan'
+     uci set firewall.adguardhome_dns_53.dest_ip="${NET_ADDR}"
+     uci set firewall.adguardhome_dns_53.dest_port='53'
+     uci commit firewall
+     /etc/init.d/firewall restart >/dev/null 2>&1
+  elif grep -qE '^VERSION_ID="21' /etc/os-release; then
+    echo -e "iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to "${NET_ADDR}":53" | tee -a /etc/firewall.user
+    echo -e "iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to "${NET_ADDR}":53" | tee -a /etc/firewall.user
+    /etc/init.d/firewall restart >/dev/null 2>&1
+  fi
 
   echo "Configuring AdGuard Home Luci"
   uci set AdGuardHome.AdGuardHome.enabled='1'
@@ -100,9 +106,15 @@ function disable() {
   uci commit dhcp
   /etc/init.d/dnsmasq restart >/dev/null 2>&1
 
-  uci delete firewall.adguardhome_dns_53
-  uci commit firewall
-  /etc/init.d/firewall restart >/dev/null 2>&1
+  if grep -qE '^VERSION_ID="23' /etc/os-release; then
+     uci delete firewall.adguardhome_dns_53
+     uci commit firewall
+     /etc/init.d/firewall restart >/dev/null 2>&1
+  elif grep -qE '^VERSION_ID="21' /etc/os-release; then
+     NET_ADDR=$(uci get network.lan.ipaddr)
+     sed -i "/iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to ${NET_ADDR}:53/d" /etc/firewall.user
+     sed -i "/iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to ${NET_ADDR}:53/d" /etc/firewall.user
+  fi
 
   uci set AdGuardHome.AdGuardHome.enabled='0'
   uci commit AdGuardHome
