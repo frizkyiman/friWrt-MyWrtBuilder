@@ -23,8 +23,8 @@ dns:
   upstream_dns:
     - '[/pool.ntp.org/]1.1.1.1'
     - '[/pool.ntp.org/]1.0.0.1'
-    - '[/id.pool.ntp.org/]1.1.1.1'
-    - '[/id.pool.ntp.org/]1.0.0.1' 
+    - '[/id.pool.ntp.org/]8.8.8.8'
+    - '[/id.pool.ntp.org/]8.8.4.4' 
     - 8.8.8.8
     - 9.9.9.9
     - 1.1.1.1
