@@ -8,6 +8,25 @@ function check_service_status() {
   fi
 }
 
+function install_core() {
+  echo "Downloading AdGuardHome..."
+  ARCH=$(uname -m) && [ "$ARCH" == "aarch64" ] && ARCH="arm64" || [ "$ARCH" == "x86_64" ] && ARCH="amd64"
+  agh_api="https://api.github.com/repos/AdguardTeam/AdGuardHome/releases"
+  agh_file="AdGuardHome_linux_$ARCH"
+  agh_file_down="$(curl -s "$agh_api" | grep "browser_download_url" | grep -oE "https.*${agh_file}.*.tar.gz" | head -n 1)"
+  latest_version=$(curl -sSL "$agh_api/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1)
+
+  if wget -nv "$agh_file_down" -P /opt; then
+    echo "Extracting cores"
+    tar -zxf "/opt/AdGuardHome_linux_$ARCH.tar.gz" -C /opt && rm "/opt/AdGuardHome_linux_$ARCH.tar.gz"
+    echo "Finished! AdGuardHome version $latest_version successfull installed"
+  else
+    echo "Failed download AdGuardHome. Please check your internet connection or try again."
+  fi
+  echo "AdGuardHome downloaded!"
+  echo "Please enable by using command 'adguardhome enable' ."
+}
+
 function enable() {
   echo "Enabling AdGuard Home..."
 
@@ -179,8 +198,12 @@ case "$1" in
     enable
     dashboard
     ;;
+  "-install-core")
+    install_core
+    ;;
   *)
     echo "Invalid option. Use 'enable' or 'disable'."
     echo "Use '--force-enable' to force enable without checking running servce."
+    echo "or '-install-core' to download AdGuardHome main core."
     ;;
 esac
