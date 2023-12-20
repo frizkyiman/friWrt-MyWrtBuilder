@@ -80,8 +80,6 @@ sed -i '/reboot/ i\chmod +x /usr/bin/repair_ro' files/etc/uci-defaults/99-init-s
 sed -i '/reboot/ i\chmod +x /sbin/repair_ro' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /usr/bin/mount_hdd' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /usr/bin/speedtest' files/etc/uci-defaults/99-init-settings.sh
-sed -i '/reboot/ i\chmod +x /usr/bin/adguardhome' files/etc/uci-defaults/99-init-settings.sh
-sed -i '/reboot/ i\bash /usr/bin/adguardhome --force-enable' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\chmod +x /etc/init.d/vnstat_backup' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\bash /etc/init.d/vnstat_backup enable' files/etc/uci-defaults/99-init-settings.sh
 sed -i '/reboot/ i\uci set luci.main.mediaurlbase='/luci-static/argon' && uci commit' files/etc/uci-defaults/99-init-settings.sh
