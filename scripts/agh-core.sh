@@ -10,7 +10,7 @@ latest_version=$(curl -sSL "$agh_api/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]
 
 if wget -nv "$agh_file_down" -P files/opt; then
   echo "Extracting core"
-  if tar -zxvf files/opt/AdGuardHome_linux_"$ARCH".tar.gz; then
+  if tar -zxvf files/opt/AdGuardHome_linux_"$ARCH".tar.gz -C files/opt; then
     rm files/opt/AdGuardHome_linux_"$ARCH".tar.gz
     echo "Done! Installed AdGuardHome version $latest_version"
   else
