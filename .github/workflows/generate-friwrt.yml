@@ -191,7 +191,7 @@ jobs:
         run: |
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
           for file in *-$TARGET_NAME-*.img.gz; do mv "$file" "fri_${file%.img.gz}_$DATE.img.gz"; done
-          rm -rf *.json *.manifest *.bin *-rootfs.*
+          rm -rf *.json *.manifest *.bin *-rootfs*
           echo "status=success" >> $GITHUB_OUTPUT
           
       - name: Upload Firmware to Artifacts
