@@ -90,7 +90,8 @@ function enable() {
   /etc/init.d/dnsmasq restart >/dev/null 2>&1
 
   echo "Set Port Forward to 53"
-  if grep -qE '^VERSION_ID="23' /etc/os-release; then
+  if [ -n "$(command -v fw4)" ]; then
+     echo "Firewall 4 nftables detected"
      uci set firewall.adguardhome_dns_53="redirect"
      uci set firewall.adguardhome_dns_53.src='lan'
      uci set firewall.adguardhome_dns_53.proto='tcp udp'
@@ -102,7 +103,8 @@ function enable() {
      uci set firewall.adguardhome_dns_53.dest_port='53'
      uci commit firewall
      /etc/init.d/firewall restart >/dev/null 2>&1
-  elif grep -qE '^VERSION_ID="21' /etc/os-release; then
+  else
+     echo "Firewall 3 iptables detected"
      echo -e "iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to "${NET_ADDR}":53" | tee -a /etc/firewall.user
      echo -e "iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to "${NET_ADDR}":53" | tee -a /etc/firewall.user
      /etc/init.d/firewall restart >/dev/null 2>&1
@@ -137,11 +139,13 @@ function disable() {
   uci commit dhcp
   /etc/init.d/dnsmasq restart >/dev/null 2>&1
 
-  if grep -qE '^VERSION_ID="23' /etc/os-release; then
+  if [ -n "$(command -v fw4)" ]; then
+     echo "Firewall 4 nftables detected"
      uci delete firewall.adguardhome_dns_53
      uci commit firewall
      /etc/init.d/firewall restart >/dev/null 2>&1
-  elif grep -qE '^VERSION_ID="21' /etc/os-release; then
+  else
+     echo "Firewall 3 iptables detected"
      NET_ADDR=$(uci get network.lan.ipaddr)
      sed -i "/iptables -t nat -A PREROUTING -i br-lan -p tcp --dport 53 -j DNAT --to ${NET_ADDR}:53/d" /etc/firewall.user
      sed -i "/iptables -t nat -A PREROUTING -i br-lan -p udp --dport 53 -j DNAT --to ${NET_ADDR}:53/d" /etc/firewall.user
