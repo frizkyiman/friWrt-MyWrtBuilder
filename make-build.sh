@@ -75,7 +75,7 @@ elif [ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]; then
 fi
 
 # Disable service
-DISABLED_SERVICES=""
+DISABLED_SERVICES="AdGuardHome"
 
 # Start build firmware
 make image PROFILE="$PROFILE" PACKAGES="$PACKAGES $CUSTOM $EXCLUDED" FILES="$FILES" DISABLED_SERVICES="$DISABLED_SERVICES"
