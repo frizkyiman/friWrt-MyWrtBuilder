@@ -193,6 +193,7 @@ case "$1" in
       echo "AdGuard Home service is already running. Skipping enable operation."
     else
       enable
+      dashboard
     fi
     ;;
   "disable")
