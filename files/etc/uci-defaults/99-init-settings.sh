@@ -138,7 +138,7 @@ sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
 sed -i 's/\[ -n "$FAILSAFE" \] && cat \/etc\/banner.failsafe/& || \/usr\/bin\/neofetch/' /etc/profile
 
 echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
-echo '0 12 * * * /sbin/sync_time.sh beacon.liveon.id' >> /etc/crontabs/root
+echo '0 12 * * * /sbin/sync_time.sh circles.asia' >> /etc/crontabs/root
 
 chmod +x /root/fix-tinyfm.sh && bash /root/fix-tinyfm.sh
 chmod +x /sbin/sync_time.sh
