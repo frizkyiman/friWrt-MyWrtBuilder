@@ -65,7 +65,7 @@ fi
 FILES="files"
 
 # some custom .ipk files
-CUSTOM=$( [ "$TARGET" == "rpi-4" ] && echo "kmod-i2c-bcm2835" )
+CUSTOM=$( [ "$PROFILE" == "rpi-4" ] && echo "kmod-i2c-bcm2835" )
 
 # Exclude package
 if [ "${RELEASE_BRANCH%:*}" == "openwrt" ]; then
