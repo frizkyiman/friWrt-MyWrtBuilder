@@ -5,6 +5,9 @@
 # You should follow this first to ensure your desired package url downloaded and propperly
 # installed while building the firmware.
 #
+# arm64 or other arch should same as "$ARCH_1" variable on .yml workflow file, exclude for x86, no need to change.
+# eg. $ARCH_1 value is armv7, then armv7 https://example.com/download/main/luci-app-name-armv7.ipk
+#
 # "all" is a sign for packages that work on both devices architecture.
 # "arm64" is a sign for packages that work only on arm64 devices architecture.
 # "x86" is a sign for packages that work only on x86 devices architecture.
