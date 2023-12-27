@@ -121,7 +121,7 @@ jobs:
           fi
           echo "BUILD_SH=make-build.sh" >> $GITHUB_ENV
           echo "PATCH_SH=scripts/builder-patch.sh" >> $GITHUB_ENV
-          echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$DEVICE".Linux-x86_64" >> $GITHUB_ENV
+          echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$TARGET_2".Linux-x86_64" >> $GITHUB_ENV
           echo "DOWNLOAD_BASE=https://downloads."${RELEASE_BRANCH%:*}".org" >> $GITHUB_ENV
           echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
           echo "BRANCH=${RELEASE_BRANCH#*:}" >> $GITHUB_ENV
@@ -209,7 +209,7 @@ jobs:
           file_glob: true
           file: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: ${{ env.TARGET }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
+          tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
