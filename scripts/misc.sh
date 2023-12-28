@@ -8,8 +8,6 @@ echo "Current Path: $PWD"
 if [[ "${RELEASE_BRANCH%:*}" == "openwrt" ]]; then
     echo "$RELEASE_BRANCH"
     sed -i '/reboot/ i\mv \/www\/luci-static\/resources\/view\/status\/include\/29_temp.js \/www\/luci-static\/resources\/view\/status\/include\/17_temp.js' files/etc/uci-defaults/99-init-settings.sh
-    mv "files/www/luci-static/resources/view/status/include/10_system_openwrt.js" "files/www/luci-static/resources/view/status/include/10_system.js"
-    rm files/www/luci-static/resources/view/status/include/10_system_immortalwrt.js
 elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
     echo "$RELEASE_BRANCH"
     if [[ "$(echo "${RELEASE_BRANCH#*:}" | awk -F '.' '{print $1"."$2}')" == "23.05" ]]; then
@@ -17,8 +15,6 @@ elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
         sed -i '/reboot/ i\opkg install /root/luci-app-oled_1.0_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
         sed -i '/reboot/ i\rm /root/luci-app-oled_1.0_all.ipk' files/etc/uci-defaults/99-init-settings.sh
     fi
-    mv "files/www/luci-static/resources/view/status/include/10_system_immortalwrt.js" "files/www/luci-static/resources/view/status/include/10_system.js"
-    rm files/www/luci-static/resources/view/status/include/10_system_openwrt.js
 fi
 }
 
