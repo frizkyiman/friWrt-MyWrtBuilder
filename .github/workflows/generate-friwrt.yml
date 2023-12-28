@@ -127,7 +127,7 @@ jobs:
             TARGET_2="x86-64"
             ARCH_1="amd64"
             ARCH_2="x86_64"
-            ARCH_3=""
+            ARCH_3="x86_64"
           fi
           echo "BUILD_SH=make-build.sh" >> $GITHUB_ENV
           echo "PATCH_SH=scripts/builder-patch.sh" >> $GITHUB_ENV
