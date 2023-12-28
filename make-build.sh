@@ -27,7 +27,7 @@ PACKAGES="$PACKAGES kmod-usb-net-rtl8150 kmod-usb-net-rtl8152 kmod-usb-net-asix 
 # tunnel option
 OPENCLASH_FW3="$PACKAGES coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun unzip luci-compat luci luci-base luci-app-openclash"
 OPENCLASH_FW4="$PACKAGES coreutils-nohup bash dnsmasq-full curl ca-certificates ipset ip-full libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip kmod-nft-tproxy luci-compat luci luci-base luci-app-openclash"
-PASSWALL="coreutils-base64 resolveip dns2socks dns2tcp microsocks tcping brook hysteria trojan-go xray-core xray-plugin sing-box chinadns-ng luci-app-passwall"
+PASSWALL="$PACKAGES coreutils-base64 resolveip dns2socks dns2tcp microsocks tcping brook hysteria trojan-go xray-core xray-plugin sing-box chinadns-ng luci-app-passwall"
 if [ "$TUNNEL" == "openclash_passwall" ]; then
     echo "Installing Openclash and Passwall"
     PACKAGES="$([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4") $PASSWALL"
