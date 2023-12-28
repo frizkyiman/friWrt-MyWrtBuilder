@@ -9,9 +9,9 @@ on:
         default: "rpi-4"
         type: choice
         options:
-          - Raspberry Pi 1
-          - Raspberry Pi 2
-          - Raspberry Pi 3
+          - Raspberry Pi 1B
+          - Raspberry Pi 2B
+          - Raspberry Pi 3B
           - Raspberry Pi 4B
           - x86-64
       release_branch:
@@ -38,6 +38,15 @@ on:
         options:
           - true
           - false
+      tunnel:
+        description: "Select tunnel app (!passwall only support on newer branch):"
+        required: true
+        default: "openclash"
+        type: choice
+        options:
+          - openclash
+          - passwall
+          - openclash_passwall
       release:
         description: "Upload compiled image to release:"
         required: true
@@ -64,6 +73,7 @@ env:
   RELEASE_BRANCH: ${{ inputs.release_branch }}
   ROOTFS_SIZE: ${{ inputs.rootfs}}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
+  TUNNEL: ${{ inputs.tunnel }}
   LOGIN_PASSWORD: ${{ inputs.login_password }}
   WIFI_SSID: ${{ inputs.wifi_ssid }}
   WIFI_PASSWORD: ${{ inputs.wifi_password }}
@@ -83,21 +93,21 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          if [ "$TARGET" == "Raspberry Pi 1" ]; then
+          if [ "$TARGET" == "Raspberry Pi 1B" ]; then
             DEVICE="rpi-1"
             TARGET_1="bcm27xx/bcm2708"
             TARGET_2="bcm27xx-bcm2708"
             ARCH_1="armv6"
             ARCH_2="arm_arm1176jzf-s_vfp"
             ARCH_3=""
-          elif [ "$TARGET" == "Raspberry Pi 2" ]; then
+          elif [ "$TARGET" == "Raspberry Pi 2B" ]; then
             DEVICE="rpi-2"
             TARGET_1="bcm27xx/bcm2709"
             TARGET_2="bcm27xx-bcm2709"
             ARCH_1="armv7"
             ARCH_2="arm_cortex-a7_neon-vfpv4"
             ARCH_3=""
-          elif [ "$TARGET" == "Raspberry Pi 3" ]; then
+          elif [ "$TARGET" == "Raspberry Pi 3B" ]; then
             DEVICE="rpi-3"
             TARGET_1="bcm27xx/bcm2710"
             TARGET_2="bcm27xx-bcm2710"
@@ -162,6 +172,12 @@ jobs:
              grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
+          if [[ "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash_passwall" ]] && [[ "$BRANCH" != "21.02.7" ]]; then
+              bash scripts/tunnel_app.sh
+          else
+              echo "Cannot install Passwall on older branch $BRANCH !"
+              exit 1
+          fi
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
@@ -190,7 +206,7 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
-          for file in *-$TARGET_NAME-*.img.gz; do mv "$file" "fri_${file%.img.gz}_$DATE.img.gz"; done
+          for file in *-$TARGET_NAME-*.img.gz; do mv "$file" "fri_${file%.img.gz}_$TUNNEL_$DATE.img.gz"; done
           rm -rf *.json *.manifest *.bin *-rootfs*
           echo "status=success" >> $GITHUB_OUTPUT
           
@@ -198,7 +214,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
         with:
-          name: ${{ env.BASE }}-${{ env.BRANCH }}-$TARGET_NAME-images-${{ env.DATETIME }}
+          name: ${{ env.BASE }}-${{ env.BRANCH }}-$TARGET_NAME-images-${{ env.TUNNEL }}-${{ env.DATETIME }}
           path: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
 
       - name: Upload Firmware to Release
@@ -209,7 +225,7 @@ jobs:
           file_glob: true
           file: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
+          tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.TUNNEL }}-${{ env.DATE }}
           overwrite: true
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
