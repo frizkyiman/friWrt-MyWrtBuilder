@@ -29,13 +29,10 @@ OPENCLASH_FW3="$PACKAGES coreutils-nohup bash iptables dnsmasq-full curl ca-cert
 OPENCLASH_FW4="$PACKAGES coreutils-nohup bash dnsmasq-full curl ca-certificates ipset ip-full libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip kmod-nft-tproxy luci-compat luci luci-base luci-app-openclash"
 PASSWALL="$PACKAGES coreutils-base64 resolveip dns2socks dns2tcp microsocks tcping brook hysteria trojan-go xray-core xray-plugin sing-box chinadns-ng luci-app-passwall"
 if [ "$TUNNEL" == "openclash_passwall" ]; then
-    echo "Installing Openclash and Passwall"
     PACKAGES="$([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4") $PASSWALL"
 elif [ "$TUNNEL" == "openclash" ]; then
-    echo "Installing Openclash"
     PACKAGES="$([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4")"
 elif [ "$TUNNEL" == "passwall" ]; then
-    echo "Installing Passwall"
     PACKAGES="$PASSWALL"
 fi
 
