@@ -6,7 +6,7 @@ on:
       target:
         description: "Select device target:"
         required: true
-        default: "rpi-4"
+        default: "Raspberry Pi 4B"
         type: choice
         options:
           - Raspberry Pi 1B
