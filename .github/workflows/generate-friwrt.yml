@@ -209,6 +209,7 @@ jobs:
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
           for file in *-$TARGET_NAME-*.img.gz; do mv "$file" "fri_${file%.img.gz}_$TUNNEL_$DATE.img.gz"; done
           rm -rf *.json *.manifest *.bin *-rootfs*
+          ls
           echo "status=success" >> $GITHUB_OUTPUT
           
       - name: Upload Firmware to Artifacts
