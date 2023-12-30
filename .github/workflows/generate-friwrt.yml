@@ -38,7 +38,7 @@ on:
         options:
           - openclash
           - passwall
-          - openclash_passwall
+          - openclash-passwall
       login_password: 
         description: "Set Login password:"
         required: false
@@ -172,7 +172,7 @@ jobs:
              grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
-          if [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash_passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
+          if [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
               bash scripts/tunnel_app.sh
           else
               echo "Cannot install Passwall on older branch $BRANCH !"
