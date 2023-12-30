@@ -172,12 +172,13 @@ jobs:
              grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
-          if [[ "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash_passwall" ]] && [[ "$BRANCH" != "21.02.7" ]]; then
+          if [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash_passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
               bash scripts/tunnel_app.sh
           else
               echo "Cannot install Passwall on older branch $BRANCH !"
               exit 1
           fi
+          ls
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
