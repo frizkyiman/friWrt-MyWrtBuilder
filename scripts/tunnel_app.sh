@@ -13,7 +13,7 @@ elif [ "$TUNNEL" == "passwall" ]; then
     echo "Downloading Passwall packages"
     wget "$passwall_packages" -nv -P packages
     unzip -qq packages/"$passwall_packages_file" -d packages && rm packages/"$passwall_packages_file"
-elif [ "$TUNNEL" == "openclash_passwall" ]; then
+elif [ "$TUNNEL" == "openclash-passwall" ]; then
     echo "Installing Openclash and Passwall"
     echo "Downloading Openclash packages"
     wget ${openclash_file_down} -nv -P packages
