@@ -30,16 +30,8 @@ on:
         description: 'Set rootfs "/" partition size (Mb):'
         required: true
         default: '5000'
-      squashfs:
-        description: "Generate squashfs image:"
-        required: true
-        default: "false"
-        type: choice
-        options:
-          - true
-          - false
       tunnel:
-        description: "Select tunnel app (!passwall only support on newer branch):"
+        description: "Select tunnel app (passwall only support for newer branch with fw4 firewall!):"
         required: true
         default: "openclash"
         type: choice
@@ -47,14 +39,6 @@ on:
           - openclash
           - passwall
           - openclash_passwall
-      release:
-        description: "Upload compiled image to release:"
-        required: true
-        default: "true"
-        type: choice
-        options:
-          - true
-          - false
       login_password: 
         description: "Set Login password:"
         required: false
@@ -67,6 +51,22 @@ on:
         description: "Set WiFi password (8 characters minimum):"
         required: false
         default: ''
+      squashfs:
+        description: "Generate squashfs image:"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - true
+          - false
+      release:
+        description: "Upload compiled image to release:"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - true
+          - false
 
 env:
   TARGET: ${{ inputs.target }}
@@ -178,7 +178,7 @@ jobs:
               echo "Cannot install Passwall on older branch $BRANCH !"
               exit 1
           fi
-          ls
+          ls packages
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
