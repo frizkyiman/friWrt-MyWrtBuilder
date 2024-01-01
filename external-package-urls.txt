@@ -44,6 +44,10 @@ all-all https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8
 #
 arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
 arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a72.ipk
+arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/dns2socks_2.1-2_aarch64_cortex-a72.ipk
+arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/dns2tcp_1.1.0-1_aarch64_cortex-a72.ipk
+arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/chinadns-ng_2023.06.01-1_aarch64_cortex-a72.ipk
+arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/xray-plugin_1.8.4-1_aarch64_cortex-a72.ipk
 x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/atinout_0.9.1_x86_64.ipk
 x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/sms-tool_2022-03-21-f07699ab-1_x86_64.ipk
 x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/dns2socks_2.1-2_x86_64.ipk
@@ -52,6 +56,10 @@ x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/xray-plugin_1.8.4-1_x
 x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/chinadns-ng_2023.06.01-1_x86_64.ipk
 armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/atinout_0.9.1_aarch64_cortex-a53.ipk
 armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a53.ipk
+armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/dns2socks_2.1-2_aarch64_cortex-a53.ipk
+armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/dns2tcp_1.1.0-1_aarch64_cortex-a53.ipk
+armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/chinadns-ng_2023.06.01-1_aarch64_cortex-a53.ipk
+armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/xray-plugin_1.8.4-1_aarch64_cortex-a53.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-tinyfm_2.6_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-proto-mbim_git-23.137.84224-37176dc_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
