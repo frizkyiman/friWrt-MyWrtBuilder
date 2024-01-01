@@ -19,7 +19,7 @@ kmod-usb-net-huawei-cdc-ncm kmod-usb-net-cdc-ether kmod-usb-net-rndis kmod-usb-n
 kmod-usb-uhci kmod-usb2 kmod-usb-ehci kmod-usb-net-ipheth usbmuxd libusbmuxd-utils libimobiledevice-utils usb-modeswitch kmod-nls-utf8 mbim-utils xmm-modem"
 
 # Modem Tools
-PACKAGES="$PACKAGES luci-app-modeminfo atinout luci-app-modemband modemband luci-app-mmconfig sms-tool luci-app-sms-tool-js picocom minicom"
+PACKAGES="$PACKAGES luci-app-modeminfo atinout luci-app-modemband modemband luci-app-mmconfig sms-tool luci-app-sms-tool picocom minicom"
 
 # Adapter UTL driver
 PACKAGES="$PACKAGES kmod-usb-net-rtl8150 kmod-usb-net-rtl8152 kmod-usb-net-asix kmod-usb-net-asix-ax88179"
