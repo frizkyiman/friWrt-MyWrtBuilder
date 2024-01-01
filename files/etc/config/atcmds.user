@@ -10,8 +10,10 @@ Enable Carrier Aggregation;AT^CA_ENABLE=0
 Disable Carrier Aggregation;AT^CA_ENABLE=1
 Check band Carrier Aggregation;AT^CA_INFO?
 Check signal band neighbour;AT+VZWRSRP?
+Check signal strength;AT+CSQ;AT+CSQ
+Get the temperature of MT;AT+QTEMP;AT+QTEMP
 Set WCDMA only;AT^SLMODE=1,14
-Set LTE only;AT^SLMODE=1,30
+Set 4G-LTE only;AT^SLMODE=1,30
 Set WCDMA & LTE;AT^SLMODE=1,35
 Check USB mode USB 2.0/USB 3.0;AT^USBTYPE
 Check modem CAT;AT^GETLTECAT?
