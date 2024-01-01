@@ -69,7 +69,7 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_al
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-modemband_1.0.21-20230914_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/modemband_20230914_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-mmconfig_0.0.5-4_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-sms-tool-js_2.0.14-20230910_all.ipk
+all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-sms-tool_1.9.6-20230501_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/internet-detector_1.0-3_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-internet-detector_1.0-1_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-diskman_v0.2.13_all.ipk
@@ -98,7 +98,7 @@ old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-modemband_1.0.21-20230914_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/modemband_20230914_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-mmconfig_0.0.5-4_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-sms-tool-js_2.0.14-20230910_all.ipk
+old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-sms-tool_1.9.6-20230501_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/internet-detector_1.0-3_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-internet-detector_1.0-1_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-diskman_v0.2.13_all.ipk
