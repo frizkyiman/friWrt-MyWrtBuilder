@@ -27,9 +27,9 @@ on:
           - immortalwrt:21.02.7
           - immortalwrt:23.05.1
       rootfs:
-        description: 'Set rootfs "/" partition size (Mb):'
+        description: 'Set rootfs "/" partition size (1GB = 1024 Mb):'
         required: true
-        default: '5000'
+        default: '5120'
       squashfs:
         description: "Generate squashfs image"
         required: true
