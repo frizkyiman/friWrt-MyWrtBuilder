@@ -30,6 +30,11 @@ on:
         description: 'Set rootfs "/" partition size (Mb):'
         required: true
         default: '5000'
+      squashfs:
+        description: "Generate squashfs image:"
+        required: true
+        default: "false"
+        type: boolean
       tunnel:
         description: "Select tunnel app (passwall only support for newer branch with fw4 firewall!):"
         required: true
@@ -52,14 +57,6 @@ on:
         description: "Set WiFi password (8 characters minimum):"
         required: false
         default: ''
-      squashfs:
-        description: "Generate squashfs image:"
-        required: true
-        default: "false"
-        type: choice
-        options:
-          - true
-          - false
       release:
         description: "Upload compiled image to release:"
         required: true
