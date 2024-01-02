@@ -1,3 +1,9 @@
+#=====================================================================================
+# Description:   Build OpenWrt and ImmortalWrt with Image Builder
+# Instructions:  https://openwrt.org/docs/guide-user/additional-software/imagebuilder
+# Download from: https://downloads.openwrt.org/releases
+#                https://downloads.immortalwrt.org/releases
+#=====================================================================================
 name: Generate friWrt Firmware
 
 on:
