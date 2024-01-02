@@ -47,7 +47,7 @@ on:
       login_password: 
         description: "Set Login password:"
         required: false
-        default: ''
+        default: 'friwrt'
       wifi_ssid: 
         description: "Set WiFi SSID:"
         required: true
@@ -55,7 +55,7 @@ on:
       wifi_password: 
         description: "Set WiFi password (8 characters minimum):"
         required: false
-        default: ''
+        default: 'friwrt2023'
       release:
         description: "Upload compiled image to release:"
         required: true
