@@ -41,7 +41,7 @@ config instance 'Openclash'
 	option mod_user_scripts_alive_period '0'
 	option mod_user_scripts_dead_period '0'
 
-config instance 'internet'
+config instance 'Internet'
 	option enabled '1'
 	list hosts '8.8.8.8'
 	option check_type '0'
