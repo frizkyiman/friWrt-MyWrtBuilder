@@ -31,7 +31,7 @@ on:
         required: true
         default: '5000'
       squashfs:
-        description: "Generate squashfs image:"
+        description: "Generate squashfs image"
         required: true
         default: "false"
         type: boolean
@@ -65,6 +65,11 @@ on:
         options:
           - true
           - false
+      artifacts:
+        description: "Upload compiled image to artifacts"
+        required: true
+        default: "false"
+        type: boolean
 
 env:
   TARGET: ${{ inputs.target }}
@@ -75,7 +80,7 @@ env:
   LOGIN_PASSWORD: ${{ inputs.login_password }}
   WIFI_SSID: ${{ inputs.wifi_ssid }}
   WIFI_PASSWORD: ${{ inputs.wifi_password }}
-  UPLOAD_ARTIFACTS: false
+  UPLOAD_ARTIFACTS: ${{ inputs.artifacts }}
   TZ: Asia/Jakarta
 
 jobs:
