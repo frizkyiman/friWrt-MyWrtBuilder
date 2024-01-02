@@ -212,8 +212,6 @@ jobs:
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
           for file in *-$TARGET_NAME-*.img.gz; do mv "$file" "fri_${file%.img.gz}_${TUNNEL}_$DATE.img.gz"; done
           ls && rm -rf *.json *.manifest *.bin *-rootfs* sha256sums && ls
-          [ -f sha256sums ] || touch sha256sums
-          sha256sum fri_*.img.gz >> sha256sums
           echo "status=success" >> $GITHUB_OUTPUT
           
       - name: Upload Firmware to Artifacts
