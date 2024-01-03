@@ -17,18 +17,18 @@ passwall_ipk_packages=("https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/
                        "https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/trojan-plus_10.0.3-2_$ARCH_3.ipk"
                        "https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/ipt2socks_1.1.3-3_$ARCH_3.ipk"
                        "https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/pdnsd-alt_1.2.9b-par-3_$ARCH_3.ipk")
-                       
-echo "tunnel option: $TUNNEL"
-if [ "$TUNNEL" == "openclash" ]; then
+          
+echo "tunnel option: $1"
+if [ "$1" == "openclash" ]; then
     echo "Downloading Openclash packages"
     wget ${openclash_file_down} -nv -P packages
-elif [ "$TUNNEL" == "passwall" ]; then
+elif [ "$1" == "passwall" ]; then
     echo "Downloading Passwall packages ipk"
     wget "$passwall_file_down" -nv -P packages
     wget "$passwall_ipk" -nv -P packages
     wget "${passwall_ipk_packages[@]}" -nv -P packages
     unzip -qq packages/"$passwall_file" -d packages && rm packages/"$passwall_file"
-elif [ "$TUNNEL" == "openclash-passwall" ]; then
+elif [ "$1" == "openclash-passwall" ]; then
     echo "Installing Openclash and Passwall"
     echo "Downloading Openclash packages"
     wget ${openclash_file_down} -nv -P packages
