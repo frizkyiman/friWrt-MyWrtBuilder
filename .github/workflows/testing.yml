@@ -207,14 +207,14 @@ jobs:
         run: |
           cd $WORKING_DIR
           if [ "$TUNNEL" == "all" ]; then
-            for t in openclash passwall openclash-passwall; do
+            for t in openclash-passwall openclash passwall; do
+              echo "Compiling with tunnel: $t"
               bash $BUILD_SH $PROFILE $t
-              echo "Compiling with $t variant"
               mkdir -p "bin/targets/$TARGET_SYSTEM/$t"
               mv bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz bin/targets/"$TARGET_SYSTEM"/"$t"
               for file in bin/targets/"$TARGET_SYSTEM"/"$t"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" bin/targets/"$TARGET_SYSTEM"/"$t"/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
-              mv bin/targets/"$TARGET_SYSTEM"/"$t"/* bin/targets/"$TARGET_SYSTEM"
-              rmdir "bin/targets/$TARGET_SYSTEM/$t"
+              ls bin/targets/"$TARGET_SYSTEM"/"$t"
+              echo -e "Server space usage after compilation with tunnel $t: \n$(df -hT ${PWD}) \n"
             done
           else
             bash $BUILD_SH $PROFILE $t
@@ -228,7 +228,8 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
-          ls && rm -rf *.json *.manifest *.bin *-rootfs* sha256sums && ls
+          if [ "$TUNNEL" == "all" ]; then for t in openclash-passwall openclash passwall; do mv "$t"/* . ; rmdir "$t" ; done; fi
+          rm -rf *.json *.manifest *.bin *-rootfs* sha256sums && ls
           sha256sum fri_*.img.gz > sha256sums
           echo "status=success" >> $GITHUB_OUTPUT
           
