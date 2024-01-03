@@ -38,9 +38,10 @@ on:
       tunnel:
         description: "Select tunnel app (passwall only support for newer branch with fw4 firewall!):"
         required: true
-        default: "openclash"
+        default: "all"
         type: choice
         options:
+          - all
           - openclash
           - passwall
           - openclash-passwall
@@ -174,14 +175,6 @@ jobs:
              grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
-          
-          if [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
-              bash scripts/tunnel_app.sh
-          else
-              echo "Cannot install Passwall on older branch $BRANCH !"
-              exit 1
-          fi
-          ls packages
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
@@ -190,6 +183,16 @@ jobs:
         run: |
           cd $WORKING_DIR
           bash $PATCH_SH
+          if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
+              bash scripts/tunnel_app.sh openclash-passwall
+              ls packages
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
+              bash scripts/tunnel_app.sh "$TUNNEL"
+              ls packages
+          else
+              echo "Cannot install Passwall on older branch $BRANCH !"
+              exit 1
+          fi
           bash scripts/clash-core.sh
           bash scripts/agh-core.sh
           bash scripts/misc.sh
@@ -201,7 +204,20 @@ jobs:
         if: steps.scripts.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          bash $BUILD_SH
+          if [ "$TUNNEL" == "all" ]; then
+            for t in openclash passwall openclash-passwall; do
+              bash $BUILD_SH $PROFILE $t
+              echo "Compiling with $t variant"
+              mkdir -p "bin/targets/$TARGET_SYSTEM/$t"
+              mv "bin/targets/$TARGET_SYSTEM/*-$TARGET_NAME-*.img.gz" "bin/targets/$TARGET_SYSTEM/$t"
+              for file in bin/targets/$TARGET_SYSTEM/$t/*-$TARGET_NAME-*.img.gz; do mv "$file" "bin/targets/$TARGET_SYSTEM/$t/fri_${file%.img.gz}_${t}_$DATE.img.gz"; done
+              mv "bin/targets/$TARGET_SYSTEM/$t"/* "bin/targets/$TARGET_SYSTEM/$t"/..
+              rmdir "bin/targets/$TARGET_SYSTEM/$t"
+            done
+          else
+            bash $BUILD_SH $PROFILE $t
+            for file in bin/targets/$TARGET_SYSTEM/*-$TARGET_NAME-*.img.gz; do mv "$file" "bin/targets/$TARGET_SYSTEM/fri_${file%.img.gz}_${t}_$DATE.img.gz"; done
+          fi
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
@@ -210,7 +226,6 @@ jobs:
         if: steps.compile.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
-          for file in *-$TARGET_NAME-*.img.gz; do mv "$file" "fri_${file%.img.gz}_${TUNNEL}_$DATE.img.gz"; done
           ls && rm -rf *.json *.manifest *.bin *-rootfs* sha256sums && ls
           echo "status=success" >> $GITHUB_OUTPUT
           
