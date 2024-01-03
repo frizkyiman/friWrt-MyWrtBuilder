@@ -83,6 +83,7 @@ fi
 DISABLED_SERVICES="AdGuardHome"
 
 # Start build firmware
+echo "tunnel option: $TUNNEL"
 echo "Packages to be installed list"
 echo "$PACKAGES"
 make image PROFILE="$PROFILE" PACKAGES="$PACKAGES $CUSTOM $EXCLUDED" FILES="$FILES" DISABLED_SERVICES="$DISABLED_SERVICES"
