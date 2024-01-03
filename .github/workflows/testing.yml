@@ -212,13 +212,13 @@ jobs:
               echo "Compiling with $t variant"
               mkdir -p "bin/targets/$TARGET_SYSTEM/$t"
               mv bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz bin/targets/"$TARGET_SYSTEM"/"$t"
-              for file in bin/targets/"$TARGET_SYSTEM"/"$t"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" bin/targets/"$TARGET_SYSTEM"/"$t"/fri_${file%.img.gz}_${t}_$DATE.img.gz; done
-              mv bin/targets/"$TARGET_SYSTEM"/"$t"/* bin/targets/"$TARGET_SYSTEM"/"$t"/..
+              for file in bin/targets/"$TARGET_SYSTEM"/"$t"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" bin/targets/"$TARGET_SYSTEM"/"$t"/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
+              mv bin/targets/"$TARGET_SYSTEM"/"$t"/* bin/targets/"$TARGET_SYSTEM"
               rmdir "bin/targets/$TARGET_SYSTEM/$t"
             done
           else
             bash $BUILD_SH $PROFILE $t
-            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" bin/targets/"$TARGET_SYSTEM"/fri_${file%.img.gz}_${t}_$DATE.img.gz; done
+            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" bin/targets/"$TARGET_SYSTEM"/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
           fi
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
