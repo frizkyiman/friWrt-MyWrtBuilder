@@ -6,7 +6,7 @@
 #                https://downloads.immortalwrt.org/releases
 #=====================================================================================
 
-name: (testing) Generate friWrt Firmware
+name: (testing2) Generate friWrt Firmware
 
 on:
   workflow_dispatch:
