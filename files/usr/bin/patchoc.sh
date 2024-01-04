@@ -1,5 +1,6 @@
-#!/bin/sh
-#patch openclash
+#!/bin/bash
+
+# patch openclash
 STATUS="/usr/lib/lua/luci/view/openclash/status.htm"
 DEV="/usr/lib/lua/luci/view/openclash/developer.htm"
 MYIP="/usr/lib/lua/luci/view/openclash/myip.htm"
@@ -76,4 +77,3 @@ EOF
 elif grep -q "Config Editor" $CONT && [ ! -f "/www/tinyfm/index.php" ]; then
 	sed -i '/Config Editor/d' $CONT
 fi
-
