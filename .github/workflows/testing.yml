@@ -45,6 +45,11 @@ on:
           - openclash
           - passwall
           - openclash-passwall
+      clean:
+        description: "make clean each run"
+        required: true
+        default: "false"
+        type: boolean
       login_password: 
         description: "Set Login password:"
         required: false
@@ -81,6 +86,7 @@ env:
   WIFI_SSID: ${{ inputs.wifi_ssid }}
   WIFI_PASSWORD: ${{ inputs.wifi_password }}
   UPLOAD_ARTIFACTS: ${{ inputs.artifacts }}
+  CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
 
 jobs:
@@ -206,39 +212,30 @@ jobs:
         if: steps.scripts.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
+          mkdir -p compiled_images
           if [ "$TUNNEL" == "all" ]; then
             for t in openclash-passwall openclash passwall; do
               echo "Compiling with tunnel: $t"
-              bash $BUILD_SH $PROFILE $t
-              mkdir -p "bin/targets/$TARGET_SYSTEM/$t"
-              mv bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz bin/targets/"$TARGET_SYSTEM"/"$t"
-              for file in bin/targets/"$TARGET_SYSTEM"/"$t"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" bin/targets/"$TARGET_SYSTEM"/"$t"/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
-              ls bin/targets/"$TARGET_SYSTEM"/"$t"
+              if [ "$CLEAN" == "true" ]; then make clean; fi
+              time bash $BUILD_SH $PROFILE $t
+              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
               echo -e "Server space usage after compilation with tunnel $t: \n$(df -hT ${PWD}) \n"
             done
           else
             bash $BUILD_SH $PROFILE $t
-            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" bin/targets/"$TARGET_SYSTEM"/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
+            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
           fi
+          ls compiled_images
+          sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
-
-      - name: Organize Files
-        id: organize
-        if: steps.compile.outputs.status == 'success' && !cancelled()
-        run: |
-          cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
-          if [ "$TUNNEL" == "all" ]; then for t in openclash-passwall openclash passwall; do mv "$t"/* . ; rmdir "$t" ; done; fi
-          rm -rf *.json *.manifest *.bin *-rootfs* sha256sums && ls
-          sha256sum fri_*.img.gz > sha256sums
-          echo "status=success" >> $GITHUB_OUTPUT
           
       - name: Upload Firmware to Artifacts
         uses: actions/upload-artifact@v2
         if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
         with:
           name: ${{ env.BASE }}-${{ env.BRANCH }}-$TARGET_NAME-images-${{ env.TUNNEL }}-${{ env.DATETIME }}
-          path: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
+          path: ${{ env.WORKING_DIR }}/compiled_images//*
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -246,7 +243,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
+          file: ${{ env.WORKING_DIR }}/compiled_images//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: testing-${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
