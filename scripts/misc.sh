@@ -57,7 +57,7 @@ fi
 
 wget --no-check-certificate -nv -P files/sbin "$sync_time"
 wget --no-check-certificate -nv -P files/usr/bin "$clock"
-wget --no-check-certificate -nv -P files/sbin "$repair_ro"
+wget --no-check-certificate -nv -P files/root "$repair_ro"
 wget --no-check-certificate -nv -P files/usr/bin "$mount_hdd"
 }
 
