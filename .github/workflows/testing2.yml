@@ -1,0 +1,261 @@
+#=====================================================================================
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description:   Build OpenWrt with Image Builder
+# Instructions:  https://openwrt.org/docs/guide-user/additional-software/imagebuilder
+# Download from: https://downloads.openwrt.org/releases
+#                https://downloads.immortalwrt.org/releases
+#=====================================================================================
+
+name: (testing) Generate friWrt Firmware
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_branch:
+        description: "Select the release branch:"
+        required: true
+        default: "openwrt:23.05.2"
+        type: choice
+        options:
+          - openwrt:21.02.7
+          - openwrt:23.05.2
+          - immortalwrt:21.02.7
+          - immortalwrt:23.05.1
+      openwrt_board:
+        description: "Select device board"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - s905x
+          - s905x-b860h
+      openwrt_kernel:
+        description: "Select kernel version"
+        required: false
+        default: "5.15.1_6.1.1"
+        type: choice
+        options:
+          - 5.4.1_5.10.1
+          - 5.15.1_6.1.1
+          - 5.4.1
+          - 5.10.1
+          - 5.15.1
+          - 6.1.1
+      auto_kernel:
+        description: "Auto use the latest kernel"
+        required: false
+        default: true
+        type: boolean
+      kernel_repo:
+        description: "Set the kernel repository"
+        required: false
+        default: "ophub/kernel"
+        type: choice
+        options:
+          - ophub/kernel
+      kernel_usage:
+        description: "Set the tags of the stable kernel."
+        required: false
+        default: "stable"
+        type: choice
+        options:
+          - stable
+          - flippy
+          - dev
+          - beta     
+      rootfs:
+        description: 'Set "/" partition size (1GB = 1024 Mb):'
+        required: true
+        default: '5120'
+      tunnel:
+        description: "Select tunnel app (passwall only support for newer branch with fw4 firewall!):"
+        required: true
+        default: "openclash"
+        type: choice
+        options:
+          - all
+          - openclash
+          - passwall
+          - openclash-passwall
+      clean:
+        description: "Do 'make clean' for each run"
+        required: true
+        default: "true"
+        type: boolean
+
+env:
+  TARGET: ${{ inputs.target }}
+  RELEASE_BRANCH: ${{ inputs.release_branch }}
+  ROOTFS_SIZE: ${{ inputs.rootfs}}
+  TUNNEL: ${{ inputs.tunnel }}
+  LOGIN_PASSWORD: friwrt
+  WIFI_SSID: friWrt_5g
+  WIFI_PASSWORD: friwrt2023
+  CLEAN: ${{ inputs.clean }}
+  TZ: Asia/Jakarta
+
+jobs:
+  Generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Initialization System Environment
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip tar gzip qemu-utils mkisofs
+          sudo timedatectl set-timezone "$TZ"
+
+      - name: Setup Environment Variables
+        run: |
+          if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ]; then
+            DEVICE=""
+            TARGET_1="armsr/armv8"
+            TARGET_2="armsr-armv8"
+            ARCH_1="armv8"
+            ARCH_2="arm"
+            ARCH_3=""
+          elif [ "$RELEASE_BRANCH" == "immortalwrt:23.05.1" ]; then
+            DEVICE=""
+            TARGET_1="armsr/armv8"
+            TARGET_2="armsr-armv8"
+            ARCH_1="armv8"
+            ARCH_2="arm"
+            ARCH_3=""
+          else
+            DEVICE="Default"
+            TARGET_1="armvirt/64"
+            TARGET_2="armvirt-64"
+            ARCH_1="armvirt"
+            ARCH_2="armvirt"
+            ARCH_3=""
+          fi
+          echo "BUILD_SH=make-build.sh" >> $GITHUB_ENV
+          echo "PATCH_SH=scripts/builder-patch.sh" >> $GITHUB_ENV
+          echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$TARGET_2".Linux-x86_64" >> $GITHUB_ENV
+          echo "DOWNLOAD_BASE=https://downloads."${RELEASE_BRANCH%:*}".org" >> $GITHUB_ENV
+          echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
+          echo "BRANCH=${RELEASE_BRANCH#*:}" >> $GITHUB_ENV
+          echo "tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "21.02" )" >> $GITHUB_ENV
+          echo "PROFILE=$DEVICE" >> $GITHUB_ENV
+          echo "TARGET_SYSTEM=$TARGET_1" >> $GITHUB_ENV
+          echo "TARGET_NAME=$TARGET_2" >> $GITHUB_ENV
+          echo "ARCH=$ARCH_1" >> $GITHUB_ENV
+          echo "ARCH_2=$ARCH_2" >> $GITHUB_ENV
+          echo "ARCH_3=$ARCH_3" >> $GITHUB_ENV
+          echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
+      
+      - name: Checkout
+        uses: actions/checkout@v3
+        with: 
+          path: origin
+
+      - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
+        id: download
+        run: |
+          RELEASE="$DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz"
+          wget -nv "$RELEASE"
+          tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
+          echo "status=success" >> $GITHUB_OUTPUT
+      
+      - name: Download External Packages
+        id: packages
+        if: steps.download.outputs.status == 'success' && !cancelled()
+        run: |
+          cd $WORKING_DIR
+          if [[ "$BRANCH" == "21.02.7" ]]; then
+             grep -E "^all-all|^old-$tags|^$ARCH-$tags" external-package-urls.txt | awk '{print $2}' > output_url.txt
+          else
+             grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
+          fi
+          wget --no-check-certificate -i output_url.txt -nv -P packages
+          echo "status=success" >> $GITHUB_OUTPUT
+         
+      - name: Run Patch and DIY Scripts
+        id: scripts
+        if: steps.packages.outputs.status == 'success' && !cancelled()
+        run: |
+          cd $WORKING_DIR
+          bash $PATCH_SH
+          if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
+              echo "tunnel option: $TUNNEL"
+              bash scripts/tunnel_app.sh openclash-passwall
+              ls packages
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
+              echo "tunnel option: $TUNNEL"
+              bash scripts/tunnel_app.sh "$TUNNEL"
+              ls packages
+          else
+              echo "Cannot install Passwall on older branch $BRANCH !"
+              exit 1
+          fi
+          bash scripts/clash-core.sh
+          bash scripts/agh-core.sh
+          bash scripts/misc.sh
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
+
+      - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
+        id: compile
+        if: steps.scripts.outputs.status == 'success' && !cancelled()
+        run: |
+          cd $WORKING_DIR
+          mkdir -p compiled_images
+          if [ "$TUNNEL" == "all" ]; then
+            for t in openclash-passwall openclash passwall; do
+              echo "Compiling with tunnel: $t"
+              if [ "$CLEAN" == "true" ]; then make clean; fi
+              time bash $BUILD_SH $PROFILE $t
+              for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images/${t}_$(basename "$file" .tar.gz).tar.gz; done
+            done
+          else
+            bash $BUILD_SH $PROFILE $t
+            for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images/${t}_$(basename "$file" .tar.gz).tar.gz; done
+          fi
+          ls compiled_images
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
+
+      - name: Clear server space
+        if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
+        run: |
+          cd $WORKING_DIR
+          rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+          df -hT ${PWD}
+
+      - name: Packaging OpenWrt
+        if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
+        uses: ophub/amlogic-s9xxx-openwrt@main
+        with:
+          openwrt_path: $WORKING_DIR/compiled_images/*rootfs.tar.gz
+          openwrt_board: ${{ inputs.openwrt_board }}
+          openwrt_kernel: ${{ inputs.openwrt_kernel }}
+          auto_kernel: ${{ inputs.auto_kernel }}
+          kernel_repo: ${{ inputs.kernel_repo }}
+          kernel_usage: ${{ inputs.kernel_usage }}
+          builder_name: ${{ inputs.builder_name }}
+
+      - name: Upload Firmware to Release
+        uses: ncipollo/release-action@main
+        if: github.event.inputs.release == 'true'
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file_glob: true
+          file: ${{ env.WORKING_DIR }}/compiled_images//*
+          asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
+          tag: testing-${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
+          overwrite: true
+          body: |
+            ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
+            Build date: ${{ env.DATETIME }}
+            - Default IP: 192.168.1.1
+            - Default username: root
+            - Default password: ${{ env.LOGIN_PASSWORD || 'none' }}
+            - Default WIFI name: ${{ env.WIFI_SSID }}
+            - Default WIFI password: ${{ env.WIFI_PASSWORD || 'none' }}
+            ### Install to EMMC
+            - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
+            ### OpenWrt Image Verification
+            - sha256sum
