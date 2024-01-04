@@ -67,14 +67,14 @@ uci set xmm-modem.@xmm-modem[0].enable='0'
 uci commit
 
 # custom repo and Disable opkg signature check
-if grep -qE '^VERSION_ID="23' /etc/os-release; then
-   sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
-   echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic" >> /etc/opkg/customfeeds.conf
-   echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/$(grep "OPENWRT_ARCH" /etc/os-release | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
-elif grep -qE '^VERSION_ID="21' /etc/os-release; then
+if grep -qE '^VERSION_ID="21' /etc/os-release; then
    sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
    echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/generic" >> /etc/opkg/customfeeds.conf
    echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/$(grep "OPENWRT_ARCH" /etc/os-release | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
+else
+   sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
+   echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic" >> /etc/opkg/customfeeds.conf
+   echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/$(grep "OPENWRT_ARCH" /etc/os-release | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
 fi
 
 # add cron job for modem rakitan
@@ -148,13 +148,11 @@ echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
 echo '0 12 * * * /sbin/sync_time.sh circles.asia' >> /etc/crontabs/root
 
 chmod +x /root/fix-tinyfm.sh && bash /root/fix-tinyfm.sh
+chmod +x /root/install2.sh && bash /root/install2.sh
 chmod +x /sbin/sync_time.sh
 chmod +x /sbin/free.sh
 chmod +x /usr/bin/neofetch
 chmod +x /usr/bin/clock
-chmod +x /etc/init.d/repair_ro
-chmod +x /usr/bin/repair_ro
-chmod +x /sbin/repair_ro
 chmod +x /usr/bin/mount_hdd
 chmod +x /usr/bin/speedtest
 
