@@ -38,7 +38,7 @@ on:
       tunnel:
         description: "Select tunnel app (passwall only support for newer branch with fw4 firewall!):"
         required: true
-        default: "all"
+        default: "openclash"
         type: choice
         options:
           - all
@@ -46,7 +46,7 @@ on:
           - passwall
           - openclash-passwall
       clean:
-        description: "Do 'make clean' each run"
+        description: "Do 'make clean' for each run"
         required: true
         default: "true"
         type: boolean
