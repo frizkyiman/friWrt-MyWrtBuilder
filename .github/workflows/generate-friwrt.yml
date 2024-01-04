@@ -206,10 +206,12 @@ jobs:
               echo "Compiling with tunnel: $t"
               if [ "$CLEAN" == "true" ]; then make clean; fi
               time bash $BUILD_SH $PROFILE $t
+              rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,sha256sums}
               for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
             done
           else
             bash $BUILD_SH $PROFILE $t
+            rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,sha256sums}
             for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
           fi
           sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
