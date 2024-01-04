@@ -29,13 +29,12 @@ OPENCLASH_FW3="$PACKAGES coreutils-nohup bash iptables dnsmasq-full curl ca-cert
 OPENCLASH_FW4="$PACKAGES coreutils-nohup bash dnsmasq-full curl ca-certificates ipset ip-full libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip kmod-nft-tproxy luci-compat luci luci-base luci-app-openclash"
 PASSWALL="$PACKAGES ipset ipt2socks iptables iptables-legacy iptables-mod-iprange iptables-mod-socket iptables-mod-tproxy kmod-ipt-nat coreutils coreutils-base64 coreutils-nohup curl dns2socks ip-full libuci-lua lua luci-compat luci-lib-jsonc microsocks resolveip tcping unzip dns2tcp brook hysteria trojan-go xray-core xray-plugin sing-box chinadns-ng haproxy ip6tables-mod-nat kcptun-client naiveproxy pdnsd-alt shadowsocks-libev-ss-local shadowsocks-libev-ss-redir shadowsocks-libev-ss-server shadowsocks-rust-sslocal shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server simple-obfs trojan-plus v2ray-core v2ray-plugin luci-app-passwall"
 
-
-if [ "$2" == "openclash-passwall" ]; then
-    PACKAGES="$([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4") $PASSWALL"
-elif [ "$2" == "openclash" ]; then
+if [ "$2" == "openclash" ]; then
     PACKAGES="$([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4")"
 elif [ "$2" == "passwall" ]; then
     PACKAGES="$PASSWALL"
+elif [ "$2" == "openclash-passwall" ]; then
+    PACKAGES="$([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4") $PASSWALL"
 fi
 
 # Adguardhome
@@ -83,6 +82,6 @@ fi
 DISABLED_SERVICES="AdGuardHome"
 
 # Start build firmware
-echo "Packages to be installed list"
+echo "Custom packages list:"
 echo "$PACKAGES"
 make image PROFILE="$1" PACKAGES="$PACKAGES $CUSTOM $EXCLUDED" FILES="$FILES" DISABLED_SERVICES="$DISABLED_SERVICES"
