@@ -45,7 +45,7 @@ echo "Downloading custom script"
 speedtest="https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
 sync_time="https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/sbin/sync_time.sh"
 clock="https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/usr/bin/clock"
-repair_ro="https://raw.githubusercontent.com/frizkyiman/fix-read-only/main/sbin/repair_ro"
+repair_ro="https://raw.githubusercontent.com/frizkyiman/fix-read-only/main/install2.sh"
 mount_hdd="https://raw.githubusercontent.com/frizkyiman/auto-mount-hdd/main/mount_hdd"
 
 if wget --no-check-certificate -nv -P files "$speedtest"; then
