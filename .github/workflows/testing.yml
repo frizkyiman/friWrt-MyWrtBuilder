@@ -70,11 +70,6 @@ on:
         options:
           - true
           - false
-      artifacts:
-        description: "Upload compiled image to artifacts"
-        required: true
-        default: "false"
-        type: boolean
 
 env:
   TARGET: ${{ inputs.target }}
@@ -85,7 +80,6 @@ env:
   LOGIN_PASSWORD: ${{ inputs.login_password }}
   WIFI_SSID: ${{ inputs.wifi_ssid }}
   WIFI_PASSWORD: ${{ inputs.wifi_password }}
-  UPLOAD_ARTIFACTS: ${{ inputs.artifacts }}
   CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
 
@@ -229,13 +223,6 @@ jobs:
           sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
-          
-      - name: Upload Firmware to Artifacts
-        uses: actions/upload-artifact@v2
-        if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
-        with:
-          name: ${{ env.BASE }}-${{ env.BRANCH }}-$TARGET_NAME-images-${{ env.TUNNEL }}-${{ env.DATETIME }}
-          path: ${{ env.WORKING_DIR }}/compiled_images//*
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
