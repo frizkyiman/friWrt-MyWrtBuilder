@@ -47,34 +47,23 @@ on:
         default: "openclash"
         type: choice
         options:
+          - all
           - openclash
           - passwall
           - openclash-passwall
+      clean:
+        description: "Do 'make clean' for each run"
+        required: true
+        default: "true"
+        type: boolean
       login_password: 
         description: "Set Login password:"
         required: false
         default: 'friwrt'
-      wifi_ssid: 
-        description: "Set WiFi SSID:"
-        required: true
-        default: 'friWrt_5g'
       wifi_password: 
         description: "Set WiFi password (8 characters minimum):"
         required: false
         default: 'friwrt2023'
-      release:
-        description: "Upload compiled image to release:"
-        required: true
-        default: "true"
-        type: choice
-        options:
-          - true
-          - false
-      artifacts:
-        description: "Upload compiled image to artifacts"
-        required: true
-        default: "false"
-        type: boolean
 
 env:
   TARGET: ${{ inputs.target }}
@@ -83,9 +72,9 @@ env:
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   TUNNEL: ${{ inputs.tunnel }}
   LOGIN_PASSWORD: ${{ inputs.login_password }}
-  WIFI_SSID: ${{ inputs.wifi_ssid }}
+  WIFI_SSID: friWrt_5g
   WIFI_PASSWORD: ${{ inputs.wifi_password }}
-  UPLOAD_ARTIFACTS: ${{ inputs.artifacts }}
+  CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
 
 jobs:
@@ -180,13 +169,6 @@ jobs:
              grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
-          if [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
-              bash scripts/tunnel_app.sh
-          else
-              echo "Cannot install Passwall on older branch $BRANCH !"
-              exit 1
-          fi
-          ls packages
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
@@ -195,6 +177,18 @@ jobs:
         run: |
           cd $WORKING_DIR
           bash $PATCH_SH
+          if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
+              echo "tunnel option: $TUNNEL"
+              bash scripts/tunnel_app.sh openclash-passwall
+              ls packages
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
+              echo "tunnel option: $TUNNEL"
+              bash scripts/tunnel_app.sh "$TUNNEL"
+              ls packages
+          else
+              echo "Cannot install Passwall on older branch $BRANCH !"
+              exit 1
+          fi
           bash scripts/clash-core.sh
           bash scripts/agh-core.sh
           bash scripts/misc.sh
@@ -206,33 +200,30 @@ jobs:
         if: steps.scripts.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          bash $BUILD_SH
+          mkdir -p compiled_images
+          if [ "$TUNNEL" == "all" ]; then
+            for t in openclash-passwall openclash passwall; do
+              echo "Compiling with tunnel: $t"
+              if [ "$CLEAN" == "true" ]; then make clean; fi
+              time bash $BUILD_SH $PROFILE $t
+              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
+            done
+          else
+            bash $BUILD_SH $PROFILE $t
+            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
+          fi
+          sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
+          ls compiled_images
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
-      - name: Organize Files
-        id: organize
-        if: steps.compile.outputs.status == 'success' && !cancelled()
-        run: |
-          cd $WORKING_DIR/bin/targets/$TARGET_SYSTEM/
-          for file in *-$TARGET_NAME-*.img.gz; do mv "$file" "fri_${file%.img.gz}_${TUNNEL}_$DATE.img.gz"; done
-          ls && rm -rf *.json *.manifest *.bin *-rootfs* sha256sums && ls
-          echo "status=success" >> $GITHUB_OUTPUT
-          
-      - name: Upload Firmware to Artifacts
-        uses: actions/upload-artifact@v2
-        if: env.UPLOAD_ARTIFACTS == 'true' && !cancelled()
-        with:
-          name: ${{ env.BASE }}-${{ env.BRANCH }}-$TARGET_NAME-images-${{ env.TUNNEL }}-${{ env.DATETIME }}
-          path: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
-
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
-        if: github.event.inputs.release == 'true'
+        if: steps.compile.outputs.status == 'success' && !cancelled()
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: ${{ env.WORKING_DIR }}/bin/targets/${{ env.TARGET_SYSTEM }}//*
+          file: ${{ env.WORKING_DIR }}/compiled_images//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
