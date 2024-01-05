@@ -41,6 +41,7 @@ all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-modemdefi
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-modemband_1.0.24-20240102_all.ipk
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/modemband_20240102_all.ipk
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-lite-watchdog_1.0.15-20240102_all.ipk
+all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-3ginfo-lite_1.0.61-20240102_all.ipk
 #
 ################################################################################
 #      Branch version snapshots and 23.05 custom external package urls list    #
