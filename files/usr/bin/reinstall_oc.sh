@@ -9,6 +9,17 @@ openclash_file="luci-app-openclash"
 openclash_file_down="$(curl -s "${openclash_api}" | grep "browser_download_url" | grep -oE "https.*${openclash_file}.*.ipk" | head -n 1)"
 patchoc="https://raw.githubusercontent.com/frizkyiman/friWrt-MyWrtBuilder/main/files/usr/bin/patchoc.sh"
 
+if [ "$1" == "install" ]; then
+  echo -e "${INFO} Start installing [ ${openclash_file} ] dependencies first"
+  if opkg list-installed | grep -q '^dnsmasq\b'; then echo -e "${INFO} dnsmasq is already installed. Removing..."; opkg remove dnsmasq; fi
+  if [ -n "$(command -v fw4)" ]; then
+    echo -e "${INFO} Firewall 4 nftables detected"
+    opkg update && opkg install coreutils-nohup bash dnsmasq-full curl ca-certificates ipset ip-full libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip kmod-nft-tproxy luci-compat luci luci-base
+  else
+    echo -e "${INFO} Firewall 3 iptables detected"
+    opkg update && opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip luci-compat luci luci-base
+  fi
+
 echo -e "${INFO} Start downloading [ ${openclash_file} ]."
 if wget -q -N -P /root "${openclash_file_down}" && wget -q -N -P /usr/bin "$patchoc"; then
   echo -e "${SUCCESS} The [ $(basename "${openclash_file_down}") ] is downloaded successfully."
