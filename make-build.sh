@@ -55,7 +55,7 @@ PACKAGES="$PACKAGES libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ct
 
 # Misc and some custom .ipk files
 if [ "${RELEASE_BRANCH%:*}" == "openwrt" ]; then
-    misc="uci-app-temp-status luci-app-cpu-status-mini"
+    misc="luci-app-temp-status luci-app-cpu-status-mini"
 elif [ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]; then
     misc=""
 fi
