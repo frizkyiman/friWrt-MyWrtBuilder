@@ -77,3 +77,4 @@ EOF
 elif grep -q "Config Editor" $CONT && [ ! -f "/www/tinyfm/index.php" ]; then
 	sed -i '/Config Editor/d' $CONT
 fi
+echo "done."
