@@ -20,7 +20,7 @@ if wget ${openclash_file_down} -q -P /root; then
   else
     echo -e "${ERROR} Patch download failed!"
   fi
-  echo -e "${SUCCESS} Openclash successfully install and patched."
+  echo -e "${SUCCESS} Openclash successfully installed and patched."
 else
   echo -e "${ERROR} [ ${openclash_file} ] download failed!"
 fi
