@@ -19,6 +19,7 @@ if [ "$1" == "install" ]; then
     echo -e "${INFO} Firewall 3 iptables detected"
     opkg update && opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip luci-compat luci luci-base
   fi
+fi
 
 echo -e "${INFO} Start downloading [ ${openclash_file} ]."
 if wget -q -N -P /root "${openclash_file_down}" && wget -q -N -P /usr/bin "$patchoc"; then
