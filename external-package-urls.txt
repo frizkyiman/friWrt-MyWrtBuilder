@@ -36,6 +36,11 @@
 ################################################################################
 #
 all-all https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk
+all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-sms-tool-js_2.0.20-20240102_all.ipk
+all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-modemdefine_1.0.5-20231008_all.ipk
+all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-modemband_1.0.24-20240102_all.ipk
+all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/modemband_20240102_all.ipk
+all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-lite-watchdog_1.0.15-20240102_all.ipk
 #
 ################################################################################
 #      Branch version snapshots and 23.05 custom external package urls list    #
@@ -50,10 +55,7 @@ armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/sms-too
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-tinyfm_2.6_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-proto-mbim_git-23.137.84224-37176dc_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-modemband_1.0.21-20230914_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/modemband_20230914_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-mmconfig_0.0.5-4_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-sms-tool_1.9.6-20230501_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/internet-detector_1.0-3_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-internet-detector_1.0-1_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-diskman_v0.2.13_all.ipk
@@ -79,10 +81,7 @@ armv7-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a53/
 old-21.02 https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-tinyfm_2.5_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-proto-mbim_git-23.262.31484-20add84_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1.2-0_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-modemband_1.0.21-20230914_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/modemband_20230914_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-mmconfig_0.0.5-4_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-sms-tool_1.9.6-20230501_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/internet-detector_1.0-3_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-internet-detector_1.0-1_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-diskman_v0.2.13_all.ipk
