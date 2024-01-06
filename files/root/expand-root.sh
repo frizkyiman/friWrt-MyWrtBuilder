@@ -44,3 +44,4 @@ cat << "EOF" >> /etc/sysupgrade.conf
 /etc/uci-defaults/70-rootpt-resize
 /etc/uci-defaults/80-rootfs-resize
 EOF
+rm "$0"
