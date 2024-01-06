@@ -36,7 +36,7 @@ if [ -n "$WIFI_PASSWORD" ]; then
 else
     echo "Wifi password is not set, skipping..."
 fi
-sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].ssid=\"$WIFI_SSID\"" files/etc/uci-defaults/99-init-settings.sh
+sed -i "/configure WLAN/ a\uci set wireless.@wifi-iface[0].ssid=\"$WIFI_SSID\"" files/etc/uci-defaults/99-init-settings.sh
 }
 
 # custom script files urls
