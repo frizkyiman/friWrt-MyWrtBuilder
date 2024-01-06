@@ -32,9 +32,9 @@ uci set network.lan.ipaddr="192.168.1.1"
 uci set network.wan1=interface
 uci set network.wan1.proto='dhcp'
 uci set network.wan1.device='eth1'
-uci set network.wan2=interface
-uci set network.wan2.proto='dhcp'
-uci set network.wan2.device='usb0'
+uci set network.tethering=interface
+uci set network.tethering.proto='dhcp'
+uci set network.tethering.device='usb0'
 uci commit network
 /etc/init.d/network restart
 
@@ -45,7 +45,7 @@ uci delete dhcp.lan.ndp
 uci commit dhcp
 /etc/init.d/dnsmasq restart
 
-uci set firewall.@zone[1].network='wan wan1 wan2'
+uci set firewall.@zone[1].network='wan wan1 tethering'
 uci commit firewall
 
 # configure WLAN
