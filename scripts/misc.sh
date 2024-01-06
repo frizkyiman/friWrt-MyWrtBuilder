@@ -7,13 +7,13 @@ echo "Current Path: $PWD"
 {
 if [[ "${RELEASE_BRANCH%:*}" == "openwrt" ]]; then
     echo "$RELEASE_BRANCH"
-    sed -i '/reboot/ i\mv \/www\/luci-static\/resources\/view\/status\/include\/29_temp.js \/www\/luci-static\/resources\/view\/status\/include\/17_temp.js' files/etc/uci-defaults/99-init-settings.sh
+    sed -i '/setup misc settings/ i\mv \/www\/luci-static\/resources\/view\/status\/include\/29_temp.js \/www\/luci-static\/resources\/view\/status\/include\/17_temp.js' files/etc/uci-defaults/99-init-settings.sh
 elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
     echo "$RELEASE_BRANCH"
     if [[ "$(echo "${RELEASE_BRANCH#*:}" | awk -F '.' '{print $1}')" == "23" ]]; then
         cp packages/luci-app-oled_1.0_all.ipk files/root/luci-app-oled_1.0_all.ipk
-        sed -i '/reboot/ i\opkg install /root/luci-app-oled_1.0_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
-        sed -i '/reboot/ i\rm /root/luci-app-oled_1.0_all.ipk' files/etc/uci-defaults/99-init-settings.sh
+        sed -i '/setup misc settings/ i\opkg install /root/luci-app-oled_1.0_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
+        sed -i '/setup misc settings/ i\rm /root/luci-app-oled_1.0_all.ipk' files/etc/uci-defaults/99-init-settings.sh
     fi
 fi
 }
