@@ -7,13 +7,13 @@ echo "Current Path: $PWD"
 {
 if [[ "${RELEASE_BRANCH%:*}" == "openwrt" ]]; then
     echo "$RELEASE_BRANCH"
-    sed -i '/setup misc settings/ i\mv \/www\/luci-static\/resources\/view\/status\/include\/29_temp.js \/www\/luci-static\/resources\/view\/status\/include\/17_temp.js' files/etc/uci-defaults/99-init-settings.sh
+    sed -i '/#setup misc settings/ i\mv \/www\/luci-static\/resources\/view\/status\/include\/29_temp.js \/www\/luci-static\/resources\/view\/status\/include\/17_temp.js' files/etc/uci-defaults/99-init-settings.sh
 elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
     echo "$RELEASE_BRANCH"
     if [[ "$(echo "${RELEASE_BRANCH#*:}" | awk -F '.' '{print $1}')" == "23" ]]; then
         cp packages/luci-app-oled_1.0_all.ipk files/root/luci-app-oled_1.0_all.ipk
-        sed -i '/setup misc settings/ i\opkg install /root/luci-app-oled_1.0_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
-        sed -i '/setup misc settings/ i\rm /root/luci-app-oled_1.0_all.ipk' files/etc/uci-defaults/99-init-settings.sh
+        sed -i '/#setup misc settings/ i\opkg install /root/luci-app-oled_1.0_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
+        sed -i '/#setup misc settings/ i\rm /root/luci-app-oled_1.0_all.ipk' files/etc/uci-defaults/99-init-settings.sh
     fi
 fi
 }
@@ -31,12 +31,12 @@ echo "Wifi SSID was set: $WIFI_SSID"
 
 if [ -n "$WIFI_PASSWORD" ]; then
     echo "Wifi password was set: $WIFI_PASSWORD"
-    sed -i "/configure WLAN/ a\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
-    sed -i "/configure WLAN/ a\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
+    sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
+    sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
 else
     echo "Wifi password is not set, skipping..."
 fi
-sed -i "/configure WLAN/ a\uci set wireless.@wifi-iface[0].ssid=\"$WIFI_SSID\"" files/etc/uci-defaults/99-init-settings.sh
+sed -i "/#configure WLAN/ a\uci set wireless.@wifi-iface[0].ssid=\"$WIFI_SSID\"" files/etc/uci-defaults/99-init-settings.sh
 }
 
 # custom script files urls
