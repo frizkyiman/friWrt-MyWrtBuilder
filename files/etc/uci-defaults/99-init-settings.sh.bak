@@ -48,7 +48,7 @@ uci commit dhcp
 uci set firewall.@zone[1].network='wan wan1 tethering'
 uci commit firewall
 
-#configure WLAN
+# configure WLAN
 uci set wireless.@wifi-iface[0].mode='ap'
 uci set wireless.@wifi-device[0].disabled='0'
 uci set wireless.@wifi-device[0].country='ID'
@@ -140,7 +140,7 @@ sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-disks-info.json
 sed -i 's/services/status/g' /usr/share/luci/menu.d/luci-app-log.json
 sed -i 's/services/modem/g' /usr/share/luci/menu.d/luci-app-lite-watchdog.json
 
-#setup misc settings
+# setup misc settings
 sed -i '/exit 0/i /usr/bin/patchoc.sh' /etc/rc.local
 sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
 sed -i 's/\[ -n "$FAILSAFE" \] && cat \/etc\/banner.failsafe/& || \/usr\/bin\/neofetch/' /etc/profile
@@ -157,7 +157,7 @@ chmod +x /usr/bin/clock
 chmod +x /usr/bin/mount_hdd
 chmod +x /usr/bin/speedtest
 
-#configurating openclash
+# configurating openclash
 
 # adding new line for enable i2c oled display
 echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
