@@ -205,12 +205,12 @@ jobs:
           cd $WORKING_DIR
           mkdir -p compiled_images
           if [ "$TUNNEL" == "all" ]; then
-            for t in openclash-passwall openclash passwall; do
+            for t in openclash-passwall openclash passwall none; do
               echo "Compiling with tunnel: $t"
               if [ "$CLEAN" == "true" ]; then make clean; fi
               time bash $BUILD_SH $PROFILE $t
               rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,sha256sums}
-              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)_${t}_$DATE.img.gz; done
+              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( [[ "$t" == "none" ]] && echo "" || echo "_$t" )_$DATE.img.gz; done
             done
           else
             bash $BUILD_SH $PROFILE $t
