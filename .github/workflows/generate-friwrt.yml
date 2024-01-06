@@ -213,7 +213,7 @@ jobs:
           else
             bash $BUILD_SH $PROFILE $t
             rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,sha256sums}
-            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)_${TUNNEL}_$DATE.img.gz; done
+            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( [[ "$TUNNEL" == "none" ]] && echo "" || echo "_$TUNNEL" )_$DATE.img.gz; done
           fi
           sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
           ls compiled_images
@@ -236,5 +236,5 @@ jobs:
             - Default IP: 192.168.1.1
             - Default username: root
             - Default password: ${{ env.LOGIN_PASSWORD || 'none' }}
-            - Default WIFI name: ${{ env.WIFI_SSID }}
-            - Default WIFI password: ${{ env.WIFI_PASSWORD || 'none' }}
+            - Default WIFI name: ${{ env.WIFI_SSID }} (if device supported)
+            - Default WIFI password: ${{ env.WIFI_PASSWORD || 'none' }} (if device supported)
