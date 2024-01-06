@@ -178,11 +178,9 @@ jobs:
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
               echo "Tunnel option: $TUNNEL"
               bash scripts/tunnel_app.sh openclash-passwall
-              ls packages
           elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
               echo "tunnel option: $TUNNEL"
               bash scripts/tunnel_app.sh "$TUNNEL"
-              ls packages
           elif [ "$TUNNEL" = "none" ]; then
               echo "Tunnel not selected"
           else
@@ -190,6 +188,7 @@ jobs:
               exit 1
           fi
           if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall" ]; then bash scripts/clash-core.sh; fi
+          ls packages
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
