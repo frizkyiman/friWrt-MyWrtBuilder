@@ -167,5 +167,6 @@ bash /usr/bin/adguardhome enable
 
 sh /root/expand-root.sh
 sh /etc/uci-defaults/70-rootpt-resize
+reboot
 
 exit 0
