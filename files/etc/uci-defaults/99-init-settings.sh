@@ -165,7 +165,4 @@ echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
 chmod +x /usr/bin/adguardhome
 bash /usr/bin/adguardhome enable
 
-sh /root/expand-root.sh
-sh /etc/uci-defaults/70-rootpt-resize
-
 exit 0
