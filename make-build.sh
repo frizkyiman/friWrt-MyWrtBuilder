@@ -57,9 +57,9 @@ elif [ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]; then
     misc=""
 fi
 
-if[ "$PROFILE" == "rpi-4" ]; then
+if [ "$PROFILE" == "rpi-4" ]; then
     misc="kmod-i2c-bcm2835 i2c-tools kmod-i2c-core kmod-i2c-gpio luci-app-oled"
-if[ "$PROFILE" == "generic" ]; then
+elif [ "$PROFILE" == "generic" ]; then
     misc=""
 fi
 PACKAGES="$PACKAGES $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop luci-app-watchcat bash curl tar unzip unrar jq luci-app-ttyd nano git git-http"
