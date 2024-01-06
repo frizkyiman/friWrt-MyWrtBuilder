@@ -27,6 +27,7 @@ elif [ "$1" == "passwall" ]; then
     wget "$passwall_ipk" -nv -P packages
     wget "${passwall_ipk_packages[@]}" -nv -P packages
     unzip -qq packages/"$passwall_file" -d packages && rm packages/"$passwall_file"
+    rm files/usr/bin/patchoc.sh
 elif [ "$1" == "openclash-passwall" ]; then
     echo "Installing Openclash and Passwall"
     echo "Downloading Openclash packages"
