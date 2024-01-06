@@ -186,6 +186,8 @@ jobs:
               echo "tunnel option: $TUNNEL"
               bash scripts/tunnel_app.sh "$TUNNEL"
               ls packages
+          elif [ "$TUNNEL" = "none" ]; then
+              echo "Tunnel not selected"
           else
               echo "Cannot install Passwall on older branch $BRANCH !"
               exit 1
