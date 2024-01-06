@@ -141,7 +141,6 @@ sed -i 's/services/status/g' /usr/share/luci/menu.d/luci-app-log.json
 sed -i 's/services/modem/g' /usr/share/luci/menu.d/luci-app-lite-watchdog.json
 
 # setup misc settings
-sed -i '/exit 0/i /usr/bin/patchoc.sh' /etc/rc.local
 sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
 sed -i 's/\[ -n "$FAILSAFE" \] && cat \/etc\/banner.failsafe/& || \/usr\/bin\/neofetch/' /etc/profile
 
