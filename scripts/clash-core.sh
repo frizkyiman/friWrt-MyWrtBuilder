@@ -20,6 +20,8 @@ sed -i "/# configurating openclash/ a\bash /usr/bin/patchoc.sh" files/etc/uci-de
 sed -i "/# configurating openclash/ a\chmod +x /etc/openclash/core/clash" files/etc/uci-defaults/99-init-settings.sh
 sed -i "/# configurating openclash/ a\chmod +x /etc/openclash/core/clash_tun" files/etc/uci-defaults/99-init-settings.sh
 sed -i "/# configurating openclash/ a\chmod +x /etc/openclash/core/clash_meta" files/etc/uci-defaults/99-init-settings.sh
+sed -i "/# configurating openclash/ a\chmod +x /usr/bin/patchoc.sh" files/etc/uci-defaults/99-init-settings.sh
+sed -i "/# configurating openclash/ a\sed -i '\/exit 0\/i \/usr\/bin\/patchoc.sh' /etc/rc.local" files/etc/uci-defaults/99-init-settings.sh
 
 echo "Start Clash Core Download !"
 #core download url
