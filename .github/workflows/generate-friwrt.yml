@@ -32,10 +32,6 @@ on:
           - immortalwrt:snapshots
           - immortalwrt:21.02.7
           - immortalwrt:23.05.1
-      rootfs:
-        description: 'Set "/" partition size (1GB = 1024 Mb):'
-        required: true
-        default: '5120'
       squashfs:
         description: "Generate squashfs image"
         required: true
@@ -69,7 +65,6 @@ on:
 env:
   TARGET: ${{ inputs.target }}
   RELEASE_BRANCH: ${{ inputs.release_branch }}
-  ROOTFS_SIZE: ${{ inputs.rootfs}}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   TUNNEL: ${{ inputs.tunnel }}
   LOGIN_PASSWORD: ${{ inputs.login_password }}
@@ -178,6 +173,8 @@ jobs:
         run: |
           cd $WORKING_DIR
           bash $PATCH_SH
+          bash scripts/agh-core.sh
+          bash scripts/misc.sh
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
               echo "Tunnel option: $TUNNEL"
               bash scripts/tunnel_app.sh openclash-passwall
@@ -193,8 +190,6 @@ jobs:
               exit 1
           fi
           if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall" ]; then bash scripts/clash-core.sh; fi
-          bash scripts/agh-core.sh
-          bash scripts/misc.sh
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
