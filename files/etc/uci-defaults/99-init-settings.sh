@@ -5,17 +5,20 @@ exec > /root/setup.log 2>&1
 # dont remove!
 sed -i "s#_('Firmware Version'),(L.isObject(boardinfo.release)?boardinfo.release.description+' / ':'')+(luciversion||''),#_('Firmware Version'),(L.isObject(boardinfo.release)?boardinfo.release.description+' build by friWrt ':''),#g" /www/luci-static/resources/view/status/include/10_system.js
 if grep -q "ImmortalWrt" /etc/openwrt_release; then
-    sed -i "s/\(DISTRIB_DESCRIPTION='ImmortalWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
-    echo Branch version: "$(grep 'DISTRIB_DESCRIPTION=' /etc/openwrt_release | awk -F"'" '{print $2}')"
+  sed -i "s/\(DISTRIB_DESCRIPTION='ImmortalWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
+  echo Branch version: "$(grep 'DISTRIB_DESCRIPTION=' /etc/openwrt_release | awk -F"'" '{print $2}')"
 elif grep -q "OpenWrt" /etc/openwrt_release; then
-    sed -i "s/\(DISTRIB_DESCRIPTION='OpenWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
-    echo Branch version: "$(grep 'DISTRIB_DESCRIPTION=' /etc/openwrt_release | awk -F"'" '{print $2}')"
+  sed -i "s/\(DISTRIB_DESCRIPTION='OpenWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
+  echo Branch version: "$(grep 'DISTRIB_DESCRIPTION=' /etc/openwrt_release | awk -F"'" '{print $2}')"
 fi
+
+# Set login root password
+(echo "friwrt"; sleep 1; echo "friwrt") | passwd > /dev/null
 
 # Set hostname and Timezone to Asia/Jakarta
 uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
-uci delete system.ntp.server
+uci -q delete system.ntp.server
 uci add_list system.ntp.server="pool.ntp.org"
 uci add_list system.ntp.server="id.pool.ntp.org"
 uci add_list system.ntp.server="time.google.com"
@@ -36,23 +39,23 @@ uci set network.tethering=interface
 uci set network.tethering.proto='dhcp'
 uci set network.tethering.device='usb0'
 uci commit network
-/etc/init.d/network restart
 
 # configure ipv6
 uci -q delete dhcp.lan.dhcpv6
 uci -q delete dhcp.lan.ra
-uci delete dhcp.lan.ndp
+uci -q delete dhcp.lan.ndp
 uci commit dhcp
-/etc/init.d/dnsmasq restart
 
 uci set firewall.@zone[1].network='wan wan1 tethering'
 uci commit firewall
 
 # configure WLAN
-uci set wireless.@wifi-iface[0].mode='ap'
 uci set wireless.@wifi-device[0].disabled='0'
+uci set wireless.@wifi-iface[0].disabled='0'
+uci set wireless.@wifi-iface[0].encryption='psk2'
+uci set wireless.@wifi-iface[0].ssid='friWrt'
+uci set wireless.@wifi-iface[0].key='friwrt2023'
 uci set wireless.@wifi-device[0].country='ID'
-uci set wireless.@wifi-device[0].htmode='VHT40'
 uci set wireless.@wifi-device[0].channel='161'
 uci commit wireless
 
@@ -84,7 +87,7 @@ echo '#auto restart for modem rakitan once a week'  >> /etc/crontabs/root
 echo '30 3 * * 0 echo  AT^RESET | atinout - /dev/ttyUSB0 - && sleep 20 && ifdown wan && ifup wan'  >> /etc/crontabs/root
 
 # Remove watchcat default config
-uci delete watchcat.@watchcat[0]
+uci -q delete watchcat.@watchcat[0]
 uci commit
 
 # setting firewall for samba4
@@ -133,7 +136,7 @@ chmod +x /etc/init.d/vnstat_backup
 bash /etc/init.d/vnstat_backup enable
 
 # adjusting app catagory
-sed -i 's/services/nas/g' /usr/lib/lua/luci/controller/aria2.lua || sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-aria2.json
+sed -i 's/services/nas/g' /usr/lib/lua/luci/controller/aria2.lua 2>/dev/null || sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-aria2.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-samba4.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-hd-idle.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-disks-info.json
@@ -164,5 +167,7 @@ echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
 # enable adguardhome
 chmod +x /usr/bin/adguardhome
 bash /usr/bin/adguardhome enable
+
+echo "All done!"
 
 exit 0
