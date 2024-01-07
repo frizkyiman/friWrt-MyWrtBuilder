@@ -26,50 +26,37 @@ on:
         default: "openwrt:23.05.2"
         type: choice
         options:
-          - openwrt:snapshots
           - openwrt:21.02.7
           - openwrt:23.05.2
-          - immortalwrt:snapshots
           - immortalwrt:21.02.7
           - immortalwrt:23.05.1
-      squashfs:
-        description: "Generate squashfs image"
-        required: true
-        default: "false"
-        type: boolean
       tunnel:
         description: "Select tunnel app (passwall only support for newer branch with fw4 firewall!):"
         required: true
-        default: "openclash"
+        default: "all"
         type: choice
         options:
           - all
-          - none
           - openclash
           - passwall
           - openclash-passwall
+          - no-tunnel
       clean:
         description: "Do 'make clean' for each run"
-        required: true
+        required: false
         default: "true"
         type: boolean
-      login_password: 
-        description: "Set Login password:"
+      squashfs:
+        description: "Generate squashfs image"
         required: false
-        default: 'friwrt'
-      wifi_password: 
-        description: "Set WiFi password (8 characters minimum):"
-        required: false
-        default: 'friwrt2023'
+        default: "false"
+        type: boolean
 
 env:
   TARGET: ${{ inputs.target }}
   RELEASE_BRANCH: ${{ inputs.release_branch }}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   TUNNEL: ${{ inputs.tunnel }}
-  LOGIN_PASSWORD: ${{ inputs.login_password }}
-  WIFI_SSID: friWrt_5g
-  WIFI_PASSWORD: ${{ inputs.wifi_password }}
   CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
 
@@ -86,57 +73,49 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          if [ "$TARGET" == "Raspberry Pi 1B" ]; then
-            DEVICE="rpi-1"
-            TARGET_1="bcm27xx/bcm2708"
-            TARGET_2="bcm27xx-bcm2708"
-            ARCH_1="armv6"
-            ARCH_2="arm"
-            ARCH_3="arm_arm1176jzf-s_vfp"
-          elif [ "$TARGET" == "Raspberry Pi 2B" ]; then
-            DEVICE="rpi-2"
-            TARGET_1="bcm27xx/bcm2709"
-            TARGET_2="bcm27xx-bcm2709"
-            ARCH_1="armv7"
-            ARCH_2="arm"
-            ARCH_3="arm_cortex-a7_neon-vfpv4"
-          elif [ "$TARGET" == "Raspberry Pi 3B" ]; then
-            DEVICE="rpi-3"
-            TARGET_1="bcm27xx/bcm2710"
-            TARGET_2="bcm27xx-bcm2710"
-            ARCH_1="armv7"
-            ARCH_2="aarch64"
-            ARCH_3="aarch64_cortex-a53"
-          elif [ "$TARGET" == "Raspberry Pi 4B" ]; then
-            DEVICE="rpi-4"
-            TARGET_1="bcm27xx/bcm2711"
-            TARGET_2="bcm27xx-bcm2711"
-            ARCH_1="arm64"
-            ARCH_2="aarch64"
-            ARCH_3="aarch64_cortex-a72"
-          elif [ "$TARGET" == "x86-64" ]; then
-            DEVICE="generic"
-            TARGET_1="x86/64"
-            TARGET_2="x86-64"
-            ARCH_1="amd64"
-            ARCH_2="x86_64"
-            ARCH_3="x86_64"
-          fi
-          echo "BUILD_SH=make-build.sh" >> $GITHUB_ENV
-          echo "PATCH_SH=scripts/builder-patch.sh" >> $GITHUB_ENV
           echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$TARGET_2".Linux-x86_64" >> $GITHUB_ENV
           echo "DOWNLOAD_BASE=https://downloads."${RELEASE_BRANCH%:*}".org" >> $GITHUB_ENV
           echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
           echo "BRANCH=${RELEASE_BRANCH#*:}" >> $GITHUB_ENV
           echo "tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "21.02" )" >> $GITHUB_ENV
-          echo "PROFILE=$DEVICE" >> $GITHUB_ENV
-          echo "TARGET_SYSTEM=$TARGET_1" >> $GITHUB_ENV
-          echo "TARGET_NAME=$TARGET_2" >> $GITHUB_ENV
-          echo "ARCH=$ARCH_1" >> $GITHUB_ENV
-          echo "ARCH_2=$ARCH_2" >> $GITHUB_ENV
-          echo "ARCH_3=$ARCH_3" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
+          if [ "$TARGET" == "Raspberry Pi 1B" ]; then
+            echo "PROFILE=rpi-1" >> $GITHUB_ENV
+            echo "TARGET_SYSTEM=bcm27xx/bcm2708" >> $GITHUB_ENV
+            echo "TARGET_NAME=bcm27xx-bcm2708" >> $GITHUB_ENV
+            echo "ARCH_1=armv6" >> $GITHUB_ENV
+            echo "ARCH_2=arm" >> $GITHUB_ENV
+            echo "ARCH_3=arm_arm1176jzf-s_vfp" >> $GITHUB_ENV
+          elif [ "$TARGET" == "Raspberry Pi 2B" ]; then
+            echo "PROFILE=rpi-2" >> $GITHUB_ENV
+            echo "TARGET_SYSTEM=bcm27xx/bcm2709" >> $GITHUB_ENV
+            echo "TARGET_NAME=bcm27xx-bcm2709" >> $GITHUB_ENV
+            echo "ARCH_1=armv7" >> $GITHUB_ENV
+            echo "ARCH_2=arm" >> $GITHUB_ENV
+            echo "ARCH_3=arm_cortex-a7_neon-vfpv4" >> $GITHUB_ENV
+          elif [ "$TARGET" == "Raspberry Pi 3B" ]; then
+            echo "PROFILE=rpi-3" >> $GITHUB_ENV
+            echo "TARGET_SYSTEM=bcm27xx/bcm2710" >> $GITHUB_ENV
+            echo "TARGET_NAME=bcm27xx-bcm2710" >> $GITHUB_ENV
+            echo "ARCH_1=armv7" >> $GITHUB_ENV
+            echo "ARCH_2=aarch64" >> $GITHUB_ENV
+            echo "ARCH_3=aarch64_cortex-a53" >> $GITHUB_ENV
+          elif [ "$TARGET" == "Raspberry Pi 4B" ]; then
+            echo "PROFILE=rpi-4" >> $GITHUB_ENV
+            echo "TARGET_SYSTEM=bcm27xx/bcm2711" >> $GITHUB_ENV
+            echo "TARGET_NAME=bcm27xx-bcm2711" >> $GITHUB_ENV
+            echo "ARCH_1=arm64" >> $GITHUB_ENV
+            echo "ARCH_2=aarch64" >> $GITHUB_ENV
+            echo "ARCH_3=aarch64_cortex-a72" >> $GITHUB_ENV
+          elif [ "$TARGET" == "x86-64" ]; then
+            echo "PROFILE=generic" >> $GITHUB_ENV
+            echo "TARGET_SYSTEM=x86/64" >> $GITHUB_ENV
+            echo "TARGET_NAME=x86-64" >> $GITHUB_ENV
+            echo "ARCH_1=amd64" >> $GITHUB_ENV
+            echo "ARCH_2x86_64" >> $GITHUB_ENV
+            echo "ARCH_3=x86_64" >> $GITHUB_ENV
+          fi
       
       - name: Checkout
         uses: actions/checkout@v3
@@ -146,9 +125,8 @@ jobs:
       - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
         id: download
         run: |
-          SNAPSHOTS="$DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz"
           RELEASE="$DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz"
-          [ "$BRANCH" == "snapshots" ] && wget -nv "$SNAPSHOTS" || wget -nv "$RELEASE"
+          wget -nv "$RELEASE"
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
@@ -158,11 +136,11 @@ jobs:
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          [ "$ARCH" == "amd64" ] && ARCH=x86
+          [ "$ARCH_1" == "amd64" ] && ARCH_1=x86
           if [[ "$BRANCH" == "21.02.7" ]]; then
-             grep -E "^all-all|^old-$tags|^$ARCH-$tags" external-package-urls.txt | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^old-$tags|^$ARCH_1-$tags" external-package-urls.txt | awk '{print $2}' > output_url.txt
           else
-             grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^all|^$ARCH_1" external-package-urls.txt | grep -vE "^$ARCH_1-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
           echo "status=success" >> $GITHUB_OUTPUT
@@ -172,7 +150,7 @@ jobs:
         if: steps.packages.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          bash $PATCH_SH
+          bash scripts/builder-patch.sh
           bash scripts/agh-core.sh
           bash scripts/misc.sh
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
@@ -181,7 +159,7 @@ jobs:
           elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
               echo "tunnel option: $TUNNEL"
               bash scripts/tunnel_app.sh "$TUNNEL"
-          elif [ "$TUNNEL" = "none" ]; then
+          elif [ "$TUNNEL" = "no-tunnel" ]; then
               echo "Tunnel not selected"
           else
               echo "Cannot install Passwall on older branch $BRANCH !"
@@ -199,17 +177,17 @@ jobs:
           cd $WORKING_DIR
           mkdir -p compiled_images
           if [ "$TUNNEL" == "all" ]; then
-            for t in openclash-passwall openclash passwall none; do
+            for t in openclash-passwall openclash passwall no-tunnel; do
               echo "Compiling with tunnel: $t"
               if [ "$CLEAN" == "true" ]; then make clean; fi
-              time bash $BUILD_SH $PROFILE $t
+              time bash make-build.sh $PROFILE $t
               rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,sha256sums}
-              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( [[ "$t" == "none" ]] && echo "" || echo "_$t" )_$DATE.img.gz; done
+              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
             done
           else
-            bash $BUILD_SH $PROFILE $t
+            bash make-build.sh $PROFILE $t
             rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,sha256sums}
-            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( [[ "$TUNNEL" == "none" ]] && echo "" || echo "_$TUNNEL" )_$DATE.img.gz; done
+            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )_$DATE.img.gz; done
           fi
           sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
           ls compiled_images
