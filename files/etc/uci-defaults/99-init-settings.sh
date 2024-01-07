@@ -59,6 +59,7 @@ uci set wireless.@wifi-iface[0].key='friwrt2023'
 uci set wireless.@wifi-device[0].country='ID'
 uci set wireless.@wifi-device[0].channel='161'
 uci commit wireless
+/etc/init.d/wireless restart
 
 # remove huawei me909s usb-modeswitch
 sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
@@ -147,6 +148,9 @@ sed -i 's/services/modem/g' /usr/share/luci/menu.d/luci-app-lite-watchdog.json
 # setup misc settings
 sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
 sed -i 's/\[ -n "$FAILSAFE" \] && cat \/etc\/banner.failsafe/& || \/usr\/bin\/neofetch/' /etc/profile
+sed -i '/exit 0/i # Auto mount disk drive on startup' /etc/rc.local
+sed -i '/exit 0/i # change to your drive path and uncomment below' /etc/rc.local
+sed -i '/exit 0/i # mount_hdd /dev/sda1 /mnt/sda1' /etc/rc.local
 
 echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
 echo '0 12 * * * /sbin/sync_time.sh circles.asia' >> /etc/crontabs/root
