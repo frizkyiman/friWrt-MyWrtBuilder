@@ -165,7 +165,7 @@ jobs:
           elif [ "$TUNNEL" = "no-tunnel" ]; then
               echo "Tunnel not selected"
           fi
-          if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall" ]; then bash scripts/clash-core.sh; fi
+          if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; fi
           ls packages
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
