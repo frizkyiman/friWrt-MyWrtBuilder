@@ -3,10 +3,10 @@ config samba
 	option charset 'UTF-8'
 	option description 'Samba on OpenWRT'
 
-#config sambashare
-#	option name 'NAS-STORAGE'
-#	option path '/mnt/sda1'
-#	option read_only 'no'
-#	option guest_ok 'yes'
-#	option create_mask '0777'
-#	option dir_mask '0777'
+config sambashare
+	option name 'NAS-STORAGE'
+	option path '/mnt/sda1'
+	option read_only 'no'
+	option guest_ok 'yes'
+	option create_mask '0755'
+	option dir_mask '0755'
