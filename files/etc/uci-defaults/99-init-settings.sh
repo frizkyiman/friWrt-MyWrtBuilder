@@ -16,6 +16,7 @@ fi
 (echo "friwrt"; sleep 1; echo "friwrt") | passwd > /dev/null
 
 # Set hostname and Timezone to Asia/Jakarta
+uci set system.@system[0].hostname='friWrt'
 uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
 uci -q delete system.ntp.server
