@@ -16,6 +16,11 @@ elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
     fi
 fi
 
+if [[ "$PROFILE" !== "generic" ]]; then
+sed -i "/uci commit wireless/ a\wifi up" files/etc/uci-defaults/99-init-settings.sh
+sed -i "/uci commit wireless/ a\sed -i '\/exit 0\/i wifi up' /etc/rc.local" files/etc/uci-defaults/99-init-settings.sh
+fi
+
 # custom script files urls
 echo "Downloading custom script" 
 speedtest="https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
