@@ -3,7 +3,7 @@
 echo "Start Downloading Misc files and setup configuration!"
 echo "Current Path: $PWD"
 
-#setup custom setting for openwrt or immortalwrt
+#setup custom setting for openwrt and immortalwrt
 if [[ "${RELEASE_BRANCH%:*}" == "openwrt" ]]; then
     echo "$RELEASE_BRANCH"
     sed -i '/# setup misc settings/ a\mv \/www\/luci-static\/resources\/view\/status\/include\/29_temp.js \/www\/luci-static\/resources\/view\/status\/include\/17_temp.js' files/etc/uci-defaults/99-init-settings.sh
@@ -14,25 +14,6 @@ elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
         sed -i '/# setup misc settings/ a\opkg install /root/luci-app-oled_1.0_all.ipk --force-reinstall' files/etc/uci-defaults/99-init-settings.sh
         sed -i '/# setup misc settings/ a\rm /root/luci-app-oled_1.0_all.ipk' files/etc/uci-defaults/99-init-settings.sh
     fi
-fi
-
-# setup login/wifi password information
-if [ -n "$LOGIN_PASSWORD" ]; then
-    echo "Login password was set: $LOGIN_PASSWORD"
-    sed -i "/exec > \/root\/setup.log 2>&1/ a\\(echo "$LOGIN_PASSWORD"; sleep 1; echo "$LOGIN_PASSWORD") | passwd > /dev/null\\" files/etc/uci-defaults/99-init-settings.sh
-else
-    echo "Login password is not set, skipping..."
-fi
-
-echo "Wifi SSID was set: $WIFI_SSID"
-sed -i "/# configure WLAN/ a\uci set wireless.@wifi-iface[0].ssid=\"$WIFI_SSID\"" files/etc/uci-defaults/99-init-settings.sh
-
-if [ -n "$WIFI_PASSWORD" ]; then
-    echo "Wifi password was set: $WIFI_PASSWORD"
-    sed -i "/# configure WLAN/ a\uci set wireless.@wifi-iface[0].encryption='psk2'" files/etc/uci-defaults/99-init-settings.sh
-    sed -i "/# configure WLAN/ a\uci set wireless.@wifi-iface[0].key=\"$WIFI_PASSWORD\"" files/etc/uci-defaults/99-init-settings.sh
-else
-    echo "Wifi password is not set, skipping..."
 fi
 
 # custom script files urls
