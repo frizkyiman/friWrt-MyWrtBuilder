@@ -106,7 +106,7 @@ jobs:
             echo "TARGET_SYSTEM=x86/64" >> $GITHUB_ENV
             echo "TARGET_NAME=x86-64" >> $GITHUB_ENV
             echo "ARCH_1=amd64" >> $GITHUB_ENV
-            echo "ARCH_2x86_64" >> $GITHUB_ENV
+            echo "ARCH_2=x86_64" >> $GITHUB_ENV
             echo "ARCH_3=x86_64" >> $GITHUB_ENV
           fi
           echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$TARGET_NAME".Linux-x86_64" >> $GITHUB_ENV
