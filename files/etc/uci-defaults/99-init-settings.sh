@@ -59,7 +59,6 @@ uci set wireless.@wifi-iface[0].key='friwrt2023'
 uci set wireless.@wifi-device[0].country='ID'
 uci set wireless.@wifi-device[0].channel='161'
 uci commit wireless
-/etc/init.d/wireless restart
 
 # remove huawei me909s usb-modeswitch
 sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
