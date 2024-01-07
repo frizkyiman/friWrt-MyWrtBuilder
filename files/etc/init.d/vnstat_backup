@@ -13,7 +13,7 @@ vnstat_option() {
 	sed -ne "s/^[[:space:]]*$1[[:space:]]*['\"]\([^'\"]*\)['\"].*/\1/p" /etc/vnstat.conf
 }
  
-BACKUP_FILE=/etc/vnstat/vnstat_backup.tar.gz
+BACKUP_FILE=/root/vnstat_backup.tar.gz
 LOGGER_TAG=vnstat_backup
 VNSTAT_DIR=/var/lib/vnstat
  
