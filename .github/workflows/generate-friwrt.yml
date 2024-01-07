@@ -181,7 +181,7 @@ jobs:
               echo "Compiling with tunnel option: $t"
               if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
               time bash make-build.sh $PROFILE $t
-              rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*ext4-factory*,sha256sums}
+              rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
               for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
             done
           elif [[ "$TUNNEL" == "all" && "$BRANCH" = "21.02.7" ]]; then
@@ -189,12 +189,12 @@ jobs:
               echo "Compiling with tunnel option: $t"
               if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
               time bash make-build.sh $PROFILE $t
-              rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*ext4-factory*,sha256sums}
+              rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
               for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
             done
           else
             bash make-build.sh $PROFILE $t
-            rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*ext4-factory*,sha256sums}
+            rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
             for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )_$DATE.img.gz; done
           fi
           sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
