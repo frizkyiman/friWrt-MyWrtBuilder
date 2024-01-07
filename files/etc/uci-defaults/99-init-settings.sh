@@ -131,7 +131,7 @@ uci set nlbwmon.@nlbwmon[0].refresh_interval='60s'
 uci commit nlbwmon
 
 # setup vnstat database dir
-sed -i 's/DatabaseDir "\/var\/lib\/vnstat"/DatabaseDir "\/etc\/vnstat"/g' /etc/vnstat.conf
+echo '0 */6 * * * /etc/init.d/vnstat_backup backup' >> /etc/crontabs/root
 chmod +x /etc/init.d/vnstat_backup
 bash /etc/init.d/vnstat_backup enable
 
