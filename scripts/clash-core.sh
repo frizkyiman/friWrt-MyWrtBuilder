@@ -28,6 +28,7 @@ echo "Start Clash Core Download !"
 clash="https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-$ARCH_1.tar.gz"
 clash_meta="$(meta_api="https://api.github.com/repos/MetaCubeX/mihomo/releases/latest" && meta_file="mihomo-linux-$ARCH_1" && curl -s ${meta_api} | grep "browser_download_url" | grep -oE "https.*${meta_file}-v[0-9]+\.[0-9]+\.[0-9]+\.gz" | head -n 1)"
 clash_tun="https://github.com/vernesong/OpenClash/raw/core/master/premium/$(curl -s "https://github.com/vernesong/OpenClash/tree/core/master/premium" | grep -o "clash-linux-$ARCH_1-[0-9]*\.[0-9]*\.[0-9]*-[0-9]*-[a-zA-Z0-9]*\.gz" | awk 'NR==1 {print $1}')"
+clash_meta_17="https://github.com/MetaCubeX/mihomo/releases/download/v1.17.0/mihomo-linux-$ARCH_1-v1.17.0.gz"
 
 mkdir -p files/etc/openclash/core
 cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
@@ -41,7 +42,8 @@ else
 fi
    
 echo "Downloading clash_meta.gz..."
-if wget --no-check-certificate -nv -O clash_meta.gz $clash_meta; then
+#if wget --no-check-certificate -nv -O clash_meta.gz $clash_meta; then
+if wget --no-check-certificate -nv -O clash_meta.gz $clash_meta_17; then
    gzip -d clash_meta.gz
    echo "clash_meta.gz downloaded successfully."
 else
