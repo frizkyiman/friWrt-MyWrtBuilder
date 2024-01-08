@@ -4,7 +4,7 @@
 # Download from: https://downloads.openwrt.org/releases
 #                https://downloads.immortalwrt.org/releases
 #=====================================================================================
-name: (testing) Generate friWrt Firmware
+name: (testing3) Generate friWrt Firmware
 
 on:
   workflow_dispatch:
