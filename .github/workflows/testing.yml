@@ -91,6 +91,7 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
+          echo "TARGET="${{ matrix.target }}" >> $GITHUB_ENV
           if [ "$TARGET" == "Raspberry Pi 1B" ]; then
             echo "PROFILE=rpi-1" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2708" >> $GITHUB_ENV
