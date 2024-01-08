@@ -67,18 +67,15 @@ jobs:
 
     strategy:
       matrix:
+      if: github.event.inputs.target == 'all'
         target:
           - Raspberry Pi 1B
           - Raspberry Pi 2B
           - Raspberry Pi 3B
           - Raspberry Pi 4B
           - x86-64
-
+    
     steps:
-      - name: Set Target
-        if: github.event.inputs.target == 'all'
-        run: echo "::set-env name=TARGET::${{ matrix.target }}"
-      
       - name: Initialization System Environment
         run: |
           sudo apt-get -qq update
