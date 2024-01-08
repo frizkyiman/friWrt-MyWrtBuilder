@@ -149,7 +149,7 @@ sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
 sed -i 's/\[ -n "$FAILSAFE" \] && cat \/etc\/banner.failsafe/& || \/usr\/bin\/neofetch/' /etc/profile
 sed -i '/exit 0/i # Auto mount disk drive on startup' /etc/rc.local
 sed -i '/exit 0/i # change to your drive path and uncomment below' /etc/rc.local
-sed -i '/exit 0/i # mount_hdd /dev/sda1 /mnt/sda1' /etc/rc.local
+sed -i '/exit 0/i #mount_hdd /dev/sda1 /mnt/sda1' /etc/rc.local
 
 echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
 echo '0 12 * * * /sbin/sync_time.sh circles.asia' >> /etc/crontabs/root
@@ -174,7 +174,7 @@ if opkg list | grep openclash > /dev/null; then
   chmod +x /etc/openclash/core/clash_meta
   chmod +x /usr/bin/patchoc.sh
   bash /usr/bin/patchoc.sh
-  sed -i '\/exit 0\/i # \/usr\/bin\/patchoc.sh' /etc/rc.local
+  sed -i '\/exit 0\/i #\/usr\/bin\/patchoc.sh' /etc/rc.local
 fi
 
 # adding new line for enable i2c oled display
