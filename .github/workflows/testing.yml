@@ -54,7 +54,7 @@ on:
         type: boolean
 
 env:
-  TARGET: ${{ inputs.target }}
+  aTARGET: ${{ inputs.target }}
   RELEASE_BRANCH: ${{ inputs.release_branch }}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   TUNNEL: ${{ inputs.tunnel }}
@@ -62,12 +62,26 @@ env:
   TZ: Asia/Jakarta
 
 jobs:
-  Generate:
+  prebuild:
     runs-on: ubuntu-latest
+    outputs:
+      target: ${{ steps.set-matrix.outputs.target }}
+    steps:
+      - id: set-matrix
+        run: |
+          if [ "${{ inputs.target }}" == "all" ]; then
+             echo "::set-output name=target::${{format('['Raspberry Pi 1B', 'Raspberry Pi 2B', 'Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']',github.event.inputs.target)}}"
+          else
+             echo "::set-output name=target::${{format('[{0}]',github.event.inputs.target)}}"
+          fi
+  Generate:
+    needs: prebuild
+    runs-on: ubuntu-latest
+    name: "${{ matrix.target }}"
     strategy:
+      fail-fast: false
       matrix:
-        target: ${{ github.event.inputs.target == 'all' && toJson(['Raspberry Pi 1B', 'Raspberry Pi 2B', 'Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']) || toJson([github.event.inputs.target]) }}
- 
+        TARGET: ${{fromJSON(needs.prebuild.outputs.target)}}
     steps:
       - name: Initialization System Environment
         run: |
