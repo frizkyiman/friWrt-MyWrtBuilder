@@ -66,14 +66,14 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.target }}" == "all" ]; then
-             target=['Raspberry Pi 3B','Raspberry Pi 4B','x86-64']
+             echo "target=['Raspberry Pi 3B','Raspberry Pi 4B','x86-64']" >> $GITHUB_OUTPUT
           else
-             target=${{ inputs.target }}
+             echo "target=${{ inputs.target }}" >> $GITHUB_OUTPUT
           fi
           if [ "${{ inputs.tunnel }}" == "all" ]; then
-             tunnel=['openclash-passwall','openclash','passwall','no-tunnel']
+             echo "tunnel=['openclash-passwall','openclash','passwall','no-tunnel']" >> $GITHUB_OUTPUT
           else
-             tunnel=${{ inputs.tunnel }}
+             echo "tunnel=${{ inputs.tunnel }}" >> $GITHUB_OUTPUT
           fi
   Generate:
     needs: prebuild
@@ -82,8 +82,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ${(needs.prebuild.outputs.target)}
-        tunnel: ${(needs.prebuild.outputs.tunnel)}
+        target: ${{fromJSON(needs.prebuild.outputs.target)}}
+        tunnel: ${{fromJSON(needs.prebuild.outputs.tunnel)}}
     steps:
       - name: Initialization System Environment
         run: |
