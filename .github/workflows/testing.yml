@@ -16,8 +16,6 @@ on:
         type: choice
         options:
           - all
-          - Raspberry Pi 1B
-          - Raspberry Pi 2B
           - Raspberry Pi 3B
           - Raspberry Pi 4B
           - x86-64
@@ -92,21 +90,7 @@ jobs:
       - name: Setup Environment Variables
         run: |
           echo "Device selected: $TARGET"
-          if [ "$TARGET" == "Raspberry Pi 1B" ]; then
-            echo "PROFILE=rpi-1" >> $GITHUB_ENV
-            echo "TARGET_SYSTEM=bcm27xx/bcm2708" >> $GITHUB_ENV
-            echo "TARGET_NAME=bcm27xx-bcm2708" >> $GITHUB_ENV
-            echo "ARCH_1=armv6" >> $GITHUB_ENV
-            echo "ARCH_2=arm" >> $GITHUB_ENV
-            echo "ARCH_3=arm_arm1176jzf-s_vfp" >> $GITHUB_ENV
-          elif [ "$TARGET" == "Raspberry Pi 2B" ]; then
-            echo "PROFILE=rpi-2" >> $GITHUB_ENV
-            echo "TARGET_SYSTEM=bcm27xx/bcm2709" >> $GITHUB_ENV
-            echo "TARGET_NAME=bcm27xx-bcm2709" >> $GITHUB_ENV
-            echo "ARCH_1=armv7" >> $GITHUB_ENV
-            echo "ARCH_2=arm" >> $GITHUB_ENV
-            echo "ARCH_3=arm_cortex-a7_neon-vfpv4" >> $GITHUB_ENV
-          elif [ "$TARGET" == "Raspberry Pi 3B" ]; then
+          if [ "$TARGET" == "Raspberry Pi 3B" ]; then
             echo "PROFILE=rpi-3" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2710" >> $GITHUB_ENV
             echo "TARGET_NAME=bcm27xx-bcm2710" >> $GITHUB_ENV
