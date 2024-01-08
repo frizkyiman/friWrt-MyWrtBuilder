@@ -66,15 +66,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [Raspberry Pi 1B, Raspberry Pi 2B, Raspberry Pi 3B, Raspberry Pi 4B, x86-64]
-        needs: set_target
+        target: ${{ github.event.inputs.target == 'all' && toJson(['Raspberry Pi 1B', 'Raspberry Pi 2B', 'Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']) || toJson([github.event.inputs.target]) }}
  
     steps:
-      - name: Set Target
-        if: github.event.inputs.target == 'all'
-        id: set_target
-        run: echo "::set-output name=matrix::$(echo '[ "Raspberry Pi 1B", "Raspberry Pi 2B", "Raspberry Pi 3B", "Raspberry Pi 4B", "x86-64" ]' | jq -c)"
-    
       - name: Initialization System Environment
         run: |
           sudo apt-get -qq update
