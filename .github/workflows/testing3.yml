@@ -68,7 +68,7 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.target }}" == "all" ]; then
-             echo "target=[Raspberry Pi 3B, Raspberry Pi 4B, x86-64]" >> $GITHUB_OUTPUT
+             echo "target=['Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']" >> $GITHUB_OUTPUT
           else
              echo "target=${{ inputs.target }}" >> $GITHUB_OUTPUT
           fi
