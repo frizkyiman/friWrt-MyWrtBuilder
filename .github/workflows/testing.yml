@@ -70,7 +70,7 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.target }}" == "all" ]; then
-             echo "::set-output name=target::${{format('['Raspberry Pi 1B', 'Raspberry Pi 2B', 'Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']',github.event.inputs.target)}}"
+             echo "::set-output name=target::${{format('['Raspberry Pi 1B','Raspberry Pi 2B','Raspberry Pi 3B','Raspberry Pi 4B','x86-64']',github.event.inputs.target)}}"
           else
              echo "::set-output name=target::${{format('[{0}]',github.event.inputs.target)}}"
           fi
