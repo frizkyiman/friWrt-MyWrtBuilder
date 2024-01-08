@@ -38,7 +38,7 @@ SSID will broadcast 5Ghz network, make sure your device supported!
 - Passwall as alternate tunneling app,
 - DOCKER installed, ready to run container,
 - Aria2 download server,
-- SAMBA4 server for sharing storage ( \\192.168.1.1\nas-storage ),
+- SAMBA4 server for sharing storage ( \ \192.168.1.1\nas-storage ),
 - TinyFm file manager,
 - Internet Detector and Watchcat,
 - vnstat2 and Nlbwmon for Bandwith Monitoring,
