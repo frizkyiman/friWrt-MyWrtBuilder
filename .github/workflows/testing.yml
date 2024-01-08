@@ -61,17 +61,13 @@ env:
   CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
 
-strategy:
-  matrix:
-    target: [Raspberry Pi 1B, Raspberry Pi 2B, Raspberry Pi 3B, Raspberry Pi 4B, x86-64]
-
 jobs:
   Generate:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: ${{ fromJson(needs.set_target.outputs.matrix) }}
-    needs: set_target
+        target: [Raspberry Pi 1B, Raspberry Pi 2B, Raspberry Pi 3B, Raspberry Pi 4B, x86-64]
+        needs: set_target
  
     steps:
       - name: Set Target
