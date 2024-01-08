@@ -66,14 +66,14 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.target }}" == "all" ]; then
-             echo "target=['Raspberry Pi 3B','Raspberry Pi 4B','x86-64']"
+             target=['Raspberry Pi 3B','Raspberry Pi 4B','x86-64']
           else
-             echo "target=${{ inputs.target }}"
+             target=${{ inputs.target }}
           fi
           if [ "${{ inputs.tunnel }}" == "all" ]; then
-             echo "tunnel=['openclash-passwall','openclash','passwall','no-tunnel']"
+             tunnel=['openclash-passwall','openclash','passwall','no-tunnel']
           else
-             echo "tunnel=${{ inputs.tunnel }}"
+             tunnel=${{ inputs.tunnel }}
           fi
   Generate:
     needs: prebuild
