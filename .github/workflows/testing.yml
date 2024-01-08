@@ -70,9 +70,9 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.target }}" == "all" ]; then
-             echo "::set-output name=os::['Raspberry Pi 1B', 'Raspberry Pi 2B', 'Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']"
+             echo "target=['Raspberry Pi 1B', 'Raspberry Pi 2B', 'Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']" >> $GITHUB_OUTPUT
           else
-             echo "::set-output name=target::${{format(github.event.inputs.target)}}"
+             echo "target=${{ inputs.target }}" >> $GITHUB_OUTPUT
           fi
   Generate:
     needs: prebuild
