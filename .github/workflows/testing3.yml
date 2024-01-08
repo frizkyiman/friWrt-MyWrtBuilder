@@ -82,8 +82,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ${{fromJSON(needs.prebuild.outputs.target)}}
-        tunnel: ${{fromJSON(needs.prebuild.outputs.tunnel)}}
+        target: ${(needs.prebuild.outputs.target)}
+        tunnel: ${(needs.prebuild.outputs.tunnel)}
     steps:
       - name: Initialization System Environment
         run: |
