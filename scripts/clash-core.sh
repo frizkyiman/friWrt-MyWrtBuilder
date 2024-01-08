@@ -14,15 +14,6 @@ else
    echo "Failed to download YACD Dashboard"
 fi
 
-sed -i "/# configurating openclash/ a\mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old" files/etc/uci-defaults/99-init-settings.sh
-sed -i "/# configurating openclash/ a\mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd" files/etc/uci-defaults/99-init-settings.sh
-sed -i "/# configurating openclash/ a\bash /usr/bin/patchoc.sh" files/etc/uci-defaults/99-init-settings.sh
-sed -i "/# configurating openclash/ a\chmod +x /etc/openclash/core/clash" files/etc/uci-defaults/99-init-settings.sh
-sed -i "/# configurating openclash/ a\chmod +x /etc/openclash/core/clash_tun" files/etc/uci-defaults/99-init-settings.sh
-sed -i "/# configurating openclash/ a\chmod +x /etc/openclash/core/clash_meta" files/etc/uci-defaults/99-init-settings.sh
-sed -i "/# configurating openclash/ a\chmod +x /usr/bin/patchoc.sh" files/etc/uci-defaults/99-init-settings.sh
-sed -i "/# configurating openclash/ a\sed -i '\/exit 0\/i # \/usr\/bin\/patchoc.sh' /etc/rc.local" files/etc/uci-defaults/99-init-settings.sh
-
 echo "Start Clash Core Download !"
 #core download url
 clash="https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-$ARCH_1.tar.gz"
