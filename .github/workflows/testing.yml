@@ -70,9 +70,9 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.target }}" == "all" ]; then
-             echo "target=['Raspberry Pi 1B', 'Raspberry Pi 2B', 'Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']" >> $GITHUB_OUTPUT
+             echo "TARGET=['Raspberry Pi 1B', 'Raspberry Pi 2B', 'Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']" >> $GITHUB_OUTPUT
           else
-             echo "target=${{ inputs.target }}" >> $GITHUB_OUTPUT
+             echo "TARGET=${{ inputs.target }}" >> $GITHUB_OUTPUT
           fi
   Generate:
     needs: prebuild
@@ -91,7 +91,6 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          echo "TARGET=${{ matrix.target }}" >> $GITHUB_ENV
           if [ "$TARGET" == "Raspberry Pi 1B" ]; then
             echo "PROFILE=rpi-1" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2708" >> $GITHUB_ENV
