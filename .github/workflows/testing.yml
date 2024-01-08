@@ -141,7 +141,7 @@ jobs:
         with: 
           path: origin
 
-      - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
+      - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ matrix.target }}
         id: download
         run: |
           RELEASE="$DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz"
@@ -189,7 +189,7 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
-      - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
+      - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}-${{ matrix.target }}
         id: compile
         if: steps.scripts.outputs.status == 'success' && !cancelled()
         run: |
