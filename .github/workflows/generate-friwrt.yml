@@ -15,8 +15,6 @@ on:
         default: "Raspberry Pi 4B"
         type: choice
         options:
-          - Raspberry Pi 1B
-          - Raspberry Pi 2B
           - Raspberry Pi 3B
           - Raspberry Pi 4B
           - x86-64
@@ -53,7 +51,6 @@ on:
         type: boolean
 
 env:
-  TARGET: ${{ inputs.target }}
   RELEASE_BRANCH: ${{ inputs.release_branch }}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   TUNNEL: ${{ inputs.tunnel }}
@@ -61,8 +58,27 @@ env:
   TZ: Asia/Jakarta
 
 jobs:
-  Generate:
+  prebuild:
     runs-on: ubuntu-latest
+    outputs:
+      target: ${{ steps.set-matrix.outputs.target }}
+    steps:
+      - id: set-matrix
+        run: |
+          if [ "${{ inputs.target }}" == "all" ]; then
+             echo "target=['Raspberry Pi 4B','x86-64']" >> $GITHUB_OUTPUT
+          else
+             echo "target=${{ inputs.target }}" >> $GITHUB_OUTPUT
+          fi
+  Generate:
+    needs: prebuild
+    runs-on: ubuntu-latest
+    name: "${{ matrix.target }} wtih tunnel: ${{ inputs.tunnel }}"
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{fromJSON(needs.prebuild.outputs.target)}}
 
     steps:
       - name: Initialization System Environment
@@ -70,24 +86,11 @@ jobs:
           sudo apt-get -qq update
           sudo apt-get -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip tar gzip qemu-utils mkisofs
           sudo timedatectl set-timezone "$TZ"
+          echo "TARGET=${{ matrix.target }}" >> $GITHUB_ENV
 
       - name: Setup Environment Variables
         run: |
-          if [ "$TARGET" == "Raspberry Pi 1B" ]; then
-            echo "PROFILE=rpi-1" >> $GITHUB_ENV
-            echo "TARGET_SYSTEM=bcm27xx/bcm2708" >> $GITHUB_ENV
-            echo "TARGET_NAME=bcm27xx-bcm2708" >> $GITHUB_ENV
-            echo "ARCH_1=armv6" >> $GITHUB_ENV
-            echo "ARCH_2=arm" >> $GITHUB_ENV
-            echo "ARCH_3=arm_arm1176jzf-s_vfp" >> $GITHUB_ENV
-          elif [ "$TARGET" == "Raspberry Pi 2B" ]; then
-            echo "PROFILE=rpi-2" >> $GITHUB_ENV
-            echo "TARGET_SYSTEM=bcm27xx/bcm2709" >> $GITHUB_ENV
-            echo "TARGET_NAME=bcm27xx-bcm2709" >> $GITHUB_ENV
-            echo "ARCH_1=armv7" >> $GITHUB_ENV
-            echo "ARCH_2=arm" >> $GITHUB_ENV
-            echo "ARCH_3=arm_cortex-a7_neon-vfpv4" >> $GITHUB_ENV
-          elif [ "$TARGET" == "Raspberry Pi 3B" ]; then
+          if [ "$TARGET" == "Raspberry Pi 3B" ]; then
             echo "PROFILE=rpi-3" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2710" >> $GITHUB_ENV
             echo "TARGET_NAME=bcm27xx-bcm2710" >> $GITHUB_ENV
@@ -122,7 +125,7 @@ jobs:
         with: 
           path: origin
 
-      - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
+      - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ matrix.target }}
         id: download
         run: |
           RELEASE="$DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz"
@@ -170,7 +173,7 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
-      - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
+      - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}-${{ matrix.target }}
         id: compile
         if: steps.scripts.outputs.status == 'success' && !cancelled()
         run: |
