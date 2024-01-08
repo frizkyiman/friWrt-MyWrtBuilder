@@ -54,7 +54,6 @@ on:
         type: boolean
 
 env:
-  aTARGET: ${{ inputs.target }}
   RELEASE_BRANCH: ${{ inputs.release_branch }}
   ROOTFS_SQUASHFS: ${{ inputs.squashfs }}
   TUNNEL: ${{ inputs.tunnel }}
@@ -70,15 +69,14 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.target }}" == "all" ]; then
-             echo "target=['Raspberry Pi 1B', 'Raspberry Pi 2B', 'Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']" >> $GITHUB_OUTPUT
+             echo "target=['Raspberry Pi 3B', 'Raspberry Pi 4B', 'x86-64']" >> $GITHUB_OUTPUT
           else
              echo "target=${{ inputs.target }}" >> $GITHUB_OUTPUT
           fi
-          echo  "$target"
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "${{ matrix.target }} wtih option ${{ inputs.tunnel }}"
+    name: "Build ${{ matrix.target }} firmware wtih selected tunnel: ${{ inputs.tunnel }}"
     strategy:
       fail-fast: false
       matrix:
@@ -93,7 +91,7 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          echo "$TARGET"
+          echo "Device selected: $TARGET"
           if [ "$TARGET" == "Raspberry Pi 1B" ]; then
             echo "PROFILE=rpi-1" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2708" >> $GITHUB_ENV
