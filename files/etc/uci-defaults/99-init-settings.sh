@@ -81,12 +81,6 @@ else
   echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/$(grep "OPENWRT_ARCH" /etc/os-release | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
 fi
 
-# add cron job for modem rakitan
-echo '#auto renew ip lease for modem rakitan' >> /etc/crontabs/root
-echo '30 3 * * 1,2,3,4,5,6 echo  AT+CFUN=4 | atinout - /dev/ttyUSB0 - && sleep 3 && ifdown wan && sleep 3 && echo  AT+CFUN=1 | atinout - /dev/ttyUSB0 - && sleep 3 && ifup wan' >> /etc/crontabs/root
-echo '#auto restart for modem rakitan once a week'  >> /etc/crontabs/root
-echo '30 3 * * 0 echo  AT^RESET | atinout - /dev/ttyUSB0 - && sleep 20 && ifdown wan && ifup wan'  >> /etc/crontabs/root
-
 # Remove watchcat default config
 uci -q delete watchcat.@watchcat[0]
 uci commit
@@ -132,7 +126,6 @@ uci set nlbwmon.@nlbwmon[0].refresh_interval='60s'
 uci commit nlbwmon
 
 # setup vnstat database dir
-echo '0 */6 * * * /etc/init.d/vnstat_backup backup' >> /etc/crontabs/root
 chmod +x /etc/init.d/vnstat_backup
 bash /etc/init.d/vnstat_backup enable
 
@@ -147,12 +140,6 @@ sed -i 's/services/modem/g' /usr/share/luci/menu.d/luci-app-lite-watchdog.json
 # setup misc settings
 sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
 sed -i 's/\[ -n "$FAILSAFE" \] && cat \/etc\/banner.failsafe/& || \/usr\/bin\/neofetch/' /etc/profile
-sed -i '/exit 0/i # Auto mount disk drive on startup' /etc/rc.local
-sed -i '/exit 0/i # change to your drive path and uncomment below' /etc/rc.local
-sed -i '/exit 0/i #mount_hdd /dev/sda1 /mnt/sda1' /etc/rc.local
-
-echo '*/15 * * * * /sbin/free.sh' >> /etc/crontabs/root
-echo '0 12 * * * /sbin/sync_time.sh circles.asia' >> /etc/crontabs/root
 
 chmod +x /usr/share/3ginfo-lite/modem/413c81d7
 chmod +x /root/fix-tinyfm.sh && bash /root/fix-tinyfm.sh
@@ -174,7 +161,6 @@ if opkg list | grep openclash > /dev/null; then
   chmod +x /etc/openclash/core/clash_meta
   chmod +x /usr/bin/patchoc.sh
   bash /usr/bin/patchoc.sh
-  sed -i '\/exit 0\/i #\/usr\/bin\/patchoc.sh' /etc/rc.local
 fi
 
 # adding new line for enable i2c oled display
