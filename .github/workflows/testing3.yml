@@ -72,11 +72,6 @@ jobs:
           else
              echo "target=${{ inputs.target }}" >> $GITHUB_OUTPUT
           fi
-          if [ "${{ inputs.tunnel }}" == "all" ]; then
-             echo "target=[openclash-passwall, openclash, passwall, no-tunnel]" >> $GITHUB_OUTPUT
-          else
-             echo "target=${{ inputs.tunnel }}" >> $GITHUB_OUTPUT
-          fi
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
