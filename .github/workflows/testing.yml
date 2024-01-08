@@ -4,7 +4,7 @@
 # Download from: https://downloads.openwrt.org/releases
 #                https://downloads.immortalwrt.org/releases
 #=====================================================================================
-name: (testing) Generate friWrt Firmware
+name: testing-Generate friWrt Firmware
 
 on:
   workflow_dispatch:
@@ -69,16 +69,18 @@ jobs:
           if [ "${{ inputs.target }}" == "all" ]; then
              echo "target=['Raspberry Pi 3B','Raspberry Pi 4B','x86-64']" >> $GITHUB_OUTPUT
           else
-             echo "target=${{ inputs.target }}" >> $GITHUB_OUTPUT
+             echo "target=['${{ inputs.target }}']" >> $GITHUB_OUTPUT
           fi
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "${{ matrix.target }} wtih tunnel: ${{ inputs.tunnel }}"
+    name: "testing ${{ matrix.target }} wtih tunnel: ${{ inputs.tunnel }}"
+    
     strategy:
       fail-fast: false
       matrix:
         target: ${{fromJSON(needs.prebuild.outputs.target)}}
+
     steps:
       - name: Initialization System Environment
         run: |
@@ -89,7 +91,6 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          echo "Device selected: $TARGET"
           if [ "$TARGET" == "Raspberry Pi 3B" ]; then
             echo "PROFILE=rpi-3" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2710" >> $GITHUB_ENV
@@ -215,6 +216,7 @@ jobs:
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: testing-${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
           overwrite: true
+          prerelease: true
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
