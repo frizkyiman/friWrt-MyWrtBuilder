@@ -76,7 +76,7 @@ jobs:
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "Build ${{ matrix.target }} firmware wtih selected tunnel: ${{ inputs.tunnel }}"
+    name: "${{ matrix.target }} wtih tunnel: ${{ inputs.tunnel }}"
     strategy:
       fail-fast: false
       matrix:
