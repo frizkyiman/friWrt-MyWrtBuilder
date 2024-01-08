@@ -66,14 +66,9 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      matrix:
-      if: github.event.inputs.target == 'all'
-        target:
-          - Raspberry Pi 1B
-          - Raspberry Pi 2B
-          - Raspberry Pi 3B
-          - Raspberry Pi 4B
-          - x86-64
+  matrix:
+    target: [Raspberry Pi 1B, Raspberry Pi 2B, Raspberry Pi 3B, Raspberry Pi 4B, x86-64]
+  if: github.event.inputs.target == 'all'
     
     steps:
       - name: Initialization System Environment
