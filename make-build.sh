@@ -42,7 +42,7 @@ PACKAGES="$PACKAGES samba4-server luci-app-samba4 aria2 ariang luci-app-aria2 lu
 PACKAGES="$PACKAGES docker docker-compose dockerd luci-app-dockerman"
 
 # Bandwith Monitoring
-PACKAGES="$PACKAGES luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2 speedtest-web luci-app-speedtest-web"
+PACKAGES="$PACKAGES luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2"
 
 # Argon Theme
 PACKAGES="$PACKAGES luci-theme-argon luci-app-argon-config"
@@ -58,9 +58,9 @@ elif [ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]; then
 fi
 
 if [ "$PROFILE" == "rpi-4" ]; then
-    misc="kmod-i2c-bcm2835 i2c-tools kmod-i2c-core kmod-i2c-gpio luci-app-oled"
+    misc="kmod-i2c-bcm2835 i2c-tools kmod-i2c-core kmod-i2c-gpio luci-app-oled speedtest-web luci-app-speedtest-web"
 elif [ "$PROFILE" == "generic" ]; then
-    misc=""
+    misc="speedtest-web luci-app-speedtest-web"
 fi
 PACKAGES="$PACKAGES $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop luci-app-watchcat bash curl tar unzip unrar jq luci-app-ttyd nano git git-http"
 
