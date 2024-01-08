@@ -165,6 +165,17 @@ chmod +x /usr/bin/mount_hdd
 chmod +x /usr/bin/speedtest
 
 # configurating openclash
+if opkg list | grep openclash > /dev/null; then
+  if mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old; then
+    mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
+  fi
+  chmod +x /etc/openclash/core/clash
+  chmod +x /etc/openclash/core/clash_tun
+  chmod +x /etc/openclash/core/clash_meta
+  chmod +x /usr/bin/patchoc.sh
+  bash /usr/bin/patchoc.sh
+  sed -i '\/exit 0\/i # \/usr\/bin\/patchoc.sh' /etc/rc.local
+fi
 
 # adding new line for enable i2c oled display
 echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
