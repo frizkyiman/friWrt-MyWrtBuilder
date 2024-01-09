@@ -77,6 +77,8 @@ jobs:
           fi
           if [ "${{ inputs.tunnel }}" == "all" ] && [ "${RELEASE_BRANCH#*:}" = "21.02.7" ]; then
              echo "tunnel=['openclash']" >> $GITHUB_OUTPUT
+          elif [ "${{ inputs.tunnel }}" == "all" ]; then
+             echo "tunnel=['openclash','passwall']" >> $GITHUB_OUTPUT
           else
              echo "tunnel=[${{ inputs.tunnel }}]" >> $GITHUB_OUTPUT
           fi
