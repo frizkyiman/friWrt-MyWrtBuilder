@@ -33,9 +33,6 @@ uci set network.wan.apn='internet'
 uci set network.wan.auth='none'
 uci set network.wan.iptype='ipv4'
 uci set network.lan.ipaddr="192.168.1.1"
-uci set network.wan1=interface
-uci set network.wan1.proto='dhcp'
-uci set network.wan1.device='eth1'
 uci set network.tethering=interface
 uci set network.tethering.proto='dhcp'
 uci set network.tethering.device='usb0'
@@ -47,7 +44,7 @@ uci -q delete dhcp.lan.ra
 uci -q delete dhcp.lan.ndp
 uci commit dhcp
 
-uci set firewall.@zone[1].network='wan wan1 tethering'
+uci set firewall.@zone[1].network='wan tethering'
 uci commit firewall
 
 # configure WLAN
@@ -59,6 +56,7 @@ uci set wireless.@wifi-iface[0].key='friwrt2023'
 uci set wireless.@wifi-device[0].country='ID'
 uci set wireless.@wifi-device[0].channel='161'
 uci commit wireless
+wifi up
 
 # remove huawei me909s usb-modeswitch
 sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
@@ -125,7 +123,7 @@ uci set nlbwmon.@nlbwmon[0].commit_interval='3h'
 uci set nlbwmon.@nlbwmon[0].refresh_interval='60s'
 uci commit nlbwmon
 
-# setup vnstat database dir
+# setup auto vnstat database backup
 chmod +x /etc/init.d/vnstat_backup
 bash /etc/init.d/vnstat_backup enable
 
@@ -140,7 +138,6 @@ sed -i 's/services/modem/g' /usr/share/luci/menu.d/luci-app-lite-watchdog.json
 # setup misc settings
 sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
 sed -i 's/\[ -n "$FAILSAFE" \] && cat \/etc\/banner.failsafe/& || \/usr\/bin\/neofetch/' /etc/profile
-
 chmod +x /usr/share/3ginfo-lite/modem/413c81d7
 chmod +x /root/fix-tinyfm.sh && bash /root/fix-tinyfm.sh
 chmod +x /root/install2.sh && bash /root/install2.sh
@@ -152,17 +149,17 @@ chmod +x /usr/bin/mount_hdd
 chmod +x /usr/bin/speedtest
 
 # configurating openclash
-if opkg list-installed | grep openclash > /dev/null; then
-  if mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old; then
-    mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
+if opkg list-installed | grep luci-app-openclash > /dev/null; then
+  if [ -d "/usr/share/openclash/ui/yacd.new" ]; then
+    if mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old; then
+      mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
+    fi
   fi
   chmod +x /etc/openclash/core/clash
   chmod +x /etc/openclash/core/clash_tun
   chmod +x /etc/openclash/core/clash_meta
   chmod +x /usr/bin/patchoc.sh
   bash /usr/bin/patchoc.sh
-else
-  rm -r /usr/share/openclash
 fi
 
 # adding new line for enable i2c oled display
