@@ -66,7 +66,6 @@ jobs:
     name: ${{ inputs.release_branch }}
     outputs:
       target: ${{ steps.set-matrix.outputs.target }}
-      tunnel: ${{ steps.set-matrix.outputs.tunnel }}
     steps:
       - id: set-matrix
         run: |
@@ -76,23 +75,22 @@ jobs:
              echo "target=['${{ inputs.target }}']" >> $GITHUB_OUTPUT
           fi
           if [ "${{ inputs.tunnel }}" == "all" ] && [ "${RELEASE_BRANCH#*:}" = "21.02.7" ]; then
-             echo "tunnel=['openclash']" >> $GITHUB_OUTPUT
+             echo "tunnel=['openclash']" >> $GITHUB_ENV
           elif [ "${{ inputs.tunnel }}" == "all" ]; then
-             echo "tunnel=['openclash','passwall']" >> $GITHUB_OUTPUT
+             echo "tunnel=openclash and passwall" >> $GITHUB_ENV
           else
-             echo "tunnel=[${{ inputs.tunnel }}]" >> $GITHUB_OUTPUT
+             echo "tunnel=${{ inputs.tunnel }}" >> $GITHUB_ENV
           fi
 
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "${{ matrix.target }}; tunnel: ${{ matrix.tunnel }}"
+    name: "${{ matrix.target }}; tunnel: $tunnel"
     
     strategy:
       fail-fast: false
       matrix:
         target: ${{fromJSON(needs.prebuild.outputs.target)}}
-        tunnel: ${{fromJSON(needs.prebuild.outputs.tunnel)}}
 
     steps:
       - name: Initialization System Environment
