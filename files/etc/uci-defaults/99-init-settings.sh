@@ -168,6 +168,10 @@ if opkg list-installed | grep luci-app-openclash > /dev/null; then
   chmod +x /usr/bin/patchoc.sh
   bash /usr/bin/patchoc.sh
   sed -i '/exit 0/i #/usr/bin/patchoc.sh' /etc/rc.local
+else
+  uci delete internet-detector.Openclash
+  uci commit internet-detector
+  service internet-detector  restart
 fi
 
 # adding new line for enable i2c oled display
