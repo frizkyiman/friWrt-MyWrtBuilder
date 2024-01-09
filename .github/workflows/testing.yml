@@ -74,10 +74,16 @@ jobs:
           else
              echo "target=['${{ inputs.target }}']" >> $GITHUB_OUTPUT
           fi
+          if [ "${{ inputs.tunnel }}" == "all" ] && [ "${RELEASE_BRANCH#*:}" = "21.02.7" ]; then
+            tunnel="openclash"
+          else
+            tunnel="${{ inputs.tunnel }}"
+          fi
+
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "${{ matrix.target }}; tunnel: ${{ inputs.tunnel }}"
+    name: "${{ matrix.target }}; tunnel: ${{ matrix.tunnel }}"
     
     strategy:
       fail-fast: false
