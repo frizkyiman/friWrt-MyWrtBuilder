@@ -75,9 +75,9 @@ jobs:
              echo "target=['${{ inputs.target }}']" >> $GITHUB_OUTPUT
           fi
           if [ "${{ inputs.tunnel }}" == "all" ] && [ "${RELEASE_BRANCH#*:}" = "21.02.7" ]; then
-            echo "tunnel=openclash" >> $GITHUB_OUTPUT
+            echo "tunnel=[openclash]" >> $GITHUB_OUTPUT
           else
-            echo "tunnel=${{ inputs.tunnel }}" >> $GITHUB_OUTPUT
+            echo "tunnel=[${{ inputs.tunnel }}]" >> $GITHUB_OUTPUT
           fi
 
   Generate:
