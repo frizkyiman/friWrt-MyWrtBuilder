@@ -64,7 +64,6 @@ jobs:
     name: ${{ inputs.release_branch }}
     outputs:
       target: ${{ steps.set-matrix.outputs.target }}
-      tunnel: ${{ steps.set-matrix.outputs.tunnel }}
     steps:
       - id: set-matrix
         run: |
