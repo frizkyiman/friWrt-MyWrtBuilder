@@ -63,6 +63,7 @@ env:
 jobs:
   prebuild:
     runs-on: ubuntu-latest
+    name: ${{ inputs.release_branch }}
     outputs:
       target: ${{ steps.set-matrix.outputs.target }}
     steps:
