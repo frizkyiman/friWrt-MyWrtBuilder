@@ -48,15 +48,22 @@ uci set firewall.@zone[1].network='wan tethering'
 uci commit firewall
 
 # configure WLAN
-uci set wireless.@wifi-device[0].disabled='0'
-uci set wireless.@wifi-iface[0].disabled='0'
-uci set wireless.@wifi-iface[0].encryption='psk2'
-uci set wireless.@wifi-iface[0].ssid='friWrt'
-uci set wireless.@wifi-iface[0].key='friwrt2023'
-uci set wireless.@wifi-device[0].country='ID'
-uci set wireless.@wifi-device[0].channel='161'
-uci commit wireless
-wifi up
+if iw dev | grep -q "Interface"; then
+  uci set wireless.@wifi-device[0].disabled='0'
+  uci set wireless.@wifi-iface[0].disabled='0'
+  uci set wireless.@wifi-iface[0].encryption='psk2'
+  uci set wireless.@wifi-iface[0].ssid='friWrt'
+  uci set wireless.@wifi-iface[0].key='friwrt2023'
+  uci set wireless.@wifi-device[0].country='ID'
+  uci set wireless.@wifi-device[0].channel='161'
+  uci commit wireless
+  wifi up
+  if ! grep -q "wifi up" /etc/rc.local; then
+    sed -i '/exit 0/i wifi up' /etc/rc.local
+  fi
+else
+  echo "No wireless detected"
+fi
 
 # remove huawei me909s usb-modeswitch
 sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
@@ -160,6 +167,7 @@ if opkg list-installed | grep luci-app-openclash > /dev/null; then
   chmod +x /etc/openclash/core/clash_meta
   chmod +x /usr/bin/patchoc.sh
   bash /usr/bin/patchoc.sh
+  sed -i '/exit 0/i #/usr/bin/patchoc.sh' /etc/rc.local
 fi
 
 # adding new line for enable i2c oled display
