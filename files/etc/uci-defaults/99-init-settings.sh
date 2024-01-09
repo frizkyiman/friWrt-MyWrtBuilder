@@ -152,7 +152,7 @@ chmod +x /usr/bin/mount_hdd
 chmod +x /usr/bin/speedtest
 
 # configurating openclash
-if opkg list | grep openclash > /dev/null; then
+if opkg list-installed | grep openclash > /dev/null; then
   if mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old; then
     mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
   fi
