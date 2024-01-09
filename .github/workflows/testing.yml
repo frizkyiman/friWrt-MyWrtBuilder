@@ -4,7 +4,7 @@
 # Download from: https://downloads.openwrt.org/releases
 #                https://downloads.immortalwrt.org/releases
 #=====================================================================================
-name: testing-Generate friWrt Firmware
+name: testing friWrt Firmware
 
 on:
   workflow_dispatch:
@@ -25,8 +25,10 @@ on:
         default: "openwrt:23.05.2"
         type: choice
         options:
+          - openwrt:snapshots
           - openwrt:21.02.7
           - openwrt:23.05.2
+          - immortalwrt:snapshots
           - immortalwrt:21.02.7
           - immortalwrt:23.05.1
       tunnel:
@@ -74,7 +76,7 @@ jobs:
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "testing ${{ matrix.target }} wtih tunnel: ${{ inputs.tunnel }}"
+    name: "${{ matrix.target }} wtih tunnel: ${{ inputs.tunnel }}"
     
     strategy:
       fail-fast: false
@@ -129,8 +131,9 @@ jobs:
       - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ matrix.target }}
         id: download
         run: |
+          SNAPSHOTS="$DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz"
           RELEASE="$DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz"
-          wget -nv "$RELEASE"
+          [ "$BRANCH" == "snapshots" ] && wget -nv "$SNAPSHOTS" || wget -nv "$RELEASE"
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
@@ -186,7 +189,7 @@ jobs:
               if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
               time bash make-build.sh $PROFILE $t
               rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
-              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
+              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/testing_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
             done
           elif [[ "$TUNNEL" == "all" && "$BRANCH" = "21.02.7" ]]; then
             for t in openclash no-tunnel; do
@@ -194,14 +197,14 @@ jobs:
               if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
               time bash make-build.sh $PROFILE $t
               rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
-              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
+              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/testing_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
             done
           else
             bash make-build.sh $PROFILE $t
             rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
-            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )_$DATE.img.gz; done
+            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/testing_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )_$DATE.img.gz; done
           fi
-          sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
+          sha256sum compiled_images/testing_*.img.gz > compiled_images/sha256sums
           ls compiled_images
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
