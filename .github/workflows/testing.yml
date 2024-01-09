@@ -50,7 +50,7 @@ on:
       squashfs:
         description: "Generate squashfs image"
         required: false
-        default: "false"
+        default: "true"
         type: boolean
 
 env:
