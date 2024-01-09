@@ -75,17 +75,17 @@ jobs:
              echo "target=['${{ inputs.target }}']" >> $GITHUB_OUTPUT
           fi
           if [ "${{ inputs.tunnel }}" == "all" ] && [ "${RELEASE_BRANCH#*:}" = "21.02.7" ]; then
-             echo "tunnel=['openclash']" >> $GITHUB_ENV
+             echo "tunnel=openclash" >> $GITHUB_OUTPUT
           elif [ "${{ inputs.tunnel }}" == "all" ]; then
-             echo "tunnel=openclash and passwall" >> $GITHUB_ENV
+             echo "tunnel=openclash and passwall" >> $GITHUB_OUTPUT
           else
-             echo "tunnel=${{ inputs.tunnel }}" >> $GITHUB_ENV
+             echo "tunnel=${{ inputs.tunnel }}" >> $GITHUB_OUTPUT
           fi
 
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "${{ matrix.target }}; tunnel: $tunnel"
+    name: "${{ matrix.target }}; tunnel: ${{ needs.prebuild.outputs.tunnel }}"
     
     strategy:
       fail-fast: false
