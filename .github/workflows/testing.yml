@@ -77,7 +77,7 @@ jobs:
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "${{ matrix.target }} wtih tunnel: ${{ inputs.tunnel }}"
+    name: "${{ matrix.target }}; tunnel: ${{ inputs.tunnel }}"
     
     strategy:
       fail-fast: false
@@ -191,13 +191,13 @@ jobs:
         run: |
           cd $WORKING_DIR
           mkdir -p compiled_images
-          if [ "$TUNNEL" == "all" ]; then
+          if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then
             for t in openclash-passwall openclash passwall no-tunnel; do
               echo "Compiling with tunnel option: $t"
               if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
               time bash make-build.sh $PROFILE $t
               rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
-              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/testing_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
+              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
             done
           elif [[ "$TUNNEL" == "all" && "$BRANCH" = "21.02.7" ]]; then
             for t in openclash no-tunnel; do
@@ -205,14 +205,14 @@ jobs:
               if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
               time bash make-build.sh $PROFILE $t
               rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
-              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/testing_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
+              for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE.img.gz; done
             done
-          else
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "no-tunnel" ]]; then
             bash make-build.sh $PROFILE $t
             rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
-            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/testing_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )_$DATE.img.gz; done
+            for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )_$DATE.img.gz; done
           fi
-          sha256sum compiled_images/testing_*.img.gz > compiled_images/sha256sums
+          sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
           ls compiled_images
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
