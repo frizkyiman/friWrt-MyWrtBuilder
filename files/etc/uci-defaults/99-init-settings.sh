@@ -161,6 +161,8 @@ if opkg list | grep openclash > /dev/null; then
   chmod +x /etc/openclash/core/clash_meta
   chmod +x /usr/bin/patchoc.sh
   bash /usr/bin/patchoc.sh
+else
+  rm -r /usr/share/openclash
 fi
 
 # adding new line for enable i2c oled display
