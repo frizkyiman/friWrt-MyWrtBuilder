@@ -75,7 +75,7 @@ jobs:
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "${{ matrix.target }} wtih tunnel: ${{ inputs.tunnel }}"
+    name: "${{ matrix.target }}; tunnel: ${{ inputs.tunnel }}"
     
     strategy:
       fail-fast: false
