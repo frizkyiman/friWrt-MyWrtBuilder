@@ -86,7 +86,7 @@ jobs:
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "${{ matrix.target }}; tunnel: ${{ needs.prebuild.outputs.tunnel }}"
+    name: "${{ matrix.target }}; ${{ needs.prebuild.outputs.tunnel }}"
     
     strategy:
       fail-fast: false
