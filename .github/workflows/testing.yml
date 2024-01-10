@@ -79,7 +79,7 @@ jobs:
   Generate:
     needs: prebuild
     runs-on: ubuntu-latest
-    name: "${{ matrix.target }}; ${{ inputs.tunnel }}}"
+    name: "${{ matrix.target }}; ${{ inputs.tunnel }}"
     
     strategy:
       fail-fast: false
