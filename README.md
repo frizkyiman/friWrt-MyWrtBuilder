@@ -28,9 +28,7 @@ Please read instruction given.
 
 Login info
 * 192.168.1.1 | user: root | password: friwrt
-* SSID: friWrt | password: friwrt
-
-SSID will broadcast 5Ghz network, make sure your device supported!
+* SSID: friWrt_2g / friWrt_5g | password: friwrt2023
 
 - Automatically expand root partition and filesystem to available free space! (Please be patient because the initial boot process takes a little longer to extend the disk and it also requires two reboot attempts),
 - AdGuard Home installed and enable (disable using "adguardhome disable" command on terminal, and "adguardhome enable" to enable again),
