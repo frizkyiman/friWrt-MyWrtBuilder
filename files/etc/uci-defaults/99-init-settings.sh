@@ -52,11 +52,16 @@ if iw dev | grep -q "Interface"; then
   uci set wireless.@wifi-device[0].disabled='0'
   uci set wireless.@wifi-iface[0].disabled='0'
   uci set wireless.@wifi-iface[0].encryption='psk2'
-  uci set wireless.@wifi-iface[0].ssid='friWrt'
   uci set wireless.@wifi-iface[0].key='friwrt2023'
   uci set wireless.@wifi-device[0].country='ID'
-  uci set wireless.@wifi-device[0].channel='1'
-  uci set wireless.@wifi-device[0].band='2g'
+  if [[ $(cat /proc/cpuinfo) == *"Raspberry Pi 4"* ]]; then
+    uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
+    uci set wireless.@wifi-device[0].channel='161'
+  else
+    uci set wireless.@wifi-iface[0].ssid='friWrt_2g'
+    uci set wireless.@wifi-device[0].channel='1'
+    uci set wireless.@wifi-device[0].band='2g'
+  fi
   uci commit wireless
   wifi up
   if ! grep -q "wifi up" /etc/rc.local; then
