@@ -1,6 +1,5 @@
 #!/bin/sh
 
-set -x -v; exec &> /root/full-setup.log
 exec > /root/setup.log 2>&1
 
 # dont remove!
@@ -54,7 +53,7 @@ if iw dev | grep -q "Interface"; then
   uci set wireless.@wifi-iface[0].encryption='psk2'
   uci set wireless.@wifi-iface[0].key='friwrt2023'
   uci set wireless.@wifi-device[0].country='ID'
-  if [[ $(cat /proc/cpuinfo) == *"Raspberry Pi 4"* ]]; then
+  if grep -q "BCM2711" /proc/cpuinfo; then
     uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
     uci set wireless.@wifi-device[0].channel='161'
   else
