@@ -55,7 +55,7 @@ if iw dev | grep -q "Interface"; then
   uci set wireless.@wifi-iface[0].ssid='friWrt'
   uci set wireless.@wifi-iface[0].key='friwrt2023'
   uci set wireless.@wifi-device[0].country='ID'
-  uci set wireless.@wifi-device[0].channel='161'
+#  uci set wireless.@wifi-device[0].channel='161'
   uci commit wireless
   wifi up
   if ! grep -q "wifi up" /etc/rc.local; then
