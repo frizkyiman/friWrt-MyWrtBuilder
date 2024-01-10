@@ -18,6 +18,7 @@ on:
           - all
           - Raspberry Pi 3B
           - Raspberry Pi 4B
+          - NanoPi-R5S
           - x86-64
       release_branch:
         description: "Select the release branch:"
