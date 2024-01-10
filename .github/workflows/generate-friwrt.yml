@@ -26,8 +26,10 @@ on:
         default: "openwrt:23.05.2"
         type: choice
         options:
+          - openwrt:snapshots
           - openwrt:21.02.7
           - openwrt:23.05.2
+          - immortalwrt:snapshots
           - immortalwrt:21.02.7
           - immortalwrt:23.05.1
       tunnel:
@@ -139,8 +141,9 @@ jobs:
       - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ matrix.target }}
         id: download
         run: |
+          SNAPSHOTS="$DOWNLOAD_BASE/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$TARGET_NAME.Linux-x86_64.tar.xz"
           RELEASE="$DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz"
-          wget -nv "$RELEASE"
+          [ "$BRANCH" == "snapshots" ] && wget -nv "$SNAPSHOTS" || wget -nv "$RELEASE"
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
