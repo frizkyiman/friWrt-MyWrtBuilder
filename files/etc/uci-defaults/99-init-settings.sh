@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -x -v; exec &> /root/full-setup.log
 exec > /root/setup.log 2>&1
 
 # dont remove!
