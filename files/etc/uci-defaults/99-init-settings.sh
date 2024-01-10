@@ -38,15 +38,14 @@ uci set network.tethering=interface
 uci set network.tethering.proto='dhcp'
 uci set network.tethering.device='usb0'
 uci commit network
+uci set firewall.@zone[1].network='wan tethering'
+uci commit firewall
 
 # configure ipv6
 uci -q delete dhcp.lan.dhcpv6
 uci -q delete dhcp.lan.ra
 uci -q delete dhcp.lan.ndp
 uci commit dhcp
-
-uci set firewall.@zone[1].network='wan tethering'
-uci commit firewall
 
 # configure WLAN
 if iw dev | grep -q "Interface"; then
