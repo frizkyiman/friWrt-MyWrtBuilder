@@ -53,7 +53,7 @@ if iw dev | grep -q "Interface"; then
   uci set wireless.@wifi-iface[0].encryption='psk2'
   uci set wireless.@wifi-iface[0].key='friwrt2023'
   uci set wireless.@wifi-device[0].country='ID'
-  if grep -q "BCM2711" /proc/cpuinfo; then
+  if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
     uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
     uci set wireless.@wifi-device[0].channel='161'
   else
