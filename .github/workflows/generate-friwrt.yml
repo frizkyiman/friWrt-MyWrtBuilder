@@ -228,7 +228,7 @@ jobs:
           file_glob: true
           file: ${{ env.WORKING_DIR }}/compiled_images//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
+          tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-$(date +"%B-%Y" | awk '{print tolower($0)}')
           overwrite: true
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
