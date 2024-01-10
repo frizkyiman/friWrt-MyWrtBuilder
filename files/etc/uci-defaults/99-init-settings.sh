@@ -3,6 +3,8 @@
 exec > /root/setup.log 2>&1
 
 # dont remove!
+echo "Device Model: $(grep '\"name\":' /etc/board.json | sed 's/ \+/ /g' | awk -F'\"' '{print $4}')"
+echo "Processor: $(grep "model name" /proc/cpuinfo | awk -F ": " '{print $2}' | head -n 1 && grep "Hardware" /proc/cpuinfo | awk -F ": " '{print $2}')"
 sed -i "s#_('Firmware Version'),(L.isObject(boardinfo.release)?boardinfo.release.description+' / ':'')+(luciversion||''),#_('Firmware Version'),(L.isObject(boardinfo.release)?boardinfo.release.description+' build by friWrt ':''),#g" /www/luci-static/resources/view/status/include/10_system.js
 if grep -q "ImmortalWrt" /etc/openwrt_release; then
   sed -i "s/\(DISTRIB_DESCRIPTION='ImmortalWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
