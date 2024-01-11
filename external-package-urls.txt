@@ -42,19 +42,19 @@ all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-modemband
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/modemband_20240102_all.ipk
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-lite-watchdog_1.0.15-20240102_all.ipk
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-3ginfo-lite_1.0.61-20240102_all.ipk
+arm64 https://downloads.openwrt.org/snapshots/packages/aarch64_cortex-a72/packages/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a72.ipk
+arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
+armv7 https://downloads.openwrt.org/snapshots/packages/aarch64_cortex-a53/packages/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a53.ipk
+armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/atinout_0.9.1_aarch64_cortex-a53.ipk
+armv8 https://downloads.openwrt.org/snapshots/packages/aarch64_generic/packages/sms-tool_2022-03-21-f07699ab-1_aarch64_generic.ipk
+armv8 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
+x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/sms-tool_2022-03-21-f07699ab-1_x86_64.ipk
+x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/atinout_0.9.1_x86_64.ipk
 #
 ################################################################################
 #      Branch version snapshots and 23.05 custom external package urls list    #
 ################################################################################
 #
-arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
-arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a72.ipk
-x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/atinout_0.9.1_x86_64.ipk
-x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/sms-tool_2022-03-21-f07699ab-1_x86_64.ipk
-armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/atinout_0.9.1_aarch64_cortex-a53.ipk
-armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a53.ipk
-armv8 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
-armv8 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/sms-tool_2022-03-21-f07699ab-1_aarch64_generic.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-tinyfm_2.6_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-proto-mbim_git-23.137.84224-37176dc_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
@@ -75,14 +75,6 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-theme-argon_2.3
 #          Old Branch version 21.02 custom external package urls list          #
 ################################################################################
 #
-arm64-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
-arm64-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a72/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a72.ipk
-x86-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/x86_64/atinout_0.9.1_x86_64.ipk
-x86-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/x86_64/sms-tool_2022-03-21-f07699ab-1_x86_64.ipk
-armv7-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a53/atinout_0.9.1_aarch64_cortex-a53.ipk
-armv7-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/aarch64_cortex-a53/sms-tool_2022-03-21-f07699ab-1_aarch64_cortex-a53.ipk
-armv8-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
-armv8-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/sms-tool_2022-03-21-f07699ab-1_aarch64_generic.ipk
 old-21.02 https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-tinyfm_2.5_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-proto-mbim_git-23.262.31484-20add84_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1.2-0_all.ipk
