@@ -132,6 +132,7 @@ jobs:
           echo "tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "21.02" )" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
+          echo "DATEMONTH=$(date +"%B-%Y" | awk '{print tolower($0)}')" >> $GITHUB_ENV
       
       - name: Checkout
         uses: actions/checkout@v3
@@ -228,7 +229,7 @@ jobs:
           file_glob: true
           file: ${{ env.WORKING_DIR }}/compiled_images//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: testing-${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-$(date +"%B-%Y" | awk '{print tolower($0)}')
+          tag: testing-${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           overwrite: true
           prerelease: true
           body: |
