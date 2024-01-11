@@ -62,25 +62,25 @@ print_info() {
     info "Uptime" uptime
     info "Packages" packages
     info "Shell" shell
-    info "Resolution" resolution
-    info "DE" de
-    info "WM" wm
-    info "WM Theme" wm_theme
-    info "Theme" theme
-    info "Icons" icons
+    # info "Resolution" resolution
+    # info "DE" de
+    # info "WM" wm
+    # info "WM Theme" wm_theme
+    # info "Theme" theme
+    # info "Icons" icons
     info "Terminal" term
-    info "Terminal Font" term_font
+    # info "Terminal Font" term_font
     info "CPU" cpu
-    info "GPU" gpu
+    # info "GPU" gpu
     info "Memory" memory
 
     # info "GPU Driver" gpu_driver  # Linux/macOS only
-    # info "Disk" disk
+    info "Disk" disk
     # info "Battery" battery
     # info "Font" font
     # info "Song" song
     # [[ "$player" ]] && prin "Music Player" "$player"
-    # info "Local IP" local_ip
+    info "Local IP" local_ip
     # info "Public IP" public_ip
     # info "Users" users
     # info "Locale" locale  # This only works on glibc systems.
@@ -152,7 +152,7 @@ os_arch="on"
 # on:   '2 days, 10 hours, 3 mins'
 # tiny: '2d 10h 3m'
 # off:  '2 days, 10 hours, 3 minutes'
-uptime_shorthand="on"
+uptime_shorthand="off"
 
 
 # Memory
@@ -167,7 +167,7 @@ uptime_shorthand="on"
 # Example:
 # on:   '1801MiB / 7881MiB (22%)'
 # off:  '1801MiB / 7881MiB'
-memory_percent="off"
+memory_percent="on"
 
 # Change memory output unit.
 #
@@ -300,7 +300,7 @@ cpu_cores="logical"
 # C:   'Intel i7-6500U (4) @ 3.1GHz [27.2°C]'
 # F:   'Intel i7-6500U (4) @ 3.1GHz [82.0°F]'
 # off: 'Intel i7-6500U (4) @ 3.1GHz'
-cpu_temp="off"
+cpu_temp="C"
 
 
 # GPU
