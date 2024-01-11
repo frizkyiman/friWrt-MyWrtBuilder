@@ -66,11 +66,11 @@ PACKAGES="$PACKAGES $misc zram-swap adb parted losetup resize2fs luci luci-ssl b
 
 # Exclude package (must use - before packages name)
 if [ "${RELEASE_BRANCH%:*}" == "openwrt" ]; then
-    EXCLUDED="-dnsmasq"
+    EXCLUDED="$EXCLUDED -dnsmasq"
 elif [ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]; then
-    EXCLUDED="-dnsmasq -automount -libustream-openssl -default-settings-chn -luci-i18n-base-zh-cn"
+    EXCLUDED="$EXCLUDED -dnsmasq -automount -libustream-openssl -default-settings-chn -luci-i18n-base-zh-cn"
     if [ "$1" == "generic" ]; then
-      EXCLUDED="-kmod-usb-net-rtl8152-vendor"
+      EXCLUDED="$EXCLUDED -kmod-usb-net-rtl8152-vendor"
     fi
 fi
 
