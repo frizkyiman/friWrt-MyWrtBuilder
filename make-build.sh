@@ -85,4 +85,5 @@ DISABLED_SERVICES="AdGuardHome"
 # Start build firmware
 echo "Custom packages list:"
 echo "$PACKAGES"
+echo "Number of packages: $(echo "$PACKAGES" | tr ' ' '\n' | wc -l)"
 make image PROFILE="$1" PACKAGES="$PACKAGES $EXCLUDED" FILES="$FILES" DISABLED_SERVICES="$DISABLED_SERVICES"
