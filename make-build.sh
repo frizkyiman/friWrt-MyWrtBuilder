@@ -69,6 +69,9 @@ if [ "${RELEASE_BRANCH%:*}" == "openwrt" ]; then
     EXCLUDED="-dnsmasq"
 elif [ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]; then
     EXCLUDED="-dnsmasq -automount -libustream-openssl -default-settings-chn -luci-i18n-base-zh-cn"
+    if [ "$1" == "generic" ]; then
+      EXCLUDED="-kmod-usb-net-rtl8152-vendor"
+    fi
 fi
 
 # Custom Files
