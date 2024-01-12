@@ -1,9 +1,9 @@
 # friWrt-builder | OpenWrt and ImmortalWrt
 
 ### What's this?
-This is a openwrt toolchain called Image Builder to build a pre-compiled image to ready one firmware. You can customize your own packages adn custom files that suitable for you. 
+This is a openwrt toolchain called Image Builder to build a pre-compiled image to ready one firmware. You can customize your own packages and custom files that suitable for you. 
 
-Using [MyWrtBuilder](https://github.com/Revincx/MyWrtBuilder) from Revincx as source base scripts, by adopting and improve it by adding ability to chose Source and Branch version, feature to easy change rootfs partition size, flexible target device, improve logic code and much more.
+Using [MyWrtBuilder](https://github.com/Revincx/MyWrtBuilder) from Revincx as a source base script, adopted it then enhanced it by adding the ability to select Source and Branch versions, automatically expanding the rootfs partition size to the remaining disk, flexible target device selection, logic code improvements and more.
 
 By default, im using Raspberry Pi 4B device with all my preference packages and custom files configuration was placed here.
 
