@@ -3,7 +3,7 @@ config watchdog
 	option restartcmd 'AT^RESET'
 	option dest '8.8.8.8'
 	option delay '60'
-	option period '15'
+	option period '1'
 	option period_count '2'
 	option enabled '0'
 	option action 'wan'
