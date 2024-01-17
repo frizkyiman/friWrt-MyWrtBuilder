@@ -7,6 +7,6 @@
 # auto restart for modem rakitan every day at 03:30 AM
 # 30 3 * * * echo  AT^RESET | atinout - /dev/ttyUSB0 - && sleep 20 && ifdown wan && ifup wan
 
-*/15 * * * * /sbin/free.sh
+0 * * * * /sbin/free.sh >/dev/null 2>&1
 0 */6 * * * /etc/init.d/vnstat_backup backup
 0 12 * * * /sbin/sync_time.sh circles.asia
