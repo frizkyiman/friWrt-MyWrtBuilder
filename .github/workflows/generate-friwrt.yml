@@ -132,7 +132,7 @@ jobs:
           echo "tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "21.02" )" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
-          echo "DATEMONTH=$(date +"%B-%Y" | awk '{print tolower($0)}')" >> $GITHUB_ENV
+          echo "DATEMONTH=$(date +"%Y-%B" | awk '{print tolower($0)}')" >> $GITHUB_ENV
       
       - name: Checkout
         uses: actions/checkout@v3
