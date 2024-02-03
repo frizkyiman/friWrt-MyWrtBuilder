@@ -32,7 +32,7 @@ elif [ "$2" == "openclash-passwall" ]; then
 fi
 
 # Adguardhome
-PACKAGES+=" luci-app-adguardhome ca-certificates ca-bundle curl wget wget-ssl tar unzip bind-tools"
+PACKAGES+=" luci-app-adguardhome ca-certificates ca-bundle tar unzip bind-tools"
 
 # NAS and Hard disk tools
 PACKAGES+=" luci-app-diskman luci-app-hd-idle luci-app-disks-info smartmontools kmod-usb-storage kmod-usb-storage-uas ntfs-3g"
@@ -63,7 +63,7 @@ if [ "$1" == "rpi-4" ]; then
 elif [ "$1" == "generic" ]; then
     misc+=" speedtest-web luci-app-speedtest-web"
 fi
-PACKAGES+=" $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop bash curl tar unzip unrar jq luci-app-ttyd nano"
+PACKAGES+=" $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop bash curl wget wget-ssl tar unzip unrar jq luci-app-ttyd nano"
 
 # Exclude package (must use - before packages name)
 EXCLUDED=""
