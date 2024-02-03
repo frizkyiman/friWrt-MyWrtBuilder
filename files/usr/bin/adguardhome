@@ -8,8 +8,8 @@ function check_service_status() {
   fi
 }
 
-function install_core() {
-  echo "Downloading AdGuardHome..."
+function install() {
+  echo "Downloading AdGuardHome core..."
   ARCH=$(uname -m) && [ "$ARCH" == "aarch64" ] && ARCH="arm64" || [ "$ARCH" == "x86_64" ] && ARCH="amd64"
   agh_api="https://api.github.com/repos/AdguardTeam/AdGuardHome/releases"
   agh_file="AdGuardHome_linux_$ARCH"
@@ -24,7 +24,27 @@ function install_core() {
   else
     echo "Failed download AdGuardHome. Please check your internet connection or try again."
   fi
-  echo "AdGuardHome downloaded!"
+  echo "AdGuardHome core downloaded!"
+
+  echo "Installing luci-app-adguardhome"
+  wget --no-check-certificate https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk -P /root
+  opkg update
+  opkg install ca-certificates ca-bundle curl wget wget-ssl tar unzip bind-tools
+  opkg install /root/luci-app-adguardhome_1.8-20221120_all.ipk
+  rm /root/luci-app-adguardhome_1.8-20221120_all.ipk
+
+  echo "Configuring AdGuardHome"
+  wget --no-check-certificate https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/files/opt/AdGuardHome/AdGuardHome.yaml -P /opt/AdGuardHome
+  uci set AdGuardHome.AdGuardHome.enabled='0'
+  uci set AdGuardHome.AdGuardHome.httpport='3000'
+  uci set AdGuardHome.AdGuardHome.redirect='exchange'
+  uci set AdGuardHome.AdGuardHome.configpath='/opt/AdGuardHome/AdGuardHome.yaml'
+  uci set AdGuardHome.AdGuardHome.workdir='/opt/AdGuardHome'
+  uci set AdGuardHome.AdGuardHome.binpath='/opt/AdGuardHome/AdGuardHome'
+  uci set AdGuardHome.AdGuardHome.logfile='/tmp/AdGuardHome.log'
+  uci commit AdGuardHome
+
+  echo "Done!"
   echo "Please enable by using command 'adguardhome enable' ."
 }
 
@@ -204,12 +224,12 @@ case "$1" in
     enable
     dashboard
     ;;
-  "-install-core")
-    install_core
+  "-install")
+    install
     ;;
   *)
     echo "Invalid option. Use 'enable' or 'disable'."
     echo "Use 'restart' to restart running servce."
-    echo "or '-install-core' to download AdGuardHome main core."
+    echo "or '-install' to install AdGuardHome main program and core."
     ;;
 esac
