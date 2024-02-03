@@ -199,7 +199,7 @@ case "$1" in
   "disable")
     disable
     ;;
-  "--force-enable")
+  "restart")
     disable
     enable
     dashboard
@@ -209,7 +209,7 @@ case "$1" in
     ;;
   *)
     echo "Invalid option. Use 'enable' or 'disable'."
-    echo "Use '--force-enable' to force enable without checking running servce."
+    echo "Use 'restart' to restart running servce."
     echo "or '-install-core' to download AdGuardHome main core."
     ;;
 esac
