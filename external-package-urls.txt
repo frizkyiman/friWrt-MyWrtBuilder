@@ -37,7 +37,6 @@
 #
 all-all https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-sms-tool-js_2.0.20-20240102_all.ipk
-all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-modemdefine_1.0.5-20231008_all.ipk
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-modemband_1.0.24-20240102_all.ipk
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/modemband_20240102_all.ipk
 all-all https://github.com/4IceG/Modem-extras/raw/main/myrepo/luci-app-lite-watchdog_1.0.15-20240102_all.ipk
