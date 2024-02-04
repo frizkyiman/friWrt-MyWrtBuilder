@@ -140,7 +140,7 @@ jobs:
           echo "DATEMONTH=$(date +"%Y-%B" | awk '{print tolower($0)}')" >> $GITHUB_ENV
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with: 
           path: origin
 
@@ -228,7 +228,7 @@ jobs:
 
       - name: Upload All Firmware to Artifacts
         if: github.event.inputs.upload-artifacts == 'true'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           path: ${{ env.WORKING_DIR }}/compiled_images//*
