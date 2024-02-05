@@ -54,7 +54,7 @@ on:
         default: "true"
         type: boolean
       upload-artifacts:
-        description: "upload compiled image to Artifacts"
+        description: "Upload compiled image to Artifacts only"
         required: false
         default: "false"
         type: boolean
