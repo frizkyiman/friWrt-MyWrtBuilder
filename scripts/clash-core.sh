@@ -32,27 +32,26 @@ else
 fi
 
 mkdir -p $core_dir
-cd $core_dir || { echo "Clash core path does not exist!"; exit 1; }
 echo "Downloading clash.tar.gz..."
-if wget --no-check-certificate -nv -O clash.tar.gz $clash; then
-   tar -zxf clash.tar.gz
-   rm clash.tar.gz
+if wget --no-check-certificate -nv -O $core_dir/clash.tar.gz $clash; then
+   tar -zxf $core_dir/clash.tar.gz
+   rm $core_dir/clash.tar.gz
    echo "clash.tar.gz downloaded and extracted successfully."
 else
    echo "Failed to download clash.tar.gz."
 fi
    
 echo "Downloading clash_meta.gz..."
-if wget --no-check-certificate -nv -O clash_meta.gz $clash_meta; then
-   gzip -d clash_meta.gz
+if wget --no-check-certificate -nv -O $core_dir/clash_meta.gz $clash_meta; then
+   gzip -d $core_dir/clash_meta.gz
    echo "clash_meta.gz downloaded successfully."
 else
    echo "Failed to download clash_meta.gz."
 fi
    
 echo "Downloading clash_tun.gz..."
-if wget --no-check-certificate -nv -O clash_tun.gz $clash_tun; then
-   gzip -d clash_tun.gz
+if wget --no-check-certificate -nv -O $core_dir/clash_tun.gz $clash_tun; then
+   gzip -d $core_dir/clash_tun.gz
    echo "clash_tun.gz downloaded successfully."
 else
    echo "Failed to download clash_tun.gz."
