@@ -23,7 +23,7 @@ patchoc="https://raw.githubusercontent.com/frizkyiman/friWrt-MyWrtBuilder/main/f
 
 if [ "$1" == "install" ]; then
     echo -e "${INFO} Start installing [ ${openclash_file} ] dependencies first"
-    if opkg list-installed | grep -q '^dnsmasq\b'; then echo -e "${INFO} dnsmasq is already installed. Removing..."; opkg remove dnsmasq; fi
+    if opkg list-installed | grep -q '^dnsmasq$'; then echo -e "${INFO} dnsmasq is already installed. Removing..."; opkg remove dnsmasq; fi
     if [ -n "$(command -v fw4)" ]; then
         echo -e "${INFO} Firewall 4 nftables detected"
         [ "$opkg_updated" = false ] && opkg update && opkg_updated=true
@@ -33,7 +33,8 @@ if [ "$1" == "install" ]; then
         [ "$opkg_updated" = false ] && opkg update && opkg_updated=true
         opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip luci-compat luci luci-base
     fi
-elif [ "$1" == "install" ] || [ "$1" == "install-core" ]; then
+fi
+if [ "$1" == "install" ] || [ "$1" == "install-core" ]; then
     echo -e "${INFO} Start downloading core..."
     yacd_dir="/usr/share/openclash/ui"
     core_dir="/etc/openclash/core"
