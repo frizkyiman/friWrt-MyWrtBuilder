@@ -5,7 +5,7 @@ SUCCESS="[\033[92m SUCCESS \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
 opkg_updated=false
 
-required_packages=("wget-ssl" "bash" "curl" "gunzip" "tar")
+required_packages=("wget-ssl" "bash" "curl" "gzip" "tar")
 for package in "${required_packages[@]}"; do
     if ! opkg list-installed | grep -q "^$package -"; then
         echo -e "${INFO} Package $package to initialize setup not found. Installing..."
