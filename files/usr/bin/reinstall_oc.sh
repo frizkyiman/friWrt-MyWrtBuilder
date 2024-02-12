@@ -5,7 +5,7 @@ SUCCESS="[\033[92m SUCCESS \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
 opkg_updated=false
 
-required_packages=("wget-ssl" "bash" "curl")
+required_packages=("wget-ssl" "bash" "curl" "gunzip" "tar")
 for package in "${required_packages[@]}"; do
     if ! opkg list-installed | grep -q "^$package -"; then
         echo -e "${INFO} Package $package to initialize setup not found. Installing..."
@@ -38,10 +38,22 @@ if [ "$1" == "install" ] || [ "$1" == "install-core" ]; then
     echo -e "${INFO} Start downloading core..."
     yacd_dir="/usr/share/openclash/ui"
     core_dir="/etc/openclash/core"
+    if [ "$1" == "install-core" ]; then rm -r $core_dir; fi
     ARCH_1=$(uname -m) && { [ "$ARCH_1" == "aarch64" ] && ARCH_1="arm64" || [ "$ARCH_1" == "x86_64" ] && ARCH_1="amd64"; }
     [ "$ARCH_1" == "x86_64" ] && PROFILE="generic"
-    bash -c "$(curl -fsSL https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/scripts/clash-core.sh)"
+    wget -qO- https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/scripts/clash-core.sh | bash -s "$yacd_dir" "$core_dir" "$ARCH_1" "$PROFILE"
     echo -e "${SUCCESS} Done!"
+    if [ -d "/usr/share/openclash/ui/yacd.new" ]; then
+      if mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old; then
+        mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
+      fi
+    fi
+    chmod +x /etc/openclash/core/clash
+    chmod +x /etc/openclash/core/clash_tun
+    chmod +x /etc/openclash/core/clash_meta
+    chmod +x /usr/bin/patchoc.sh
+    bash /usr/bin/patchoc.sh
+    sed -i '/exit 0/i #/usr/bin/patchoc.sh' /etc/rc.local
 fi
 
 echo -e "${INFO} Start downloading [ ${openclash_file} ]."
