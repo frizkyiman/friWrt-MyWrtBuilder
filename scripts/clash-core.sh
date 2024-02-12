@@ -4,7 +4,7 @@ echo "Current Path: $PWD"
 
 echo "Start YACD Download !"
 
-yacd_dir="files/usr/share/openclash/ui"
+yacd_dir="${1:-files/usr/share/openclash/ui}"
 yacd="https://github.com/taamarin/yacd-meta/archive/gh-pages.zip"
 mkdir -p $yacd_dir
 if wget --no-check-certificate -nv $yacd -O $yacd_dir/yacd.zip; then
@@ -18,7 +18,9 @@ fi
 
 echo "Start Clash Core Download !"
 #core download url
-core_dir="files/etc/openclash/core"
+core_dir="${2:-files/etc/openclash/core}"
+ARCH_1="${3:-$ARCH_1}"
+PROFILE="${4:-$PROFILE}"
 clash="https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-$ARCH_1.tar.gz"
 clash_tun="https://github.com/vernesong/OpenClash/raw/core/master/premium/$(curl -s "https://github.com/vernesong/OpenClash/tree/core/master/premium" | grep -o "clash-linux-$ARCH_1-[0-9]*\.[0-9]*\.[0-9]*-[0-9]*-[a-zA-Z0-9]*\.gz" | awk 'NR==1 {print $1}')"
 if [[ "$PROFILE" == "generic" ]]; then
