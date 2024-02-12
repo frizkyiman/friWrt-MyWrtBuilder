@@ -33,8 +33,7 @@ fi
 mkdir -p $core_dir
 echo "Downloading clash.tar.gz..."
 if wget --no-check-certificate -nv -O $core_dir/clash.tar.gz $clash; then
-   tar -zxf $core_dir/clash.tar.gz
-   rm $core_dir/clash.tar.gz
+   tar -zxf $core_dir/clash.tar.gz && rm $core_dir/clash.tar.gz
    echo "clash.tar.gz downloaded and extracted successfully."
 else
    echo "Failed to download clash.tar.gz."
