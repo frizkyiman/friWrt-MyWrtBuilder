@@ -72,7 +72,7 @@ install_openclash_core() {
     yacd_dir="/usr/share/openclash/ui"
     core_dir="/etc/openclash/core"
     ARCH_1=$(uname -m) && { [ "$ARCH_1" == "aarch64" ] && ARCH_1="arm64" || [ "$ARCH_1" == "x86_64" ] && ARCH_1="amd64"; }
-    [ "$ARCH_1" == "x86_64" ] && PROFILE="generic"
+    if [ "$ARCH_1" == "x86_64" ]; then PROFILE="generic"; fi
     wget -qO- https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/scripts/clash-core.sh | bash -s "$yacd_dir" "$core_dir" "$ARCH_1" "$PROFILE"
     echo -e "${SUCCESS} Done!"
     if [ -d "$yacd_dir/yacd.new" ]; then
