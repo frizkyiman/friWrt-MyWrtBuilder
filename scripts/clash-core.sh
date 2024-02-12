@@ -9,7 +9,7 @@ yacd="https://github.com/taamarin/yacd-meta/archive/gh-pages.zip"
 mkdir -p $yacd_dir
 if wget --no-check-certificate -nv $yacd -O $yacd_dir/yacd.zip; then
    unzip -qq $yacd_dir/yacd.zip -d $yacd_dir && rm $yacd_dir/yacd.zip
-   if mv $yacd_dir/yacd* $yacd_dir/yacd.new; then 
+   if mv $yacd_dir/yacd-meta-gh-pages $yacd_dir/yacd.new; then 
      echo "YACD Dashboard download successfully."
    fi
 else
