@@ -4,11 +4,12 @@ echo "Current Path: $PWD"
 
 echo "Start YACD Download !"
 
+yacd_dir="files/usr/share/openclash/ui"
 yacd="https://github.com/taamarin/yacd-meta/archive/gh-pages.zip"
-mkdir -p files/usr/share/openclash/ui
-if wget --no-check-certificate -nv $yacd -O files/usr/share/openclash/ui/yacd.zip; then
-   unzip -qq files/usr/share/openclash/ui/yacd.zip -d files/usr/share/openclash/ui && rm files/usr/share/openclash/ui/yacd.zip
-   if mv files/usr/share/openclash/ui/yacd* files/usr/share/openclash/ui/yacd.new; then 
+mkdir -p $yacd_dir
+if wget --no-check-certificate -nv $yacd -O $yacd_dir/yacd.zip; then
+   unzip -qq $yacd_dir/yacd.zip -d $yacd_dir && rm $yacd_dir/yacd.zip
+   if mv $yacd_dir/yacd* $yacd_dir/yacd.new; then 
      echo "YACD Dashboard download successfully."
    fi
 else
@@ -17,6 +18,7 @@ fi
 
 echo "Start Clash Core Download !"
 #core download url
+core_dir="files/etc/openclash/core"
 clash="https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-$ARCH_1.tar.gz"
 clash_tun="https://github.com/vernesong/OpenClash/raw/core/master/premium/$(curl -s "https://github.com/vernesong/OpenClash/tree/core/master/premium" | grep -o "clash-linux-$ARCH_1-[0-9]*\.[0-9]*\.[0-9]*-[0-9]*-[a-zA-Z0-9]*\.gz" | awk 'NR==1 {print $1}')"
 if [[ "$PROFILE" == "generic" ]]; then
@@ -27,8 +29,8 @@ else
   clash_meta="https://github.com/MetaCubeX/mihomo/releases/download/v1.17.0/mihomo-linux-$ARCH_1-v1.17.0.gz"
 fi
 
-mkdir -p files/etc/openclash/core
-cd files/etc/openclash/core || { echo "Clash core path does not exist!"; exit 1; }
+mkdir -p $core_dir
+cd $core_dir || { echo "Clash core path does not exist!"; exit 1; }
 echo "Downloading clash.tar.gz..."
 if wget --no-check-certificate -nv -O clash.tar.gz $clash; then
    tar -zxf clash.tar.gz
