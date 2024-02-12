@@ -162,6 +162,7 @@ chmod +x /usr/bin/neofetch
 chmod +x /usr/bin/clock
 chmod +x /usr/bin/mount_hdd
 chmod +x /usr/bin/speedtest
+chmod +x /usr/bin/openclash.sh
 
 # configurating openclash
 if opkg list-installed | grep luci-app-openclash > /dev/null; then
@@ -183,7 +184,9 @@ else
 fi
 
 # adding new line for enable i2c oled display
-echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
+if ARCH_1=$(uname -m) && [ "$ARCH_1" != "x86_64" ]; then
+  echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
+fi
 
 # enable adguardhome
 chmod +x /usr/bin/adguardhome
