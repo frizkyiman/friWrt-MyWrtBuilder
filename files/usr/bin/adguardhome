@@ -7,6 +7,7 @@ INFO="[\033[94m INFO \033[0m]"
 SUCCESS="[\033[92m SUCCESS \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
 opkg_updated=false
+ARCH=$(uname -m) && [ "$ARCH" == "aarch64" ] && ARCH="arm64" || [ "$ARCH" == "x86_64" ] && ARCH="amd64"
 agh_api="https://api.github.com/repos/AdguardTeam/AdGuardHome/releases"
 agh_file="AdGuardHome_linux_$ARCH"
 agh_file_down="$(curl -s "$agh_api" | grep "browser_download_url" | grep -oE "https.*${agh_file}.*.tar.gz" | head -n 1)"
@@ -45,7 +46,7 @@ install_adguardhome() {
     fi
     
     echo -e "${INFO} Configuring AdGuardHome..."
-    wget --no-check-certificate https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/files/opt/AdGuardHome/AdGuardHome.yaml -P /opt/AdGuardHome
+    wget  -q -N -P /opt/AdGuardHome https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/files/opt/AdGuardHome/AdGuardHome.yaml
     uci set AdGuardHome.AdGuardHome.enabled='0'
     uci set AdGuardHome.AdGuardHome.httpport='3000'
     uci set AdGuardHome.AdGuardHome.redirect='exchange'
@@ -57,6 +58,7 @@ install_adguardhome() {
     echo -e "${SUCCESS} Done!"
     
     if wget -q -N -P /usr/bin "agh_script"; then 
+        echo -e "${INFO} Downloading additional script..."
         chmod +x /usr/bin/adguardhome
     else
         echo -e "${ERROR} Failed to download additional script! Make sure the connection is accessible."
@@ -65,12 +67,15 @@ install_adguardhome() {
 
 install_adguardhome_core() {
     echo -e "${INFO} Downloading AdGuardHome core..."
-    ARCH=$(uname -m) && [ "$ARCH" == "aarch64" ] && ARCH="arm64" || [ "$ARCH" == "x86_64" ] && ARCH="amd64"
     mkdir -p /opt
     if wget -nv "$agh_file_down" -P /opt; then
       echo -e "${INFO} Extracting core..."
-      tar -zxf "/opt/AdGuardHome_linux_$ARCH.tar.gz" -C /opt && rm "/opt/AdGuardHome_linux_$ARCH.tar.gz"
-      echo -e "${SUCCESS} Finished! AdGuardHome version $latest_version successfull installed"
+      if tar -zxf "/opt/AdGuardHome_linux_$ARCH.tar.gz" -C /opt; then
+         rm "/opt/AdGuardHome_linux_$ARCH.tar.gz"
+         echo -e "${SUCCESS} Finished! AdGuardHome version $latest_version successfull installed"
+      else
+         echo -e "${ERROR} Failed to extract core!"
+      fi
     else
      echo -e "${ERROR} Failed download AdGuardHome. Please check your internet connection or try again."
     fi
