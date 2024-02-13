@@ -222,7 +222,7 @@ jobs:
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
       - name: Upload Firmware to Release
-        uses: svenstaro/upload-release-action@v2
+        uses: termux/upload-release-action@v4.0.2
         if: steps.compile.outputs.status == 'success' && !cancelled()
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
