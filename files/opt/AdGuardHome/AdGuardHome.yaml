@@ -93,13 +93,13 @@ tls:
   strict_sni_check: false
 querylog:
   ignored: []
-  interval: 2160h
+  interval: 720h
   size_memory: 1000
   enabled: true
   file_enabled: true
 statistics:
   ignored: []
-  interval: 2160h
+  interval: 720h
   enabled: true
 filters:
   - enabled: true
