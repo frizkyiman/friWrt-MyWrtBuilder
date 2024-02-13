@@ -61,7 +61,7 @@ install_adguardhome() {
     uci commit AdGuardHome
     echo -e "${SUCCESS} Done!"
     
-    if wget -q -N -P /usr/bin "agh_script"; then 
+    if wget -q -N -P /usr/bin "$agh_script"; then 
         echo -e "${INFO} Downloading additional script..."
         chmod +x /usr/bin/adguardhome
     else
