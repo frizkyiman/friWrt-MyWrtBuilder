@@ -72,6 +72,9 @@ install_adguardhome() {
 install_adguardhome_core() {
     echo -e "${INFO} Downloading AdGuardHome core..."
     mkdir -p /opt
+    if [ -d "/opt/AdGuardHome" ]; then
+      find "/opt/AdGuardHome" -type f ! -name '*.yaml' -exec rm {} \;
+    fi
     if wget -nv "$agh_file_down" -P /opt; then
       echo -e "${INFO} Extracting core..."
       if tar -zxf "/opt/AdGuardHome_linux_$ARCH.tar.gz" -C /opt; then
