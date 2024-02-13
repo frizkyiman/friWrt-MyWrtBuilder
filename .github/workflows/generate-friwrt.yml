@@ -135,7 +135,7 @@ jobs:
           echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
           echo "BRANCH=${RELEASE_BRANCH#*:}" >> $GITHUB_ENV
           echo "tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "21.02" )" >> $GITHUB_ENV
-          echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
           echo "DATEMONTH=$(date +"%Y-%B" | awk '{print tolower($0)}')" >> $GITHUB_ENV
       
@@ -234,7 +234,7 @@ jobs:
           path: ${{ env.WORKING_DIR }}/compiled_images//*
 
       - name: Upload Firmware to Release
-        uses: svenstaro/upload-release-action@v2
+        uses: svenstaro/upload-release-action@v2.7.0
         if: github.event.inputs.upload-artifacts == 'false'
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
