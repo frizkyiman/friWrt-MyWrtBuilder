@@ -190,7 +190,7 @@ fi
 
 # enable adguardhome
 chmod +x /usr/bin/adguardhome
-bash /usr/bin/adguardhome enable
+bash /usr/bin/adguardhome restart
 
 echo "All done!"
 
