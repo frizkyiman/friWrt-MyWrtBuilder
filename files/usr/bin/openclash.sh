@@ -1,4 +1,7 @@
 #!/bin/bash
+# Script to install openclash, gabut version.
+# Created by Frizkyiman
+# Github https://github.com/frizkyiman/
 
 INFO="[\033[94m INFO \033[0m]"
 SUCCESS="[\033[92m SUCCESS \033[0m]"
