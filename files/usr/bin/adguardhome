@@ -12,6 +12,7 @@ agh_file="AdGuardHome_linux_$ARCH"
 agh_file_down="$(curl -s "$agh_api" | grep "browser_download_url" | grep -oE "https.*${agh_file}.*.tar.gz" | head -n 1)"
 latest_version=$(curl -sSL "$agh_api/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1)
 agh_ipk="https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk"
+agh_script="https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/files/usr/bin/adguardhome"
 
 check_service_status() {
     if /etc/init.d/AdGuardHome status | grep -q "running"; then
@@ -53,8 +54,13 @@ install_adguardhome() {
     uci set AdGuardHome.AdGuardHome.binpath='/opt/AdGuardHome/AdGuardHome'
     uci set AdGuardHome.AdGuardHome.logfile='/tmp/AdGuardHome.log'
     uci commit AdGuardHome
-
     echo -e "${SUCCESS} Done!"
+    
+    if wget -q -N -P /usr/bin "agh_script"; then 
+        chmod +x /usr/bin/adguardhome
+    else
+        echo -e "${ERROR} Failed to download additional script! Make sure the connection is accessible."
+    fi
 }
 
 install_adguardhome_core() {
