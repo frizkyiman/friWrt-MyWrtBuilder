@@ -86,7 +86,6 @@ install_adguardhome_core() {
     else
      echo -e "${ERROR} Failed download AdGuardHome. Please check your internet connection or try again."
     fi
-    echo -e "${SUCCESS} Finished! AdGuardHome core version $latest_version successfull installed"
 }
 
 enable_agh() {
