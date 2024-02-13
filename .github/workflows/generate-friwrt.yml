@@ -234,7 +234,7 @@ jobs:
           path: ${{ env.WORKING_DIR }}/compiled_images//*
 
       - name: Upload Firmware to Release
-        uses: svenstaro/upload-release-action@v2.7.0
+        uses: termux/upload-release-action@v4.0.2
         if: github.event.inputs.upload-artifacts == 'false'
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
