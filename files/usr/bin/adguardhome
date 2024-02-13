@@ -31,11 +31,15 @@ install_adguardhome_depands() {
 
 install_adguardhome() {
     echo -e "${INFO} Start downloading luci-app-adguardhome."
+    if opkg list-installed | grep -q '^adguardhome$'; then
+        echo -e "${INFO} adguardhome is already installed. Removing..."
+        opkg remove adguardhome
+    fi
     if wget -q -N -P /root "$agh_ipk"; then
         echo -e "${SUCCESS} luci-app-adguardhome is downloaded successfully."
         echo -e "${INFO} Start installing luci-app-adguardhome"
         [ "$opkg_updated" = false ] && opkg update && opkg_updated=true
-        if opkg install /root/*adguardhome*.ipk; then
+        if opkg install /root/*adguardhome*.ipk --force-reinstall; then
             [ "${?}" -eq "0" ] && echo -e "${SUCCESS} AdGuardHome successfully installed." || echo -e "${ERROR} Failed to install! Check for errors during installation."
         else
             echo -e "${ERROR} Failed to install luci-app-adguardhome! Check for errors during installation."
