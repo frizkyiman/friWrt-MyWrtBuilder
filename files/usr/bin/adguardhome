@@ -31,15 +31,19 @@ install_adguardhome_depands() {
 
 install_adguardhome() {
     echo -e "${INFO} Start downloading luci-app-adguardhome."
-    if opkg list-installed | grep -q '^adguardhome$'; then
-        echo -e "${INFO} adguardhome is already installed. Removing..."
-        opkg remove adguardhome
-    fi
+    packages=("adguardhome" "luci-app-adguardhome")
+    for package in "${packages[@]}"; do
+        if opkg list-installed | grep -q "^$package"; then
+            echo -e "${INFO} $package is already installed. Removing..."
+            opkg remove "$package" --force-remove
+        fi
+    done
+    rm -f /etc/config/AdGuardHome
     if wget -q -N -P /root "$agh_ipk"; then
         echo -e "${SUCCESS} luci-app-adguardhome is downloaded successfully."
         echo -e "${INFO} Start installing luci-app-adguardhome"
         [ "$opkg_updated" = false ] && opkg update && opkg_updated=true
-        if opkg install /root/*adguardhome*.ipk --force-reinstall; then
+        if opkg install /root/*adguardhome*.ipk --force-overwrite; then
             [ "${?}" -eq "0" ] && echo -e "${SUCCESS} AdGuardHome successfully installed." || echo -e "${ERROR} Failed to install! Check for errors during installation."
         else
             echo -e "${ERROR} Failed to install luci-app-adguardhome! Check for errors during installation."
@@ -271,11 +275,11 @@ setup() {
             enable_agh
             dashboard
             ;;
-        install-core)
+        update-core)
             install_adguardhome_core
             ;;
         *)
-            echo -e "${ERROR} Invalid argument. Usage: $0 {enable|disable|restart|install|install-core}"
+            echo -e "${ERROR} Invalid argument. Usage: $0 {enable|disable|restart|install|update-core}"
             ;;
     esac
 }
