@@ -83,7 +83,7 @@ install_adguardhome_core() {
       echo -e "${INFO} Extracting core..."
       if tar -zxf "/opt/AdGuardHome_linux_$ARCH.tar.gz" -C /opt; then
          rm "/opt/AdGuardHome_linux_$ARCH.tar.gz"
-         echo -e "${SUCCESS} Finished! AdGuardHome version $latest_version successfull installed"
+         echo -e "${SUCCESS} Finished! AdGuardHome core version $latest_version successfull installed"
       else
          echo -e "${ERROR} Failed to extract core!"
       fi
@@ -258,6 +258,9 @@ setup() {
             install_adguardhome_core
             dashboard
             echo -e "${INFO} Please enable by using command 'adguardhome enable' ."
+            echo -e "${INFO} Before enabling AdGuardHome, make sure there are no"
+            echo -e "${INFO} other programs that can override the DNS configuration"
+            echo -e "${INFO} and settings because it can create anomalies on your network."
             ;;
         enable)
             if check_service_status "AdGuardHome"; then
