@@ -103,7 +103,6 @@ enable_agh() {
     uci set AdGuardHome.AdGuardHome.binpath='/opt/AdGuardHome/AdGuardHome'
     uci set AdGuardHome.AdGuardHome.verbose='0'
     uci commit AdGuardHome
-    sed -i '/port: 6060/! s/\(port:\s*\)[0-9]*/\153/' /opt/AdGuardHome/AdGuardHome.yaml
 
     echo "Get the first IPv4 and IPv6 Address of router."
     NET_ADDR=$(uci get network.lan.ipaddr)
@@ -111,6 +110,10 @@ enable_agh() {
  
     echo "Router IPv4 : ""${NET_ADDR}"
     echo "Router IPv6 : ""${NET_ADDR6}"
+
+    echo "Making some changes on .yaml confing."
+    sed -i "s/local_ptr_upstreams: \[\]/local_ptr_upstreams:\n    - ${NET_ADDR}:54/" /opt/AdGuardHome/AdGuardHome.yaml
+    sed -i '/port: 6060/! s/\(port:\s*\)[0-9]*/\153/' /opt/AdGuardHome/AdGuardHome.yaml
 
     echo "Enable dnsmasq to do PTR requests."
     uci set dhcp.@dnsmasq[0].noresolv='0'
