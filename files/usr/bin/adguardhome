@@ -25,8 +25,21 @@ check_service_status() {
 
 install_adguardhome_depands() {
     echo -e "${INFO} Start installing dependencies first"
-    [ "$opkg_updated" = false ] && opkg update && opkg_updated=true
-    opkg install ca-certificates ca-bundle curl wget wget-ssl tar unzip bind-tools
+    dependencies=("ca-certificates" "ca-bundle" "curl" "wget" "wget-ssl" "tar" "unzip" "bind-tools")
+    for dependency in "${dependencies[@]}"; do
+        [ "$opkg_updated" = false ] && { opkg update || { echo -e "${ERROR} Failed to update opkg!"; exit 1; }; opkg_updated=true; }
+        if ! opkg list-installed | grep -q "^$dependency"; then
+            echo -e "${INFO} Installing $dependency"
+            if opkg install "$dependency"; then
+                echo -e "${SUCCESS} $dependency successfully installed."
+            else
+                echo -e "${ERROR} Failed to install $dependency!"
+                exit 1
+            fi
+        else
+            echo -e "${INFO} $dependency is already installed."
+        fi
+    done
 }
 
 install_adguardhome() {
@@ -43,15 +56,17 @@ install_adguardhome() {
     if wget -q -N -P /root "$agh_ipk"; then
         echo -e "${SUCCESS} luci-app-adguardhome is downloaded successfully."
         echo -e "${INFO} Start installing luci-app-adguardhome"
-        [ "$opkg_updated" = false ] && opkg update && opkg_updated=true
+        [ "$opkg_updated" = false ] && { opkg update || { echo -e "${ERROR} Failed to update opkg!"; exit 1; }; opkg_updated=true; }
         if opkg install /root/*adguardhome*.ipk; then
             echo -e "${SUCCESS} AdGuardHome successfully installed."
         else
             echo -e "${ERROR} Failed to install luci-app-adguardhome!"
+            exit 1
         fi
         rm /root/*adguardhome*.ipk
     else
         echo -e "${ERROR} luci-app-adguardhome download failed! Make sure the connection is accessible."
+        exit 1
     fi
     
     echo -e "${INFO} Configuring AdGuardHome..."
@@ -87,9 +102,11 @@ install_adguardhome_core() {
          echo -e "${SUCCESS} Finished! AdGuardHome core version $latest_version successfull installed"
       else
          echo -e "${ERROR} Failed to extract core!"
+         exit 1
       fi
     else
      echo -e "${ERROR} Failed download AdGuardHome. Please check your internet connection or try again."
+     exit 1
     fi
 }
 
