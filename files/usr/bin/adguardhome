@@ -227,6 +227,7 @@ disable_agh() {
     echo -e "${SUCCESS} AdGuard Home Successfully Disable!"
 }
 
+
 dashboard() {
     if ! grep -q 'entry({"admin","services","AdGuardHome", "agh"}, template("AdGuardHome"), _("Dashboard")).leaf=true' /usr/lib/lua/luci/controller/AdGuardHome.lua; then
       echo -e "${INFO} setup AdGuardHome Dashboard."
