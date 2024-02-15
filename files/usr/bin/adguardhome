@@ -82,8 +82,8 @@ install_adguardhome_core() {
     fi
     if wget -nv "$agh_file_down" -P /opt; then
       echo -e "${INFO} Extracting core..."
-      if tar -zxf "/opt/AdGuardHome*.tar.gz" -C /opt; then
-         rm "/opt/AdGuardHome*.tar.gz"
+      if tar -zxf "/opt/AdGuardHome_linux_$ARCH.tar.gz" -C /opt; then
+         rm "/opt/AdGuardHome_linux_$ARCH.tar.gz"
          echo -e "${SUCCESS} Finished! AdGuardHome core version $latest_version successfull installed"
       else
          echo -e "${ERROR} Failed to extract core!"
