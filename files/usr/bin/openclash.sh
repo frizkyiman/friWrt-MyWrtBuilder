@@ -29,7 +29,7 @@ install_openclash_depands() {
     echo -e "${INFO} Start installing [ ${openclash_file} ] dependencies first"
     if opkg list-installed | grep -q '^dnsmasq[[:space:]]'; then
         echo -e "${INFO} dnsmasq is already installed. Removing..."
-        opkg remove dnsmasq --force-remove
+        opkg remove dnsmasq
     fi
     if [ -n "$(command -v fw4)" ]; then
         echo -e "${INFO} Firewall 4 nftables detected"
