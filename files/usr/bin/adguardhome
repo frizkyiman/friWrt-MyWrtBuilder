@@ -360,6 +360,10 @@ setup() {
         update-core)
             install_adguardhome_core
             ;;
+        enable_agh)
+            enable_agh
+            dashboard
+            ;;
         *)
             echo -e "${ERROR} Invalid argument. Usage: $0 {enable|disable|restart|install|update-core}"
             ;;
