@@ -1,3 +1,2 @@
 config vnstat
 	list interface 'br-lan'
-	list interface 'wwan0'
