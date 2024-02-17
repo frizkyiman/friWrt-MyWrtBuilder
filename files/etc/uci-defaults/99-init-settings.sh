@@ -29,13 +29,13 @@ uci add_list system.ntp.server="time.google.com"
 uci commit system
 
 # configure wan interface
+uci set network.lan.ipaddr="192.168.1.1"
 uci set network.wan=interface 
 uci set network.wan.proto='modemmanager'
-uci set network.wan.device='/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1'
+#uci set network.wan.device='/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1'
 uci set network.wan.apn='internet'
 uci set network.wan.auth='none'
 uci set network.wan.iptype='ipv4'
-uci set network.lan.ipaddr="192.168.1.1"
 uci set network.tethering=interface
 uci set network.tethering.proto='dhcp'
 uci set network.tethering.device='usb0'
@@ -93,10 +93,6 @@ else
   echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/generic" >> /etc/opkg/customfeeds.conf
   echo "src/gz custom_arch https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/main/$(grep "OPENWRT_ARCH" /etc/os-release | awk -F '"' '{print $2}')" >> /etc/opkg/customfeeds.conf
 fi
-
-# Remove watchcat default config
-uci -q delete watchcat.@watchcat[0]
-uci commit
 
 # setting firewall for samba4
 uci -q delete firewall.samba_nsds_nt
