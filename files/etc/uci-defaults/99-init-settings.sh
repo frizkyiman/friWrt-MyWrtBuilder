@@ -186,7 +186,7 @@ fi
 
 # enable adguardhome
 chmod +x /usr/bin/adguardhome
-bash /usr/bin/adguardhome restart
+bash /usr/bin/adguardhome enable_agh
 
 echo "All done!"
 
