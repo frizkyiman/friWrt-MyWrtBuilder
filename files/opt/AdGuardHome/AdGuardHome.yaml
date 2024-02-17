@@ -22,9 +22,7 @@ dns:
   refuse_any: true
   upstream_dns:
     - '[/pool.ntp.org/]1.1.1.1'
-    - '[/pool.ntp.org/]1.0.0.1'
     - '[/id.pool.ntp.org/]8.8.8.8'
-    - '[/id.pool.ntp.org/]8.8.4.4' 
     - 8.8.8.8
     - 9.9.9.9
     - 1.1.1.1
@@ -32,8 +30,11 @@ dns:
   upstream_dns_file: ""
   bootstrap_dns:
     - 8.8.8.8
+    - 8.8.4.4
     - 9.9.9.9
+    - 9.9.9.10
     - 1.1.1.1
+    - 1.0.0.1
   fallback_dns:
     - 149.112.112.112
     - 1.0.0.1
@@ -52,7 +53,7 @@ dns:
     - 127.0.0.0/8
     - ::1/128
   cache_size: 33554432
-  cache_ttl_min: 0
+  cache_ttl_min: 2400
   cache_ttl_max: 0
   cache_optimistic: true
   bogus_nxdomain: []
