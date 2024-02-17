@@ -61,14 +61,14 @@ print_info() {
     info "Kernel" kernel
     info "Uptime" uptime
     info "Packages" packages
-    info "Shell" shell
+    # info "Shell" shell
     # info "Resolution" resolution
     # info "DE" de
     # info "WM" wm
     # info "WM Theme" wm_theme
     # info "Theme" theme
     # info "Icons" icons
-    #info "Terminal" term
+    # info "Terminal" term
     # info "Terminal Font" term_font
     info "CPU" cpu
     # info "GPU" gpu
@@ -81,7 +81,7 @@ print_info() {
     # info "Song" song
     # [[ "$player" ]] && prin "Music Player" "$player"
     info "Local IP" local_ip
-    # info "Public IP" public_ip
+    info "Public IP" public_ip
     # info "Users" users
     # info "Locale" locale  # This only works on glibc systems.
 
