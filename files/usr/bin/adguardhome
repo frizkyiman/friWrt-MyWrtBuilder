@@ -7,13 +7,6 @@ INFO="[\033[94m INFO \033[0m]"
 SUCCESS="[\033[92m SUCCESS \033[0m]"
 ERROR="[\033[91m ERROR \033[0m]"
 opkg_updated=false
-ARCH=$(uname -m) && [ "$ARCH" == "aarch64" ] && ARCH="arm64" || [ "$ARCH" == "x86_64" ] && ARCH="amd64"
-agh_api="https://api.github.com/repos/AdguardTeam/AdGuardHome/releases"
-agh_file="AdGuardHome_linux_$ARCH"
-agh_file_down="$(curl -s "$agh_api" | grep "browser_download_url" | grep -oE "https.*${agh_file}.*.tar.gz" | head -n 1)"
-latest_version=$(curl -sSL "$agh_api/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1)
-agh_ipk="https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk"
-agh_script="https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/files/usr/bin/adguardhome"
 
 check_service_status() {
     if /etc/init.d/AdGuardHome status | grep -q "running"; then
@@ -43,6 +36,8 @@ install_adguardhome_depands() {
 }
 
 install_adguardhome() {
+    agh_ipk="https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk"
+    agh_script="https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/files/usr/bin/adguardhome"
     echo -e "${INFO} Start downloading luci-app-adguardhome."
     packages=("adguardhome" "luci-app-adguardhome")
     for package in "${packages[@]}"; do
@@ -90,6 +85,11 @@ install_adguardhome() {
 }
 
 install_adguardhome_core() {
+    ARCH=$(uname -m) && [ "$ARCH" == "aarch64" ] && ARCH="arm64" || [ "$ARCH" == "x86_64" ] && ARCH="amd64"
+    agh_api="https://api.github.com/repos/AdguardTeam/AdGuardHome/releases"
+    agh_file="AdGuardHome_linux_$ARCH"
+    agh_file_down="$(curl -s "$agh_api" | grep "browser_download_url" | grep -oE "https.*${agh_file}.*.tar.gz" | head -n 1)"
+    latest_version=$(curl -sSL "$agh_api/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1)
     echo -e "${INFO} Downloading AdGuardHome core..."
     [ ! -d "/opt" ] && mkdir -p /opt
     if [ -d "/opt/AdGuardHome" ]; then
