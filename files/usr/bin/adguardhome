@@ -341,7 +341,7 @@ setup() {
             else
               enable_agh
               if check_openclash_installed; then
-                  manage_openclash_restart
+                  manage_openclash_configuration
               fi
             fi
             ;;
@@ -354,7 +354,7 @@ setup() {
             enable_agh
             dashboard
             if check_openclash_installed; then
-                manage_openclash_restart
+                manage_openclash_configuration
             fi
             ;;
         update-core)
