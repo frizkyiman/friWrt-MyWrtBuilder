@@ -51,7 +51,6 @@ x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/atinout_0.9.1_x86_64.
 ################################################################################
 #
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-tinyfm_2.6_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-proto-mbim_git-23.137.84224-37176dc_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-mmconfig_0.0.5-4_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/internet-detector_1.0-3_all.ipk
@@ -71,7 +70,6 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-theme-argon_2.3
 ################################################################################
 #
 old-21.02 https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-tinyfm_2.5_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-proto-mbim_git-23.262.31484-20add84_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1.2-0_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-mmconfig_0.0.5-4_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/internet-detector_1.0-3_all.ipk
