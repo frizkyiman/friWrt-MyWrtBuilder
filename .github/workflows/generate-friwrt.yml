@@ -223,7 +223,7 @@ jobs:
             for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )_$DATE.img.gz; done
           fi
           sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
-          ls compiled_images
+          ls -l compiled_images
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
