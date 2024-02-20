@@ -55,5 +55,5 @@ else
    echo "Failed to download clash_tun.gz."
 fi
 
-ls $core_dir
+ls -l $core_dir
 echo "All Core Downloaded succesfully"
