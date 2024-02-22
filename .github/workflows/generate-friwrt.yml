@@ -58,6 +58,11 @@ on:
         required: false
         default: "false"
         type: boolean
+      upload-prerelease:
+        description: "Upload as pre-release"
+        required: false
+        default: "false"
+        type: boolean
 
 env:
   RELEASE_BRANCH: ${{ inputs.release_branch }}
@@ -65,6 +70,7 @@ env:
   TUNNEL: ${{ inputs.tunnel }}
   CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
+  PRE_RELEASE: ${{ inputs.upload-prerelease }}
 
 jobs:
   prebuild:
@@ -234,8 +240,20 @@ jobs:
           name: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           path: ${{ env.WORKING_DIR }}/compiled_images//*
 
+      - name: Add changelog to body of new release
+        if: github.event.inputs.upload-artifacts == 'false'
+        id: read_release
+        shell: bash
+        run: |
+          cd $WORKING_DIR
+          r=$(cat changelog.md)
+          r="${r//'%'/'%25'}"
+          r="${r//$'\n'/'%0A'}"
+          r="${r//$'\r'/'%0D'}"  
+          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT 
+          
       - name: Upload Firmware to Release
-        uses: termux/upload-release-action@v4.0.2
+        uses: svenstaro/upload-release-action@v2
         if: github.event.inputs.upload-artifacts == 'false'
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -244,9 +262,11 @@ jobs:
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           overwrite: true
+          prerelease: ${{ env.PRE_RELEASE }}
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
+            ${{ steps.read_release.outputs.RELEASE_BODY }}
             See [here](https://github.com/frizkyiman/friWrt-MyWrtBuilder?tab=readme-ov-file#firmware-details) for more detail feature and other information.
             - Default IP: 192.168.1.1
             - Default username: root
