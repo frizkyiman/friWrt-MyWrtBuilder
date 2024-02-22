@@ -42,6 +42,7 @@ uci set network.tethering.device='usb0'
 uci commit network
 uci set firewall.@zone[1].network='wan tethering'
 uci commit firewall
+chmod +x /usr/lib/ModemManager/connection.d/10-report-down
 
 # configure ipv6
 uci -q delete dhcp.lan.dhcpv6
