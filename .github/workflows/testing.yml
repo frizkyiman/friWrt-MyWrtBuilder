@@ -260,7 +260,7 @@ jobs:
           file_glob: true
           file: ${{ env.WORKING_DIR }}/compiled_images//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          tag: testing-${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           overwrite: true
           prerelease: ${{ env.PRE_RELEASE }}
           body: |
