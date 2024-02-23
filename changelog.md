@@ -1,3 +1,6 @@
+**Changelog** (23-02-2024):
+- add auto reconnect modemmanager
+
 **Changelog** (17-02-2024):
 - update openclash to v0.46.001-beta
 - update several script
