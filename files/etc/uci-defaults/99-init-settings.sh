@@ -29,20 +29,20 @@ uci add_list system.ntp.server="time.google.com"
 uci commit system
 
 # configure wan interface
+chmod +x /usr/lib/ModemManager/connection.d/10-report-down-and-reconnect
 uci set network.lan.ipaddr="192.168.1.1"
 uci set network.wan=interface 
 uci set network.wan.proto='modemmanager'
-#uci set network.wan.device='/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1'
+uci set network.wan.device='/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1'
 uci set network.wan.apn='internet'
 uci set network.wan.auth='none'
-uci set network.wan.iptype='ipv4'
+uci set network.wan.iptype='ipv4v6'
 uci set network.tethering=interface
 uci set network.tethering.proto='dhcp'
 uci set network.tethering.device='usb0'
 uci commit network
 uci set firewall.@zone[1].network='wan tethering'
 uci commit firewall
-chmod +x /usr/lib/ModemManager/connection.d/10-report-down
 
 # configure ipv6
 uci -q delete dhcp.lan.dhcpv6
