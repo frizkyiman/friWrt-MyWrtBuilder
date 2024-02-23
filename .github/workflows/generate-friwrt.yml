@@ -240,13 +240,13 @@ jobs:
           name: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           path: ${{ env.WORKING_DIR }}/compiled_images//*
 
-      - name: Add changelog to body of new release
+      - name: Add changelog info to new release description
         if: github.event.inputs.upload-artifacts == 'false'
         id: read_release
         shell: bash
         run: |
           cd $WORKING_DIR
-          r=$(cat changelog.md)
+          r=$(awk '/^\*\*Changelog\*\*/ {if(found) exit; found=1} found' changelog.md)
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
           r="${r//$'\r'/'%0D'}"  
@@ -266,7 +266,9 @@ jobs:
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
+            
             ${{ steps.read_release.outputs.RELEASE_BODY }}
+            
             See [here](https://github.com/frizkyiman/friWrt-MyWrtBuilder?tab=readme-ov-file#firmware-details) for more detail feature and other information.
             - Default IP: 192.168.1.1
             - Default username: root
