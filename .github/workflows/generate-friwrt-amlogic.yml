@@ -6,7 +6,7 @@
 #                https://downloads.immortalwrt.org/releases
 #=====================================================================================
 
-name: (testing2) Generate friWrt Firmware
+name: Generate friWrt Amlogic Firmware
 
 on:
   workflow_dispatch:
@@ -145,6 +145,7 @@ jobs:
           echo "ARCH_3=$ARCH_3" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
+          echo "DATEMONTH=$(date +"%B-%Y" | awk '{print tolower($0)}')" >> $GITHUB_ENV
       
       - name: Checkout
         uses: actions/checkout@v3
@@ -222,7 +223,7 @@ jobs:
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+          rm -rf $(ls . | grep -v "^compiled_images$" | xargs) 2>/dev/null
           df -hT ${PWD}
 
       - name: Packaging OpenWrt
@@ -239,14 +240,14 @@ jobs:
 
       - name: Upload Firmware to Release
         uses: ncipollo/release-action@main
-        if: github.event.inputs.release == 'true'
+        if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file_glob: true
-          file: ${{ env.WORKING_DIR }}/compiled_images//*
-          asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: testing-${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATE }}
-          overwrite: true
+          tag: ${{ env.PROFILE }}_Amlogic-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
