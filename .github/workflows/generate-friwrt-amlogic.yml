@@ -1,7 +1,7 @@
 #=====================================================================================
-# https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description:   Build OpenWrt with Image Builder
 # Instructions:  https://openwrt.org/docs/guide-user/additional-software/imagebuilder
+#                https://github.com/ophub/amlogic-s9xxx-openwrt
 # Download from: https://downloads.openwrt.org/releases
 #                https://downloads.immortalwrt.org/releases
 #=====================================================================================
@@ -187,24 +187,26 @@ on:
           - flippy
           - dev
           - beta
-      rootfs:
-        description: 'Set "/" partition size (1GB = 1024 Mb):'
-        required: true
-        default: '5120'
       tunnel:
-        description: "Select tunnel app (passwall only support for newer branch with fw4 firewall!):"
+        description: "Select VPN Client app (!passwall only support for newer branch with fw4 firewall!):"
         required: true
-        default: "openclash"
+        default: "all"
         type: choice
         options:
           - all
           - openclash
           - passwall
           - openclash-passwall
+          - no-tunnel
       clean:
         description: "Do 'make clean' for each run"
-        required: true
+        required: false
         default: "true"
+        type: boolean
+      upload-prerelease:
+        description: "Upload as pre-release"
+        required: false
+        default: "false"
         type: boolean
 
 env:
@@ -220,6 +222,7 @@ env:
 
 jobs:
   Generate:
+    name: ${{ inputs.release_branch }}-${{ inputs.tunnel }}
     runs-on: ubuntu-latest
 
     steps:
@@ -232,50 +235,43 @@ jobs:
       - name: Setup Environment Variables
         run: |
           if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ]; then
-            DEVICE=""
-            TARGET_1="armsr/armv8"
-            TARGET_2="armsr-armv8"
-            ARCH_1="armv8"
-            ARCH_2="arm"
-            ARCH_3=""
+            echo "PROFILE=" >> $GITHUB_ENV
+            echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
+            echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
+            echo "ARCH_1=armv8" >> $GITHUB_ENV
+            echo "ARCH_2=arm" >> $GITHUB_ENV
+            echo "ARCH_3=" >> $GITHUB_ENV
           elif [ "$RELEASE_BRANCH" == "immortalwrt:23.05.1" ]; then
-            DEVICE=""
-            TARGET_1="armsr/armv8"
-            TARGET_2="armsr-armv8"
-            ARCH_1="armv8"
-            ARCH_2="arm"
-            ARCH_3=""
+            echo "PROFILE=" >> $GITHUB_ENV
+            echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
+            echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
+            echo "ARCH_1=armv8" >> $GITHUB_ENV
+            echo "ARCH_2=arm" >> $GITHUB_ENV
+            echo "ARCH_3=" >> $GITHUB_ENV
           else
-            DEVICE="Default"
-            TARGET_1="armvirt/64"
-            TARGET_2="armvirt-64"
-            ARCH_1="armvirt"
-            ARCH_2="armvirt"
-            ARCH_3=""
+            echo "PROFILE=Default" >> $GITHUB_ENV
+            echo "TARGET_SYSTEM=armvirt/64" >> $GITHUB_ENV
+            echo "TARGET_NAME=armvirt-64" >> $GITHUB_ENV
+            echo "ARCH_1=armvirt" >> $GITHUB_ENV
+            echo "ARCH_2=armvirt" >> $GITHUB_ENV
+            echo "ARCH_3=" >> $GITHUB_ENV
           fi
-          echo "BUILD_SH=make-build.sh" >> $GITHUB_ENV
-          echo "PATCH_SH=scripts/builder-patch.sh" >> $GITHUB_ENV
-          echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$TARGET_2".Linux-x86_64" >> $GITHUB_ENV
+
+          echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$TARGET_NAME".Linux-x86_64" >> $GITHUB_ENV
           echo "DOWNLOAD_BASE=https://downloads."${RELEASE_BRANCH%:*}".org" >> $GITHUB_ENV
           echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
           echo "BRANCH=${RELEASE_BRANCH#*:}" >> $GITHUB_ENV
           echo "tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "21.02" )" >> $GITHUB_ENV
-          echo "PROFILE=$DEVICE" >> $GITHUB_ENV
-          echo "TARGET_SYSTEM=$TARGET_1" >> $GITHUB_ENV
-          echo "TARGET_NAME=$TARGET_2" >> $GITHUB_ENV
-          echo "ARCH=$ARCH_1" >> $GITHUB_ENV
-          echo "ARCH_2=$ARCH_2" >> $GITHUB_ENV
-          echo "ARCH_3=$ARCH_3" >> $GITHUB_ENV
-          echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
           echo "DATEMONTH=$(date +"%B-%Y" | awk '{print tolower($0)}')" >> $GITHUB_ENV
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with: 
           path: origin
 
-      - name: Download Image Builder ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
+      - name: Download Image Builder
         id: download
         run: |
           RELEASE="$DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz"
@@ -289,10 +285,11 @@ jobs:
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
+          bash external-package-urls.sh
           if [[ "$BRANCH" == "21.02.7" ]]; then
-             grep -E "^all-all|^old-$tags|^$ARCH-$tags" external-package-urls.txt | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^old-$tags|^$ARCH_1-$tags|^$ARCH_1" external-package-urls.txt | awk '{print $2}' > output_url.txt
           else
-             grep -E "^all-all|^all|^$ARCH" external-package-urls.txt | grep -vE "^$ARCH-$tags" | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^all|^$ARCH_1" external-package-urls.txt | grep -vE "^$ARCH_1-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
           echo "status=success" >> $GITHUB_OUTPUT
@@ -302,43 +299,52 @@ jobs:
         if: steps.packages.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          bash $PATCH_SH
-          if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
-              echo "tunnel option: $TUNNEL"
-              bash scripts/tunnel_app.sh openclash-passwall
-              ls packages
-          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
-              echo "tunnel option: $TUNNEL"
-              bash scripts/tunnel_app.sh "$TUNNEL"
-              ls packages
-          else
-              echo "Cannot install Passwall on older branch $BRANCH !"
-              exit 1
-          fi
-          bash scripts/clash-core.sh
+          bash scripts/builder-patch.sh
           bash scripts/agh-core.sh
           bash scripts/misc.sh
+          if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
+              echo "VPN Client: $TUNNEL"
+              bash scripts/tunnel_app.sh openclash-passwall
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
+              echo "VPN Client: $TUNNEL"
+              bash scripts/tunnel_app.sh "$TUNNEL"
+          elif [[ "$TUNNEL" == "all" && "$BRANCH" = "21.02.7" ]]; then 
+              echo "VPN Client: $TUNNEL"
+              bash scripts/tunnel_app.sh openclash
+          else
+              echo "No VPN Client selected"
+          fi
+          if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; fi
+          ls packages
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
-      - name: Compile Firmware ${{ env.BASE }}-${{ env.BRANCH }}-${{ inputs.target }}
+      - name: Compile Firmware
         id: compile
         if: steps.scripts.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
           mkdir -p compiled_images
-          if [ "$TUNNEL" == "all" ]; then
-            for t in openclash-passwall openclash passwall; do
-              echo "Compiling with tunnel: $t"
-              if [ "$CLEAN" == "true" ]; then make clean; fi
-              time bash $BUILD_SH $PROFILE $t
-              for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images/${t}_$(basename "$file" .tar.gz).tar.gz; done
+          if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then
+            for t in openclash-passwall openclash passwall no-tunnel; do
+              echo "Compiling with VPN Client: $t"
+              if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
+              time bash make-build.sh $PROFILE $t
+              for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images; done
             done
-          else
-            bash $BUILD_SH $PROFILE $t
-            for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images/${t}_$(basename "$file" .tar.gz).tar.gz; done
+          elif [[ "$TUNNEL" == "all" && "$BRANCH" = "21.02.7" ]]; then
+            for t in openclash no-tunnel; do
+              echo "Compiling with VPN Client: $t"
+              if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
+              time bash make-build.sh $PROFILE $t
+              for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images; done
+            done
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "no-tunnel" ]]; then
+            echo "Compiling with VPN Client: $TUNNEL"
+            bash make-build.sh $PROFILE $TUNNEL
+            for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images; done
           fi
-          ls compiled_images
+          ls -l compiled_images
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
@@ -361,25 +367,50 @@ jobs:
           kernel_usage: ${{ inputs.kernel_usage }}
           builder_name: ${{ inputs.builder_name }}
 
-      - name: Upload Firmware to Release
-        uses: ncipollo/release-action@main
+      - name: Prepare file before upload
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
+        id: prep_upload
+        run: |
+          cd $WORKING_DIR
+          for file in ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$t" ).img.gz; done
+          rm -rm *.sha && sha256sum ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz > ${{ env.PACKAGED_OUTPUTPATH }}/sha256sums
+          ls -l ${{ env.PACKAGED_OUTPUTPATH }}
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Add changelog info to new release description
+        if: github.event.inputs.upload-artifacts == 'false'
+        id: read_release
+        shell: bash
+        run: |
+          cd $WORKING_DIR
+          r=$(awk '/^\*\*Changelog\*\*/ {if(found) exit; found=1} found' changelog_amlogic.md)
+          r="${r//'%'/'%25'}"
+          r="${r//$'\n'/'%0A'}"
+          r="${r//$'\r'/'%0D'}"  
+          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT
+
+      - name: Upload Firmware to Release
+        uses: svenstaro/upload-release-action@v2
+        if: ${{ steps.prep_upload.outputs.status }} == 'success' && !cancelled()
         with:
-          tag: ${{ env.PROFILE }}_Amlogic-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
-          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-          allowUpdates: true
-          removeArtifacts: false
-          replacesArtifacts: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file_glob: true
+          file: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
+          tag: Amlogic-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          overwrite: true
+          prerelease: ${{ env.PRE_RELEASE }}
           body: |
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
+            
+            ${{ steps.read_release.outputs.RELEASE_BODY }}
+            
+            See [here](https://github.com/frizkyiman/friWrt-MyWrtBuilder?tab=readme-ov-file#firmware-details) for more detail feature and other information.
             - Default IP: 192.168.1.1
             - Default username: root
-            - Default password: ${{ env.LOGIN_PASSWORD || 'none' }}
-            - Default WIFI name: ${{ env.WIFI_SSID }}
-            - Default WIFI password: ${{ env.WIFI_PASSWORD || 'none' }}
+            - Default password: friwrt
+            - Default WIFI name: friWrt_2g | friWrt_5g (if device supported)
+            - Default WIFI password: friwrt2023 (if device supported)
             ### Install to EMMC
             - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
-            ### OpenWrt Image Verification
-            - sha256sum
