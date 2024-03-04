@@ -66,7 +66,7 @@ fi
 
 if [ "$1" == "rpi-4" ]; then
     misc+=" kmod-i2c-bcm2835 i2c-tools kmod-i2c-core kmod-i2c-gpio luci-app-oled speedtest-web luci-app-speedtest-web"
-elif [ "$1" == "generic" ]; then
+elif [ "$ARCH_2" == "x86_64" ]; then
     misc+=" speedtest-web luci-app-speedtest-web kmod-iwlwifi iw-full pciutils"
 fi
 PACKAGES+=" $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop bash curl wget wget-ssl tar unzip unrar jq luci-app-ttyd nano"
@@ -77,7 +77,7 @@ if [ "${RELEASE_BRANCH%:*}" == "openwrt" ]; then
     EXCLUDED+=" -dnsmasq"
 elif [ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]; then
     EXCLUDED+=" -dnsmasq -automount -libustream-openssl -default-settings-chn -luci-i18n-base-zh-cn"
-    if [ "$1" == "generic" ]; then
+    if [ "$ARCH_2" == "x86_64" ]; then
       EXCLUDED+=" -kmod-usb-net-rtl8152-vendor"
     fi
 fi
