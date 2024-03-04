@@ -252,8 +252,8 @@ jobs:
         run: |
           cd $WORKING_DIR
           ls -l ${{ env.PACKAGED_OUTPUTPATH }}
-          for file in ${{ env.PACKAGED_OUTPUTPATH }}/*amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$t" ).img.gz; done
-          rm *.sha && sha256sum ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz > ${{ env.PACKAGED_OUTPUTPATH }}/sha256sums
+          #for file in ${{ env.PACKAGED_OUTPUTPATH }}/*amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$t" ).img.gz; done
+          rm -r *.sha && sha256sum ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz > ${{ env.PACKAGED_OUTPUTPATH }}/sha256sums
           ls -l ${{ env.PACKAGED_OUTPUTPATH }}
           echo "status=success" >> $GITHUB_OUTPUT
 
