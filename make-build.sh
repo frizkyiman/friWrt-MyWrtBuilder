@@ -58,6 +58,12 @@ elif [ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]; then
     misc+=" "
 fi
 
+if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ]; then
+    misc+=" iptables-mod-ipopt"
+else
+    misc+=" "
+fi
+
 if [ "$1" == "rpi-4" ]; then
     misc+=" kmod-i2c-bcm2835 i2c-tools kmod-i2c-core kmod-i2c-gpio luci-app-oled speedtest-web luci-app-speedtest-web"
 elif [ "$1" == "generic" ]; then
