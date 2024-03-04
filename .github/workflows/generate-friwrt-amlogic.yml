@@ -235,14 +235,14 @@ jobs:
       - name: Setup Environment Variables
         run: |
           if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ]; then
-            echo "PROFILE=" >> $GITHUB_ENV
+            echo "PROFILE= " >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
             echo "ARCH_1=armv8" >> $GITHUB_ENV
             echo "ARCH_2=arm" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           elif [ "$RELEASE_BRANCH" == "immortalwrt:23.05.1" ]; then
-            echo "PROFILE=" >> $GITHUB_ENV
+            echo "PROFILE= " >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
             echo "ARCH_1=armv8" >> $GITHUB_ENV
