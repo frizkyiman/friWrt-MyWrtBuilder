@@ -210,15 +210,11 @@ on:
         type: boolean
 
 env:
-  TARGET: ${{ inputs.target }}
   RELEASE_BRANCH: ${{ inputs.release_branch }}
-  ROOTFS_SIZE: ${{ inputs.rootfs}}
   TUNNEL: ${{ inputs.tunnel }}
-  LOGIN_PASSWORD: friwrt
-  WIFI_SSID: friWrt_5g
-  WIFI_PASSWORD: friwrt2023
   CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
+  PRE_RELEASE: ${{ inputs.upload-prerelease }}
 
 jobs:
   Generate:
@@ -235,21 +231,21 @@ jobs:
       - name: Setup Environment Variables
         run: |
           if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ]; then
-            DEVICE=""
+            echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
             echo "ARCH_1=armv8" >> $GITHUB_ENV
             echo "ARCH_2=arm" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           elif [ "$RELEASE_BRANCH" == "immortalwrt:23.05.1" ]; then
-            DEVICE=""
+            echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
             echo "ARCH_1=armv8" >> $GITHUB_ENV
             echo "ARCH_2=arm" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           else
-            DEVICE=""
+            echo "PROFILE=Default" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armvirt/64" >> $GITHUB_ENV
             echo "TARGET_NAME=armvirt-64" >> $GITHUB_ENV
             echo "ARCH_1=armvirt" >> $GITHUB_ENV
