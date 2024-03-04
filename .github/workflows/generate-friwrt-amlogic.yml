@@ -222,7 +222,7 @@ env:
 
 jobs:
   Generate:
-    name: ${{ inputs.release_branch }}-${{ inputs.tunnel }}
+    name: Amlogic-${{ inputs.release_branch }}-${{ inputs.tunnel }}
     runs-on: ubuntu-latest
 
     steps:
