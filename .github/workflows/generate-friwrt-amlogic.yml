@@ -239,7 +239,7 @@ jobs:
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          rm -rf $(ls . | grep -v "^compiled_images$" | xargs) 2>/dev/null
+          rm -rf $(ls . | grep -vE "^compiled_images$|^changelog_amlogic.md$" | xargs) 2>/dev/null
           df -hT ${PWD}
 
       - name: Packaging OpenWrt
@@ -270,8 +270,7 @@ jobs:
         shell: bash
         run: |
           cd $WORKING_DIR
-          ls -l
-          r=$(awk '/^\*\*Changelog\*\*/ {if(found) exit; found=1} found' changelog.md)
+          r=$(awk '/^\*\*Changelog\*\*/ {if(found) exit; found=1} found' changelog_amlogic.md)
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
           r="${r//$'\r'/'%0D'}"  
