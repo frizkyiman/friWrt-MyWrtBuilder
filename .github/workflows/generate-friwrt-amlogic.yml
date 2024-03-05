@@ -115,14 +115,14 @@ jobs:
             echo "openwrt_board=s905x" >> $GITHUB_ENV
           fi
           if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ]; then
-            echo "PROFILE=Default" >> $GITHUB_ENV
+            echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
             echo "ARCH_1=arm64" >> $GITHUB_ENV
             echo "ARCH_2=arm64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           elif [ "$RELEASE_BRANCH" == "immortalwrt:23.05.1" ]; then
-            echo "PROFILE=Default" >> $GITHUB_ENV
+            echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
             echo "ARCH_1=arm64" >> $GITHUB_ENV
