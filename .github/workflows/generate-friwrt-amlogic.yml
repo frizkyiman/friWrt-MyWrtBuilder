@@ -252,13 +252,13 @@ jobs:
         run: |
           cd $WORKING_DIR
           cd ${{ env.PACKAGED_OUTPUTPATH }}
-          for file in *amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$t" ).img.gz; done
+          for file in *amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" ).img.gz; done
           rm -r *.sha && sha256sum *.img.gz > sha256sums
           ls -l
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Add changelog info to new release description
-        if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
+        if: if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         id: read_release
         shell: bash
         run: |
@@ -267,7 +267,7 @@ jobs:
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
           r="${r//$'\r'/'%0D'}"  
-          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT
+          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT 
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
