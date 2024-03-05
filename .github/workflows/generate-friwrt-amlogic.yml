@@ -1,9 +1,13 @@
 #=====================================================================================
+#
 # Description:   Build OpenWrt with Image Builder
-# Instructions:  https://openwrt.org/docs/guide-user/additional-software/imagebuilder
-#                https://github.com/ophub/amlogic-s9xxx-openwrt
+# This file is a part of the make OpenWrt for Amlogic s9xxx tv box
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+#
+# Documentation: https://openwrt.org/docs/guide-user/additional-software/imagebuilder
 # Download from: https://downloads.openwrt.org/releases
 #                https://downloads.immortalwrt.org/releases
+#
 #=====================================================================================
 
 name: Generate friWrt Amlogic Firmware
@@ -30,6 +34,7 @@ on:
           - all
           - hg680p
           - b860h
+          - nanopi-r5s
       openwrt_kernel:
         description: "Select kernel version"
         required: false
@@ -113,6 +118,8 @@ jobs:
             echo "openwrt_board=all" >> $GITHUB_ENV
           elif [ "$TARGET" == "hg680p" ] || [ "$TARGET" == "b860h" ]; then
             echo "openwrt_board=s905x" >> $GITHUB_ENV
+          elif [ "$TARGET" == "nanopi-r5s" ]; then
+            echo "openwrt_board=rk3568" >> $GITHUB_ENV
           fi
           if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ]; then
             echo "PROFILE=generic" >> $GITHUB_ENV
