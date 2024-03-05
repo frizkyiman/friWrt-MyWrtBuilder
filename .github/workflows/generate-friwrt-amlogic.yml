@@ -78,7 +78,7 @@ on:
       clean:
         description: "Do 'make clean' for each run"
         required: false
-        default: "true"
+        default: "false"
         type: boolean
       upload-prerelease:
         description: "Upload as pre-release"
@@ -97,7 +97,7 @@ env:
 
 jobs:
   Generate:
-    name: Amlogic-${{ inputs.release_branch }}-${{ inputs.tunnel }}
+    name: amlogic-${{ inputs.target }}-${{ inputs.release_branch }}-${{ inputs.tunnel }}
     runs-on: ubuntu-latest
 
     steps:
@@ -251,10 +251,10 @@ jobs:
         id: prep_upload
         run: |
           cd $WORKING_DIR
-          ls -l ${{ env.PACKAGED_OUTPUTPATH }}
-          #for file in ${{ env.PACKAGED_OUTPUTPATH }}/*amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$t" ).img.gz; done
-          rm -r *.sha && sha256sum ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz > ${{ env.PACKAGED_OUTPUTPATH }}/sha256sums
-          ls -l ${{ env.PACKAGED_OUTPUTPATH }}
+          cd ${{ env.PACKAGED_OUTPUTPATH }} && ls -l
+          #for file in *amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$t" ).img.gz; done
+          rm -r *.sha && sha256sum *.img.gz > sha256sums
+          ls -l
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Add changelog info to new release description
