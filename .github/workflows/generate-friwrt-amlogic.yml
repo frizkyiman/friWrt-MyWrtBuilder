@@ -270,6 +270,7 @@ jobs:
         shell: bash
         run: |
           cd $WORKING_DIR
+          ls -l
           r=$(awk '/^\*\*Changelog\*\*/ {if(found) exit; found=1} found' changelog.md)
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
