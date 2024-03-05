@@ -1,9 +1,13 @@
 #=====================================================================================
+#
 # Description:   Build OpenWrt with Image Builder
-# Instructions:  https://openwrt.org/docs/guide-user/additional-software/imagebuilder
-#                https://github.com/ophub/amlogic-s9xxx-openwrt
+# This file is a part of the make OpenWrt for Amlogic s9xxx tv box
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+#
+# Documentation: https://openwrt.org/docs/guide-user/additional-software/imagebuilder
 # Download from: https://downloads.openwrt.org/releases
 #                https://downloads.immortalwrt.org/releases
+#
 #=====================================================================================
 
 name: Generate friWrt Amlogic Firmware
@@ -28,8 +32,9 @@ on:
         type: choice
         options:
           - all
-          - HG680P
-          - B860H
+          - hg680p
+          - b860h
+          - nanopi-r5s
       openwrt_kernel:
         description: "Select kernel version"
         required: false
@@ -111,29 +116,31 @@ jobs:
         run: |
           if [ "$TARGET" == "all" ]; then
             echo "openwrt_board=all" >> $GITHUB_ENV
-          elif [ "$TARGET" == "HG680P" ] || [ "$TARGET" == "B860H" ]; then
+          elif [ "$TARGET" == "hg680p" ] || [ "$TARGET" == "b860h" ]; then
             echo "openwrt_board=s905x" >> $GITHUB_ENV
+          elif [ "$TARGET" == "nanopi-r5s" ]; then
+            echo "openwrt_board=rk3568" >> $GITHUB_ENV
           fi
           if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ]; then
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
-            echo "ARCH_1=armv8" >> $GITHUB_ENV
-            echo "ARCH_2=arm" >> $GITHUB_ENV
+            echo "ARCH_1=arm64" >> $GITHUB_ENV
+            echo "ARCH_2=arm64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           elif [ "$RELEASE_BRANCH" == "immortalwrt:23.05.1" ]; then
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
-            echo "ARCH_1=armv8" >> $GITHUB_ENV
-            echo "ARCH_2=arm" >> $GITHUB_ENV
+            echo "ARCH_1=arm64" >> $GITHUB_ENV
+            echo "ARCH_2=arm64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           else
             echo "PROFILE=Default" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armvirt/64" >> $GITHUB_ENV
             echo "TARGET_NAME=armvirt-64" >> $GITHUB_ENV
-            echo "ARCH_1=armvirt" >> $GITHUB_ENV
-            echo "ARCH_2=armvirt" >> $GITHUB_ENV
+            echo "ARCH_1=arm64" >> $GITHUB_ENV
+            echo "ARCH_2=arm64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           fi
           echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$TARGET_NAME".Linux-x86_64" >> $GITHUB_ENV
@@ -165,10 +172,11 @@ jobs:
         run: |
           cd $WORKING_DIR
           bash external-package-urls.sh
+          bash scripts/amlogic_service.sh
           if [[ "$BRANCH" == "21.02.7" ]]; then
-             grep -E "^all-all|^old-$tags|^$ARCH_1-$tags|^$ARCH_1" external-package-urls.txt | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^old-$tags|^amlogic-$tags|^amlogic" external-package-urls.txt | awk '{print $2}' > output_url.txt
           else
-             grep -E "^all-all|^all|^$ARCH_1" external-package-urls.txt | grep -vE "^$ARCH_1-$tags" | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^all|^amlogic" external-package-urls.txt | grep -vE "^amlogic-$tags" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
           echo "status=success" >> $GITHUB_OUTPUT
@@ -244,26 +252,26 @@ jobs:
           auto_kernel: ${{ inputs.auto_kernel }}
           kernel_repo: ${{ inputs.kernel_repo }}
           kernel_usage: ${{ inputs.kernel_usage }}
-          builder_name: fri
 
       - name: Prepare file before upload
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         id: prep_upload
         run: |
           cd $WORKING_DIR
-          cd ${{ env.PACKAGED_OUTPUTPATH }} && ls -l
-          #for file in *amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$t" ).img.gz; done
+          cd ${{ env.PACKAGED_OUTPUTPATH }}
+          for file in *amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" ).img.gz; done
           rm -r *.sha && sha256sum *.img.gz > sha256sums
           ls -l
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Add changelog info to new release description
-        if: github.event.inputs.upload-artifacts == 'false'
+        if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         id: read_release
         shell: bash
         run: |
           cd $WORKING_DIR
-          r=$(awk '/^\*\*Changelog\*\*/ {if(found) exit; found=1} found' changelog_amlogic.md)
+          ls -l
+          r=$(awk '/^\*\*Changelog\*\*/ {if(found) exit; found=1} found' changelog.md)
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
           r="${r//$'\r'/'%0D'}"  
@@ -277,7 +285,7 @@ jobs:
           file_glob: true
           file: ${{ env.PACKAGED_OUTPUTPATH }}/*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: Amlogic-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          tag: ophub/amlogic-${{ env.TARGET }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           overwrite: true
           prerelease: ${{ env.PRE_RELEASE }}
           body: |
@@ -292,6 +300,7 @@ jobs:
             - Default password: friwrt
             - Default WIFI name: friWrt_2g | friWrt_5g (if device supported)
             - Default WIFI password: friwrt2023 (if device supported)
+            
             ### Install to EMMC
             - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
 
