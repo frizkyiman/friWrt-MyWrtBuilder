@@ -307,15 +307,13 @@ jobs:
       - name: Find Firmware files
         run: |
           FIRMWARE_FILES=$(find "${{ env.PACKAGED_OUTPUTPATH }}" -name "*.img.gz")
-          echo "::set-output name=firmware_files::$FIRMWARE_FILES"
 
       - name: Send to Telegram
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          MESSAGE_TELE: |
-            tester bot
+          MESSAGE_ID: "TESTER: Upload"
         run: |
           for file in $FIRMWARE_FILES; do
-            curl -F document=@"$file" "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument?chat_id=${TELEGRAM_CHAT_ID}&caption=${MESSAGE_TELE}"
+            curl -F chat_id="${TELEGRAM_CHAT_ID}" -F document=@"$file" -F caption="${MESSAGE_ID} ${file}" "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument"
           done
