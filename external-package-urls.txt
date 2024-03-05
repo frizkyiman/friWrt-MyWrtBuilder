@@ -11,6 +11,7 @@
 # "all" is a sign for packages that work on both devices architecture.
 # "arm64" is a sign for packages that work only on arm64 devices architecture.
 # "x86" is a sign for packages that work only on x86 devices architecture.
+# "amlogic" is a sign for packages that work only on amlogic devices architecture.
 # "all-all" is a sign for packages that work on both devices architecture and branch version.
 # "old-21.02" is a sign for 21.02 branch that missing lua-luci-runtime as requaried depedency from source repo.
 # "arm64-21.02" is a sign for 21.02 branch that missing lua-luci-runtime as requaried depedency from source repo.
@@ -30,6 +31,7 @@
 # eg. old-21.02 https://example.com/download/21.02/luci-app-name-all.ipk
 # eg. arm64-21.02 https://example.com/download/21.02/luci-app-name-aarch64_cortex-a72.ipk
 # eg. x86-21.02 https://example.com/download/21.02/luci-app-name-x86-64.ipk
+# eg. amlogic https://example.com/download/main/luci-app-name-aarch64_generic.ipk
 #
 ################################################################################
 #             All Branch version custom external package urls list             #
@@ -45,6 +47,7 @@ arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout
 armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/atinout_0.9.1_aarch64_cortex-a53.ipk
 armv8 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
 x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/atinout_0.9.1_x86_64.ipk
+amlogic https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
 #
 ################################################################################
 #      Branch version snapshots and 23.05 custom external package urls list    #
