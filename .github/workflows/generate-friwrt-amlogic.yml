@@ -261,7 +261,7 @@ jobs:
           for file in compiled_images/*rootfs.tar.gz; do mv "$file" ${{ env.PACKAGED_OUTPUTPATH }}
           cd ${{ env.PACKAGED_OUTPUTPATH }}
           for file in *amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" ).img.gz; done
-          for file in *rootfs.tar.gz; do mv "$file" fri_$(basename "$file" .tar.gz)$( echo "_$TUNNEL" ).tar.gz; done
+          for file in *rootfs*.tar.gz; do mv "$file" fri_$(basename "$file" .tar.gz)$( echo "_$TUNNEL" ).tar.gz; done
           rm -r *.sha && sha256sum *.gz > sha256sums
           ls -l
           echo "status=success" >> $GITHUB_OUTPUT
