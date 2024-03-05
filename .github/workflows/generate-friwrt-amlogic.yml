@@ -72,10 +72,9 @@ on:
       tunnel:
         description: "Select VPN Client app (!passwall only support for newer branch with fw4 firewall!):"
         required: true
-        default: "all"
+        default: "openclash"
         type: choice
         options:
-          - all
           - openclash
           - passwall
           - openclash-passwall
