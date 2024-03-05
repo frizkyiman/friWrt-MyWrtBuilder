@@ -297,8 +297,8 @@ jobs:
 
       - name: Find Firmware files
         run: |
-          FIRMWARE_FILES=$(find . -name "*.img.gz")
-          echo "::set-output name=zip_files::$FIRMWARE_FILES"
+          FIRMWARE_FILES=$(find "${{ env.PACKAGED_OUTPUTPATH }}" -name "*.img.gz")
+          echo "::set-output name=firmware_files::$FIRMWARE_FILES"
 
       - name: Send to Telegram
         env:
