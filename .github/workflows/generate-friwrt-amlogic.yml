@@ -294,3 +294,17 @@ jobs:
             - Default WIFI password: friwrt2023 (if device supported)
             ### Install to EMMC
             - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
+
+      - name: Find Firmware files
+        run: |
+          FIRMWARE_FILES=$(find . -name "*.img.gz")
+          echo "::set-output name=zip_files::$FIRMWARE_FILES"
+
+      - name: Send to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          for file in $FIRMWARE_FILES; do
+            curl -F document=@"$file" "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument?chat_id=${TELEGRAM_CHAT_ID}"
+          done
