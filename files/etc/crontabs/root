@@ -1,3 +1,6 @@
+# Use crontab.guru to set crontab schedule
+
+# Uncomment below if you want to use modem script
 # auto renew ip lease for modem rakitan every monday to saturday at 03:30 AM
 #30 3 * * 1,2,3,4,5,6 echo  AT+CFUN=4 | atinout - /dev/ttyUSB0 - && sleep 3 && ifdown wan && sleep 3 && echo  AT+CFUN=1 | atinout - /dev/ttyUSB0 - && sleep 3 && ifup wan
 
