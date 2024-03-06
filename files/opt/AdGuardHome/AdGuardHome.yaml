@@ -27,6 +27,7 @@ dns:
     - 9.9.9.9
     - 1.1.1.1
     - 208.67.222.222
+    - #https://dns.bebasid.com/dns-query
   upstream_dns_file: ""
   bootstrap_dns:
     - 8.8.8.8
@@ -40,6 +41,8 @@ dns:
     - 1.0.0.1
     - 8.8.4.4
     - 208.67.220.220
+    - #https://dns.cloudflare.com/dns-query
+    - #https://dns.google/dns-query
   all_servers: true
   fastest_addr: false
   fastest_timeout: 1s
