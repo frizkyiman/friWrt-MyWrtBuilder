@@ -124,7 +124,7 @@ uci set firewall.samba_smb_nt.target="NOTRACK"
 uci commit firewall
 
 # set argon as default theme
-uci set luci.main.mediaurlbase='/luci-static/argon' && uci commit
+uci set luci.main.mediaurlbase='/luci-static/rta' && uci commit
 
 # remove login password required when accessing terminal
 uci set ttyd.@ttyd[0].command='/bin/bash --login'
