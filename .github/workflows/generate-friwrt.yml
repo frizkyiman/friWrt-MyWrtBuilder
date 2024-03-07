@@ -165,7 +165,7 @@ jobs:
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
-          bash external-package-urls.sh
+          bash scripts/external-package-urls.sh
           [ "$ARCH_1" == "amd64" ] && ARCH_1=x86
           if [[ "$BRANCH" == "21.02.7" ]]; then
              grep -E "^all-all|^old-$tags|^$ARCH_1-$tags|^$ARCH_1" external-package-urls.txt | awk '{print $2}' > output_url.txt
