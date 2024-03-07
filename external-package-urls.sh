@@ -1,6 +1,6 @@
 #!/bin/bash
-# This script for packages url from snapshots repo's
-# Put url base and file name.
+# This script for custom download the latest packages version from snapshots/stable repo's url.
+# Put file name and url base.
 
 files=(
     "luci-proto-modemmanager|https://downloads.openwrt.org/releases/23.05.2/packages/$ARCH_3/luci"
