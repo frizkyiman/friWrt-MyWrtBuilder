@@ -1,5 +1,10 @@
 # What's New!
 
+**Changelog** (07-03-2024):
+- fix Modemmanager auto-reconnect
+- update packages
+- small fix
+
 **Changelog** (23-02-2024):
 - add auto reconnect modemmanager
 
