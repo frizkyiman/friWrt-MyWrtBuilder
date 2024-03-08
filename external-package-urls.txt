@@ -48,6 +48,8 @@ armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/atinout
 armv8 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
 x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/atinout_0.9.1_x86_64.ipk
 amlogic https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
+all-all https://github.com/rtaserver/RTA-Theme-OpenWrt/releases/download/v1.0.1/luci-theme-rta_1.0.1_all.ipk
+all-all https://github.com/rtaserver/RTA-Theme-OpenWrt/releases/download/v1.0.1/luci-app-rtaconfig_1.0.1_all.ipk
 #
 ################################################################################
 #      Branch version snapshots and 23.05 custom external package urls list    #
@@ -67,8 +69,6 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-cpu-status-
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-ramfree_1.0_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-argon-config_1.0_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-theme-argon_2.3.1_all.ipk
-all https://github.com/rtaserver/RTA-Theme-OpenWrt/releases/download/v1.0.1/luci-theme-rta_1.0.1_all.ipk
-all https://github.com/rtaserver/RTA-Theme-OpenWrt/releases/download/v1.0.1/luci-app-rtaconfig_1.0.1_all.ipk
 #
 ################################################################################
 #          Old Branch version 21.02 custom external package urls list          #
