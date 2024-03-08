@@ -3,6 +3,7 @@
 **Changelog** (08-03-2024):
 - add auto reconnect modemmanager (23-02-2024)
 - fix Modemmanager auto-reconnect
+- adguardhome disable by default, you can enable by your self if needed.
 - add new theme (Alpha Theme and RTA Theme)
 - update packages
 - small fix and adjustment
