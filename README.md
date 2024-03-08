@@ -30,17 +30,19 @@ Login info
 * 192.168.1.1 | user: root | password: friwrt
 * SSID: friWrt_2g / friWrt_5g | password: friwrt2023
 
+- Modemmanager protocol for connecting 4g/5g modems (tested using Dell DW5821e Snapdragon X20 LTE),
+- Modemmanager with auto-reconnect,
 - Automatically expand root partition and filesystem to available free space! (Please be patient because the initial boot process takes a little longer to extend the disk and it also requires two reboot attempts),
-- AdGuard Home installed and enable (disable using "adguardhome disable" command on terminal, and "adguardhome enable" to enable again),
-- Openclash with latest core and latest MetaCubeX Mihomo core,
+- AdGuard Home installed (enable using "adguardhome enable" command on terminal, and "adguardhome disable" to disable),
+- Openclash with latest beta release and latest MetaCubeX Mihomo core,
 - Passwall as alternate tunneling app,
 - DOCKER installed, ready to run container,
 - Aria2 download server,
-- SAMBA4 server for sharing storage ( \ \192.168.1.1\nas-storage ),
+- SAMBA4 server for sharing storage,
 - TinyFm file manager,
-- Internet Detector and Watchcat,
+- Internet Detector and Lite Watchdog,
 - vnstat2 and Nlbwmon for Bandwith Monitoring,
-- Argon Theme with some cool custom login image,
+- Argon, RTA and Alpha Theme with some cool custom login image,
 - Modemmanager protocol for connecting 4g/5g modems (im using Dell DW5821e Snapdragon X20 LTE)
 - Modemmanager with auto-reconnect,
 - 3ginfo lite and Modeminfo, sms-tool, and other modem support app,

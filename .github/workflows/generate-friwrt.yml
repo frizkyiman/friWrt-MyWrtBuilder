@@ -111,6 +111,7 @@ jobs:
             echo "PROFILE=rpi-3" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2710" >> $GITHUB_ENV
             echo "TARGET_NAME=bcm27xx-bcm2710" >> $GITHUB_ENV
+            TARGET_NAME="bcm27xx-bcm2710"
             echo "ARCH_1=armv7" >> $GITHUB_ENV
             echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_cortex-a53" >> $GITHUB_ENV
@@ -118,6 +119,7 @@ jobs:
             echo "PROFILE=rpi-4" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2711" >> $GITHUB_ENV
             echo "TARGET_NAME=bcm27xx-bcm2711" >> $GITHUB_ENV
+            TARGET_NAME="bcm27xx-bcm2711"
             echo "ARCH_1=arm64" >> $GITHUB_ENV
             echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_cortex-a72" >> $GITHUB_ENV
@@ -125,6 +127,7 @@ jobs:
             echo "PROFILE=friendlyarm_nanopi-r5s" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=rockchip/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=rockchip-armv8" >> $GITHUB_ENV
+            TARGET_NAME="rockchip-armv8"
             echo "ARCH_1=armv8" >> $GITHUB_ENV
             echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
@@ -132,6 +135,7 @@ jobs:
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=x86/64" >> $GITHUB_ENV
             echo "TARGET_NAME=x86-64" >> $GITHUB_ENV
+            TARGET_NAME="x86-64"
             echo "ARCH_1=amd64" >> $GITHUB_ENV
             echo "ARCH_2=x86_64" >> $GITHUB_ENV
             echo "ARCH_3=x86_64" >> $GITHUB_ENV
