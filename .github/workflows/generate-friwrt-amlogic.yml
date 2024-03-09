@@ -263,15 +263,8 @@ jobs:
           cd $WORKING_DIR
           for file in compiled_images/*rootfs.tar.gz; do mv "$file" ${{ env.PACKAGED_OUTPUTPATH }}; done
           cd ${{ env.PACKAGED_OUTPUTPATH }}
-          if ls *.img.gz *.tar.gz 1> /dev/null 2>&1; then
-             for file in *amlogic*.img.gz *rockchip*.img.gz *allwinner*.img.gz *rootfs.tar.gz; do
-                 if [[ "$file" =~ (amlogic|rockchip|allwinner).*\.img\.gz ]]; then
-                     mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" ).img.gz
-                 elif [[ "$file" =~ rootfs.*\.tar\.gz ]]; then
-                     mv "$file" fri_$(basename "$file" .tar.gz)$( echo "_$TUNNEL" ).tar.gz
-                 fi
-             done
-          fi
+          for file in *.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" ).img.gz; done
+          for file in *rootfs.tar.gz; do mv "$file" fri_$(basename "$file" .tar.gz)$( echo "_$TUNNEL" ).tar.gz; done
           rm -r *.sha && sha256sum *.gz > sha256sums
           ls -l
           echo "status=success" >> $GITHUB_OUTPUT
