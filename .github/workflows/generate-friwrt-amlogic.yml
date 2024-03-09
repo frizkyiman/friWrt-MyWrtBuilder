@@ -315,7 +315,11 @@ jobs:
           cd ${{ env.PACKAGED_OUTPUTPATH }}
           for file in *.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" ).img.gz; done
           for file in *rootfs.tar.gz; do mv "$file" fri_$(basename "$file" .tar.gz)$( echo "_$TUNNEL" ).tar.gz; done
-          rm -r *.sha && sha256sum *.gz > sha256sums
+          if wget -q https://github.com/frizkyiman/friWrt-MyWrtBuilder/releases/download/amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/sha256sums; then
+             rm -r *.sha && sha256sum *.gz >> sha256sums
+          else
+             rm -r *.sha && sha256sum *.gz > sha256sums
+          fi
           ls -l
           echo "status=success" >> $GITHUB_OUTPUT
 
