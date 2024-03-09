@@ -105,8 +105,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Initialization environment
+      - name: Initialization environment (normal)
         id: init
+        if: github.event.inputs.target != 'all'
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip tar gzip qemu-utils mkisofs
+          sudo timedatectl set-timezone "$TZ"
+          
+      - name: Initialization environment (deep)
+        id: init
+        if: github.event.inputs.target == 'all'
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
@@ -128,6 +139,7 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Create simulated physical disk
+        if: github.event.inputs.target == 'all'
         run: |
           mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
           root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
