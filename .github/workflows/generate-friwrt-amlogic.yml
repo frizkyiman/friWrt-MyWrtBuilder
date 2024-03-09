@@ -152,8 +152,8 @@ jobs:
           sudo lvcreate -n runner -l 100%FREE github
           sudo mkfs.xfs /dev/github/runner
           sudo mkdir -p /builder
-          sudo mount /dev/github/runner /builder
-          sudo chown -R runner.runner /builder
+          sudo mount /dev/github/runner /origin
+          sudo chown -R runner.runner /origin
           df -Th
 
       - name: Checkout
