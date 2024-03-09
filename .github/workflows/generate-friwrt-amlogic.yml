@@ -105,9 +105,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-    
       - name: Initialization environment (normal)
         if: github.event.inputs.target != 'all'
         env:
@@ -159,6 +156,11 @@ jobs:
           sudo chown -R runner.runner /builder
           df -Th
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with: 
+          path: origin
+
       - name: Setup Environment Variables
         run: |
           if [ "$TARGET" == "all" ]; then
@@ -208,7 +210,7 @@ jobs:
           RELEASE="$DOWNLOAD_BASE/releases/$BRANCH/targets/$TARGET_SYSTEM/$BASE-imagebuilder-$BRANCH-$TARGET_NAME.Linux-x86_64.tar.xz"
           wget -nv "$RELEASE"
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
-          #cp -r $GITHUB_WORKSPACE/* $GITHUB_WORKSPACE/$WORKING_DIR
+          cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
