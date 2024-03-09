@@ -202,7 +202,6 @@ fi
 # enable adguardhome
 chmod +x /usr/bin/adguardhome
 #bash /usr/bin/adguardhome enable_agh
-bash /usr/bin/adguardhome disable >/dev/null 2>&1
 
 echo "All first boot setup done!"
 
