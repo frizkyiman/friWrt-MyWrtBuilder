@@ -3,6 +3,7 @@
 exec > /root/setup.log 2>&1
 
 # dont remove!
+echo "Start first boot custom setup"
 echo "$(date '+%A, %d %B %Y %T')"
 echo "Device Model: $(grep '\"name\":' /etc/board.json | sed 's/ \+/ /g' | awk -F'\"' '{print $4}')"
 echo "Processor: $(grep "model name" /proc/cpuinfo | awk -F ": " '{print $2}' | head -n 1 && grep "Hardware" /proc/cpuinfo | awk -F ": " '{print $2}')"
@@ -97,6 +98,7 @@ else
 fi
 
 # setting firewall for samba4
+echo "Setup SAMBA4 firewall..."
 uci -q delete firewall.samba_nsds_nt
 uci set firewall.samba_nsds_nt="rule"
 uci set firewall.samba_nsds_nt.name="NoTrack-Samba/NS/DS"
@@ -124,8 +126,10 @@ uci set firewall.samba_smb_nt.target="NOTRACK"
 uci commit firewall
 
 # set argon as default theme
+echo "Setup Theme"
 uci set luci.main.mediaurlbase='/luci-static/argon' && uci commit
 
+echo "Setup misc settings"
 # remove login password required when accessing terminal
 uci set ttyd.@ttyd[0].command='/bin/bash --login'
 uci commit
@@ -164,21 +168,27 @@ chmod +x /usr/bin/openclash.sh
 
 # configurating openclash
 if opkg list-installed | grep luci-app-openclash > /dev/null; then
+  echo "Openclash Detected!"
+  echo "Start Patch New YACD and Openclash Core"
   if [ -d "/usr/share/openclash/ui/yacd.new" ]; then
+    echo "Configuring YACD..."
     if mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old; then
       mv /usr/share/openclash/ui/yacd.new /usr/share/openclash/ui/yacd
     fi
   fi
+  echo "Configuring Core..."
   chmod +x /etc/openclash/core/clash
   chmod +x /etc/openclash/core/clash_tun
   chmod +x /etc/openclash/core/clash_meta
   chmod +x /usr/bin/patchoc.sh
   bash /usr/bin/patchoc.sh
   sed -i '/exit 0/i #/usr/bin/patchoc.sh' /etc/rc.local
+  echo "New YACD and Core setup complete!"
 else
+  echo "No Openclash Detected."
   uci delete internet-detector.Openclash
   uci commit internet-detector
-  service internet-detector  restart
+  service internet-detector restart
 fi
 
 # adding new line for enable i2c oled display
@@ -191,6 +201,6 @@ chmod +x /usr/bin/adguardhome
 #bash /usr/bin/adguardhome enable_agh
 bash /usr/bin/adguardhome disable >/dev/null 2>&1
 
-echo "All done!"
+echo "All first boot setup done!"
 
 exit 0
