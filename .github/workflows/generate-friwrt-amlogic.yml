@@ -82,7 +82,7 @@ on:
       clean:
         description: "Do 'make clean' for each run"
         required: false
-        default: "false"
+        default: "true"
         type: boolean
       upload-prerelease:
         description: "Upload as pre-release"
@@ -124,6 +124,7 @@ jobs:
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
+            TARGET_NAME="armsr-armv8"
             echo "ARCH_1=arm64" >> $GITHUB_ENV
             echo "ARCH_2=arm64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
@@ -131,6 +132,7 @@ jobs:
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
+            TARGET_NAME="armsr-armv8"
             echo "ARCH_1=arm64" >> $GITHUB_ENV
             echo "ARCH_2=arm64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
@@ -138,6 +140,7 @@ jobs:
             echo "PROFILE=Default" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armvirt/64" >> $GITHUB_ENV
             echo "TARGET_NAME=armvirt-64" >> $GITHUB_ENV
+            TARGET_NAME="armvirt-64"
             echo "ARCH_1=arm64" >> $GITHUB_ENV
             echo "ARCH_2=arm64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
@@ -205,7 +208,7 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
-      - name: Compile Firmware
+      - name: Build Rootfs ${{ inputs.release_branch }}
         id: compile
         if: steps.scripts.outputs.status == 'success' && !cancelled()
         run: |
@@ -241,7 +244,7 @@ jobs:
           rm -rf $(ls . | grep -vE "^compiled_images$|^changelog_amlogic.md$" | xargs) 2>/dev/null
           df -hT ${PWD}
 
-      - name: Packaging OpenWrt
+      - name: Packaging ${{ inputs.release_branch }}
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
@@ -268,7 +271,7 @@ jobs:
 
       - name: Add changelog info to new release description
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
-        id: read_release
+        id: changelog
         shell: bash
         run: |
           cd $WORKING_DIR
@@ -276,7 +279,7 @@ jobs:
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
           r="${r//$'\r'/'%0D'}"  
-          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT
+          echo "CHANGELOG=$r" >> $GITHUB_OUTPUT
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -291,10 +294,11 @@ jobs:
           overwrite: true
           prerelease: ${{ env.PRE_RELEASE }}
           body: |
+            ![GitHub Downloads (all assets, specific tag)](https://img.shields.io/github/downloads/frizkyiman/friWrt-MyWrtBuilder/amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/total?style=for-the-badge&logo=Openwrt)
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
             
-            ${{ steps.read_release.outputs.RELEASE_BODY }}
+            ${{ steps.changelog.outputs.CHANGELOG }}
             
             See [here](https://github.com/frizkyiman/friWrt-MyWrtBuilder?tab=readme-ov-file#firmware-details) for more detail feature and other information.
             - Default IP: 192.168.1.1
