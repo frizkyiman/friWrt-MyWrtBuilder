@@ -106,7 +106,6 @@ jobs:
 
     steps:
       - name: Initialization environment (normal)
-        id: init
         if: github.event.inputs.target != 'all'
         env:
           DEBIAN_FRONTEND: noninteractive
