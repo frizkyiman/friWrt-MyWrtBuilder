@@ -151,7 +151,7 @@ jobs:
           sudo vgcreate github /dev/loop6 /dev/loop7
           sudo lvcreate -n runner -l 100%FREE github
           sudo mkfs.xfs /dev/github/runner
-          sudo mkdir -p /builder
+          sudo mkdir -p /origin
           sudo mount /dev/github/runner /origin
           sudo chown -R runner.runner /origin
           df -Th
