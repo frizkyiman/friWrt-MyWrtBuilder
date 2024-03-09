@@ -246,7 +246,7 @@ jobs:
 
       - name: Add changelog info to new release description
         if: github.event.inputs.upload-artifacts == 'false'
-        id: read_release
+        id: changelog
         shell: bash
         run: |
           cd $WORKING_DIR
@@ -254,7 +254,7 @@ jobs:
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
           r="${r//$'\r'/'%0D'}"  
-          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT 
+          echo "CHANGELOG=$r" >> $GITHUB_OUTPUT 
           
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -273,7 +273,7 @@ jobs:
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
             
-            ${{ steps.read_release.outputs.RELEASE_BODY }}
+            ${{ steps.changelog.outputs.CHANGELOG }}
             
             See [here](https://github.com/frizkyiman/friWrt-MyWrtBuilder?tab=readme-ov-file#firmware-details) for more detail feature and other information.
             - Default IP: 192.168.1.1
