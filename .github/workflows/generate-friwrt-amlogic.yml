@@ -151,9 +151,9 @@ jobs:
           sudo vgcreate github /dev/loop6 /dev/loop7
           sudo lvcreate -n runner -l 100%FREE github
           sudo mkfs.xfs /dev/github/runner
-          sudo mkdir -p /origin
-          sudo mount /dev/github/runner /origin
-          sudo chown -R runner.runner /origin
+          sudo mkdir -p /builder
+          sudo mount /dev/github/runner /builder
+          sudo chown -R runner.runner /builder
           df -Th
 
       - name: Checkout
@@ -211,6 +211,9 @@ jobs:
           wget -nv "$RELEASE"
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
+          mkdir -p /builder/$WORKING_DIR
+          ln -sf /builder/$WORKING_DIR $GITHUB_WORKSPACE/$WORKING_DIR
+          ln -sf /builder/$WORKING_DIR /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
