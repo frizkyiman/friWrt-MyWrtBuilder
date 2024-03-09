@@ -211,7 +211,7 @@ jobs:
           wget -nv "$RELEASE"
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
-          if [ "$TARGET" == "alll" ]; then
+          if [ "$TARGET" == "all" ]; then
              mkdir -p /builder/$WORKING_DIR
              ln -sf /builder/$WORKING_DIR $GITHUB_WORKSPACE/$WORKING_DIR
              ln -sf /builder/$WORKING_DIR /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
