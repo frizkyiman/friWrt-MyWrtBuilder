@@ -145,7 +145,6 @@ jobs:
             echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           fi
-          echo "PROFILE=$PROFILE" >> $GITHUB_ENV
           echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$TARGET_NAME".Linux-x86_64" >> $GITHUB_ENV
           echo "DOWNLOAD_BASE=https://downloads."${RELEASE_BRANCH%:*}".org" >> $GITHUB_ENV
           echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
