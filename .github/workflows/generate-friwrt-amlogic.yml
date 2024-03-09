@@ -75,6 +75,7 @@ on:
         default: "openclash"
         type: choice
         options:
+          - all
           - openclash
           - passwall
           - openclash-passwall
