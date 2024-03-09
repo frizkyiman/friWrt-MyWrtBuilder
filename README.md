@@ -1,5 +1,7 @@
 # friWrt-builder | OpenWrt and ImmortalWrt
 
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/frizkyiman/friWrt-MyWrtBuilder/total?style=for-the-badge&logo=Openwrt)
+
 ### What's this?
 This is a openwrt toolchain called Image Builder to build a pre-compiled image to ready one firmware. You can customize your own packages and custom files that suitable for you. 
 
