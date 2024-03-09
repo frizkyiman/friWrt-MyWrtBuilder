@@ -121,7 +121,7 @@ jobs:
             echo "openwrt_board=rk3568" >> $GITHUB_ENV
           fi
           if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ]; then
-            PROFILE=""
+            echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
             TARGET_NAME="armsr-armv8"
@@ -129,7 +129,7 @@ jobs:
             echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           elif [ "$RELEASE_BRANCH" == "immortalwrt:23.05.1" ]; then
-            PROFILE=""
+            echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
             TARGET_NAME="armsr-armv8"
@@ -137,7 +137,7 @@ jobs:
             echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           else
-            PROFILE="Default"
+            echo "PROFILE=Default" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armvirt/64" >> $GITHUB_ENV
             echo "TARGET_NAME=armvirt-64" >> $GITHUB_ENV
             TARGET_NAME="armvirt-64"
