@@ -3,7 +3,7 @@
 exec > /root/setup.log 2>&1
 
 # dont remove!
-echo "Start first boot custom setup"
+echo "Start first boot custom setup!"
 echo "$(date '+%A, %d %B %Y %T')"
 echo "Device Model: $(grep '\"name\":' /etc/board.json | sed 's/ \+/ /g' | awk -F'\"' '{print $4}')"
 echo "Processor: $(grep "model name" /proc/cpuinfo | awk -F ": " '{print $2}' | head -n 1 && grep "Hardware" /proc/cpuinfo | awk -F ": " '{print $2}')"
@@ -20,6 +20,7 @@ fi
 (echo "friwrt"; sleep 1; echo "friwrt") | passwd > /dev/null
 
 # Set hostname and Timezone to Asia/Jakarta
+echo "Setup NTP Server and Time Zone to Asia/Jakarta"
 uci set system.@system[0].hostname='friWrt'
 uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
@@ -30,6 +31,7 @@ uci add_list system.ntp.server="time.google.com"
 uci commit system
 
 # configure wan interface
+echo "Setup WAN and LAN Interface"
 rm /usr/lib/ModemManager/connection.d/10-report-down
 chmod +x /usr/lib/ModemManager/connection.d/10-report-down-and-reconnect
 uci set network.lan.ipaddr="192.168.1.1"
@@ -87,6 +89,7 @@ uci set xmm-modem.@xmm-modem[0].enable='0'
 uci commit
 
 # custom repo and Disable opkg signature check
+echo "Setup custom repo using MyOPKG Repo"
 if grep -qE '^VERSION_ID="21' /etc/os-release; then
   sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
   echo "src/gz custom_generic https://raw.githubusercontent.com/lrdrdn/my-opkg-repo/21.02/generic" >> /etc/opkg/customfeeds.conf
@@ -98,7 +101,7 @@ else
 fi
 
 # setting firewall for samba4
-echo "Setup SAMBA4 firewall..."
+echo "Setup SAMBA4 firewall"
 uci -q delete firewall.samba_nsds_nt
 uci set firewall.samba_nsds_nt="rule"
 uci set firewall.samba_nsds_nt.name="NoTrack-Samba/NS/DS"
@@ -126,7 +129,7 @@ uci set firewall.samba_smb_nt.target="NOTRACK"
 uci commit firewall
 
 # set argon as default theme
-echo "Setup Theme"
+echo "Setup Default Theme"
 uci set luci.main.mediaurlbase='/luci-static/argon' && uci commit
 
 echo "Setup misc settings"
