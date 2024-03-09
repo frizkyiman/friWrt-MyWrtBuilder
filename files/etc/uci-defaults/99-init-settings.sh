@@ -55,38 +55,24 @@ uci -q delete dhcp.lan.ndp
 uci commit dhcp
 
 # configure WLAN
-if iw dev | grep -q "Interface"; then
-  uci set wireless.@wifi-device[0].disabled='0'
-  uci set wireless.@wifi-iface[0].disabled='0'
-  uci set wireless.@wifi-iface[0].encryption='psk2'
-  uci set wireless.@wifi-iface[0].key='friwrt2023'
-  uci set wireless.@wifi-device[0].country='ID'
-  if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
-    uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
-    uci set wireless.@wifi-device[0].channel='161'
-  else
-    uci set wireless.@wifi-iface[0].ssid='friWrt_2g'
-    uci set wireless.@wifi-device[0].channel='1'
-    uci set wireless.@wifi-device[0].band='2g'
-  fi
-  uci commit wireless
-  wifi up
-  if ! grep -q "wifi up" /etc/rc.local; then
-    sed -i '/exit 0/i wifi up' /etc/rc.local
-  fi
+uci set wireless.@wifi-device[0].disabled='0'
+uci set wireless.@wifi-iface[0].disabled='0'
+uci set wireless.@wifi-iface[0].encryption='psk2'
+uci set wireless.@wifi-iface[0].key='friwrt2023'
+uci set wireless.@wifi-device[0].country='ID'
+if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
+  uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
+  uci set wireless.@wifi-device[0].channel='161'
 else
-  echo "No wireless detected"
+  uci set wireless.@wifi-iface[0].ssid='friWrt_2g'
+  uci set wireless.@wifi-device[0].channel='1'
+  uci set wireless.@wifi-device[0].band='2g'
 fi
-
-# remove huawei me909s usb-modeswitch
-sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
-
-# remove dw5821e usb-modeswitch
-sed -i -e '/413c:81d7/,+5d' /etc/usb-mode.json
-
-# Disable /etc/config/xmm-modem
-uci set xmm-modem.@xmm-modem[0].enable='0'
-uci commit
+uci commit wireless
+wifi up >/dev/null 2>&1
+if ! grep -q "wifi up" /etc/rc.local; then
+  sed -i '/exit 0/i wifi up' /etc/rc.local
+fi
 
 # custom repo and Disable opkg signature check
 echo "Setup custom repo using MyOPKG Repo"
@@ -137,6 +123,16 @@ echo "Setup misc settings"
 uci set ttyd.@ttyd[0].command='/bin/bash --login'
 uci commit
 
+# remove huawei me909s usb-modeswitch
+sed -i -e '/12d1:15c1/,+5d' /etc/usb-mode.json
+
+# remove dw5821e usb-modeswitch
+sed -i -e '/413c:81d7/,+5d' /etc/usb-mode.json
+
+# Disable /etc/config/xmm-modem
+uci set xmm-modem.@xmm-modem[0].enable='0'
+uci commit
+
 # setup nlbwmon database dir
 uci set nlbwmon.@nlbwmon[0].database_directory='/etc/nlbwmon'
 uci set nlbwmon.@nlbwmon[0].commit_interval='3h'
@@ -172,7 +168,7 @@ chmod +x /usr/bin/openclash.sh
 # configurating openclash
 if opkg list-installed | grep luci-app-openclash > /dev/null; then
   echo "Openclash Detected!"
-  echo "Start Patch New YACD and Openclash Core"
+  echo "Start Patch YACD and Openclash Core"
   if [ -d "/usr/share/openclash/ui/yacd.new" ]; then
     echo "Configuring YACD..."
     if mv /usr/share/openclash/ui/yacd /usr/share/openclash/ui/yacd.old; then
@@ -184,9 +180,10 @@ if opkg list-installed | grep luci-app-openclash > /dev/null; then
   chmod +x /etc/openclash/core/clash_tun
   chmod +x /etc/openclash/core/clash_meta
   chmod +x /usr/bin/patchoc.sh
+  echo "Patching Openclash Overview"
   bash /usr/bin/patchoc.sh
   sed -i '/exit 0/i #/usr/bin/patchoc.sh' /etc/rc.local
-  echo "New YACD and Core setup complete!"
+  echo "YACD and Core setup complete!"
 else
   echo "No Openclash Detected."
   uci delete internet-detector.Openclash
@@ -195,7 +192,7 @@ else
 fi
 
 # adding new line for enable i2c oled display
-if ARCH_1=$(uname -m) && [ "$ARCH_1" != "x86_64" ]; then
+if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
   echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
 fi
 
