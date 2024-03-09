@@ -135,26 +135,8 @@ jobs:
           sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
           sudo rm -rf ~/{.cargo,.dotnet,.rustup}
           sudo timedatectl set-timezone "${TZ}"
-          echo "status=success" >> ${GITHUB_OUTPUT}
-
-      - name: Create simulated physical disk
-        if: github.event.inputs.target == 'all'
-        run: |
-          mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
-          root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
-          sudo truncate -s "${mnt_size}"G /mnt/mnt.img
-          sudo truncate -s "${root_size}"G /root.img
-          sudo losetup /dev/loop6 /mnt/mnt.img
-          sudo losetup /dev/loop7 /root.img
-          sudo pvcreate /dev/loop6
-          sudo pvcreate /dev/loop7
-          sudo vgcreate github /dev/loop6 /dev/loop7
-          sudo lvcreate -n runner -l 100%FREE github
-          sudo mkfs.xfs /dev/github/runner
-          sudo mkdir -p /builder
-          sudo mount /dev/github/runner /builder
-          sudo chown -R runner.runner /builder
           df -Th
+          echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -211,9 +193,6 @@ jobs:
           wget -nv "$RELEASE"
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
-          mkdir -p /builder/$WORKING_DIR
-          ln -sf /builder/$WORKING_DIR $GITHUB_WORKSPACE/$WORKING_DIR
-          ln -sf /builder/$WORKING_DIR /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
