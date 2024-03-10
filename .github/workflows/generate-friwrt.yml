@@ -51,7 +51,7 @@ on:
       squashfs:
         description: "Generate squashfs image"
         required: false
-        default: "true"
+        default: "false"
         type: boolean
       upload-artifacts:
         description: "Upload compiled image to Artifacts only"
