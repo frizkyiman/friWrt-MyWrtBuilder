@@ -7,7 +7,7 @@ files=(
     "modemmanager|https://downloads.openwrt.org/releases/23.05.2/packages/$ARCH_3/packages"
     "libmbim|https://downloads.openwrt.org/releases/23.05.2/packages/$ARCH_3/packages"
     "libqmi|https://downloads.openwrt.org/releases/23.05.2/packages/$ARCH_3/packages"
-    "luci-proto-mbim|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/luci"
+    "luci-proto-mbim|https://downloads.openwrt.org/releases/23.05.2/packages/$ARCH_3/luci"
     "sms-tool|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/packages"
 )
 
