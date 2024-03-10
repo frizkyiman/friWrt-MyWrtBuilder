@@ -74,9 +74,9 @@ install_openclash_core() {
     echo -e "${INFO} Start downloading core..."
     yacd_dir="/usr/share/openclash/ui"
     core_dir="/etc/openclash/core"
-    ARCH_1=$(uname -m) && { [ "$ARCH_1" == "aarch64" ] && ARCH_1="arm64"; } || { [ "$ARCH_1" == "x86_64" ] && ARCH_1="amd64" && PROFILE="generic"; }
+    ARCH_1=$(uname -m) && { [ "$ARCH_1" == "aarch64" ] && ARCH_1="arm64"; } || { [ "$ARCH_1" == "x86_64" ] && ARCH_1="amd64" && ARCH_2="x86_64"; }
     rm -r "$core_dir"
-    wget -qO- https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/scripts/clash-core.sh | bash -s "$yacd_dir" "$core_dir" "$ARCH_1" "$PROFILE"
+    wget -qO- https://github.com/frizkyiman/friWrt-MyWrtBuilder/raw/main/scripts/clash-core.sh | bash -s "$yacd_dir" "$core_dir" "$ARCH_1" "$ARCH_2"
     echo -e "${SUCCESS} Done!"
     if [ -d "$yacd_dir/yacd.new" ]; then
         [ -d "$yacd_dir/yacd.old" ] && rm -rf "$yacd_dir/yacd.old"
