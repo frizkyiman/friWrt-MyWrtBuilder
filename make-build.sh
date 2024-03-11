@@ -76,7 +76,7 @@ elif [ "$ARCH_2" == "x86_64" ]; then
     misc+=" speedtest-web luci-app-speedtest-web kmod-iwlwifi iw-full pciutils"
 fi
 
-if [ "$TYPE" == "AMLOGIC" ]; then 
+if [ "$TYPE" == "AMLOGIC" ]; then
     misc+=" luci-app-amlogic"
 fi
 
