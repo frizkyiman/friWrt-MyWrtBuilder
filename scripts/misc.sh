@@ -24,6 +24,11 @@ elif [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "23" ]; then
     echo "$BRANCH"
 fi
 
+if [ "$TYPE" == "AMLOGIC" ]; then
+   rm files/etc/uci-defaults/70-rootpt-resize
+   rm files/etc/uci-defaults/80-rootfs-resize
+fi
+
 # custom script files urls
 echo "Downloading custom script" 
 speedtest="https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
