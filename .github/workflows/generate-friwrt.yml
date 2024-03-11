@@ -144,7 +144,6 @@ jobs:
           echo "DOWNLOAD_BASE=https://downloads."${RELEASE_BRANCH%:*}".org" >> $GITHUB_ENV
           echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
           echo "BRANCH=${RELEASE_BRANCH#*:}" >> $GITHUB_ENV
-          echo "tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "21.02" )" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
           echo "DATEMONTH=$(date +"%B-%Y" | awk '{print tolower($0)}')" >> $GITHUB_ENV
@@ -169,6 +168,7 @@ jobs:
         if: steps.download.outputs.status == 'success' && !cancelled()
         run: |
           cd $WORKING_DIR
+          tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "21.02" )
           bash scripts/external-package-urls.sh
           [ "$ARCH_1" == "amd64" ] && ARCH_1=x86
           if [[ "$BRANCH" == "21.02.7" ]]; then
