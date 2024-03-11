@@ -80,7 +80,7 @@ if [ "$TYPE" == "AMLOGIC" ]; then
     misc+=" luci-app-amlogic"
 fi
 
-PACKAGES+=" $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop bash curl wget wget-ssl tar unzip unrar jq luci-app-ttyd nano"
+PACKAGES+=" $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop bash curl wget wget-ssl tar unzip unrar jq luci-app-ttyd nano httping screen"
 
 # Exclude package (must use - before packages name)
 EXCLUDED=""

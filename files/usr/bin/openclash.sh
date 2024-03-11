@@ -89,6 +89,20 @@ install_openclash_core() {
     chmod +x "$core_dir/clash_meta"
 }
 
+uninstall_openclash() {
+    echo -e "${INFO} Start uninstalling [ ${openclash_file} ]"
+    if opkg list-installed | grep -q 'luci-app-openclash'; then
+        echo -e "${INFO} Detect luci-app-openclash installed. Removing..."
+        opkg remove luci-app-openclash
+        rm -rf /usr/lib/lua/luci/model/cbi/openclash
+        rm -rf /usr/lib/lua/luci/view/openclash
+        rm -rf /www/luci-static/resources/openclash
+        rm -rf /usr/share/openclash/
+        rm -rf /tmp/luci*
+        echo -e "${SUCCESS} Done!"
+    fi
+}
+
 setup() {
     case "$1" in
         reinstall)
@@ -105,8 +119,11 @@ setup() {
         patch-only)
             patch_openclash
             ;;
+        uninstall)
+            uninstall_openclash
+            ;;
         *)
-            echo -e "${ERROR} Invalid argument. Usage: $0 {reinstall|install-core|full-install|patch-only}"
+            echo -e "${ERROR} Invalid argument. Usage: $0 {full-install|reinstall|install-core|patch-only|uninstall}"
             ;;
     esac
 }

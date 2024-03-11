@@ -5,16 +5,23 @@ echo "Current Path: $PWD"
 
 #setup custom setting for openwrt and immortalwrt
 sed -i "s/Ouc3kNF6/$DATE/g" files/etc/uci-defaults/99-init-settings.sh
-if [[ "${RELEASE_BRANCH%:*}" == "openwrt" ]]; then
-    echo "$RELEASE_BRANCH"
+if [[ "$BASE" == "openwrt" ]]; then
+    echo "$BASE"
     sed -i '/# setup misc settings/ a\mv \/www\/luci-static\/resources\/view\/status\/include\/29_temp.js \/www\/luci-static\/resources\/view\/status\/include\/17_temp.js' files/etc/uci-defaults/99-init-settings.sh
-elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
-    echo "$RELEASE_BRANCH"
-    if [[ "$(echo "${RELEASE_BRANCH#*:}" | awk -F '.' '{print $1}')" == "23" && "$PROFILE" == "rpi-4" ]]; then
+elif [[ "$BASE" == "immortalwrt" ]]; then
+    echo "$BASE"
+    if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "23" ] && "$PROFILE" == "rpi-4" ]]; then
         cp packages/luci-app-oled_1.0_all.ipk files/root/luci-app-oled_1.0_all.ipk
         sed -i '/# setup misc settings/ a\rm /root/luci-app-oled_1.0_all.ipk' files/etc/uci-defaults/99-init-settings.sh
         sed -i '/# setup misc settings/ a\opkg install /root/luci-app-oled_1.0_all.ipk --force-downgrade' files/etc/uci-defaults/99-init-settings.sh
     fi
+fi
+
+if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ]; then
+    echo "$BRANCH"
+    rm files/usr/lib/lua/luci/model/cbi/dockerman/networks.lua
+elif [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "23" ]; then
+    echo "$BRANCH"
 fi
 
 # custom script files urls
