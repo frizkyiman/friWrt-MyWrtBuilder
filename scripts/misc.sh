@@ -17,6 +17,10 @@ elif [[ "${RELEASE_BRANCH%:*}" == "immortalwrt" ]]; then
     fi
 fi
 
+if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ]; then
+    rm files/usr/lib/lua/luci/model/cbi/dockerman/networks.lua
+fi
+
 # custom script files urls
 echo "Downloading custom script" 
 speedtest="https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
