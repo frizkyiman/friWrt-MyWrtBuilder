@@ -76,11 +76,11 @@ elif [ "$ARCH_2" == "x86_64" ]; then
     misc+=" speedtest-web luci-app-speedtest-web kmod-iwlwifi iw-full pciutils"
 fi
 
-if [ "$TYPE" == "AMLOGIC" ]; then
+if [ "$TYPE" == "AMLOGIC" ]; then 
     misc+=" luci-app-amlogic"
 fi
 
-PACKAGES+=" $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop bash curl wget wget-ssl tar unzip unrar jq luci-app-ttyd nano"
+PACKAGES+=" $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop bash curl wget wget-ssl tar unzip unrar jq luci-app-ttyd nano httping screen"
 
 # Exclude package (must use - before packages name)
 EXCLUDED=""
