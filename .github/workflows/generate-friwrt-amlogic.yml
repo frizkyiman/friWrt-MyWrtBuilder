@@ -200,7 +200,6 @@ jobs:
           echo "DOWNLOAD_BASE=https://downloads."${RELEASE_BRANCH%:*}".org" >> $GITHUB_ENV
           echo "BASE=${RELEASE_BRANCH%:*}" >> $GITHUB_ENV
           echo "BRANCH=${RELEASE_BRANCH#*:}" >> $GITHUB_ENV
-          echo "tags=$( [[ "${RELEASE_BRANCH#*:}" == "21.02.7" ]] && echo "21.02" )" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
           echo "DATEMONTH=$(date +"%B-%Y" | awk '{print tolower($0)}')" >> $GITHUB_ENV
@@ -227,9 +226,9 @@ jobs:
           bash scripts/external-package-urls.sh
           bash scripts/amlogic_service.sh
           if [[ "$BRANCH" == "21.02.7" ]]; then
-             grep -E "^all-all|^old-$tags|^amlogic-$tags|^amlogic" external-package-urls.txt | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^old-21.02|^amlogic-$tags|^amlogic" external-package-urls.txt | awk '{print $2}' > output_url.txt
           else
-             grep -E "^all-all|^all|^amlogic" external-package-urls.txt | grep -vE "^amlogic-$tags" | awk '{print $2}' > output_url.txt
+             grep -E "^all-all|^all|^amlogic" external-package-urls.txt | grep -vE "^amlogic-21.02" | awk '{print $2}' > output_url.txt
           fi
           wget --no-check-certificate -i output_url.txt -nv -P packages
           echo "status=success" >> $GITHUB_OUTPUT
