@@ -138,6 +138,7 @@ uci set nlbwmon.@nlbwmon[0].database_directory='/etc/nlbwmon'
 uci set nlbwmon.@nlbwmon[0].commit_interval='3h'
 uci set nlbwmon.@nlbwmon[0].refresh_interval='60s'
 uci commit nlbwmon
+bash /etc/init.d/nlbwmon restart
 
 # setup auto vnstat database backup
 chmod +x /etc/init.d/vnstat_backup
