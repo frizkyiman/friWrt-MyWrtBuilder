@@ -28,7 +28,7 @@ on:
       target:
         description: "Select device board"
         required: false
-        default: "all"
+        default: "hg680p"
         type: choice
         options:
           - all
@@ -75,6 +75,7 @@ on:
         default: "openclash"
         type: choice
         options:
+          - all
           - openclash
           - passwall
           - openclash-passwall
@@ -82,7 +83,7 @@ on:
       clean:
         description: "Do 'make clean' for each run"
         required: false
-        default: "false"
+        default: "true"
         type: boolean
       upload-prerelease:
         description: "Upload as pre-release"
@@ -102,14 +103,64 @@ env:
 jobs:
   Generate:
     name: amlogic-${{ inputs.target }}-${{ inputs.release_branch }}-${{ inputs.tunnel }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
-      - name: Initialization System Environment
+      - name: Initialization environment (normal)
+        if: github.event.inputs.target != 'all'
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
           sudo apt-get -qq update
           sudo apt-get -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip tar gzip qemu-utils mkisofs
           sudo timedatectl set-timezone "$TZ"
+          
+      - name: Initialization environment (deep)
+        id: init
+        if: github.event.inputs.target == 'all'
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          docker rmi $(docker images -q) 2>/dev/null
+          [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
+          sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android 2>/dev/null
+          sudo swapoff -a
+          sudo rm -f /swapfile /mnt/swapfile
+          sudo -E apt-get -y update
+          sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
+          sudo -E apt-get -y install $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
+          sudo -E systemctl daemon-reload
+          #sudo -E apt-get -y full-upgrade
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
+          sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
+          sudo rm -rf ~/{.cargo,.dotnet,.rustup}
+          sudo timedatectl set-timezone "${TZ}"
+          echo "status=success" >> ${GITHUB_OUTPUT}
+
+      - name: Create simulated physical disk
+        if: github.event.inputs.target == 'all'
+        run: |
+          mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
+          root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
+          sudo truncate -s "${mnt_size}"G /mnt/mnt.img
+          sudo truncate -s "${root_size}"G /root.img
+          sudo losetup /dev/loop6 /mnt/mnt.img
+          sudo losetup /dev/loop7 /root.img
+          sudo pvcreate /dev/loop6
+          sudo pvcreate /dev/loop7
+          sudo vgcreate github /dev/loop6 /dev/loop7
+          sudo lvcreate -n runner -l 100%FREE github
+          sudo mkfs.xfs /dev/github/runner
+          sudo mkdir -p /builder
+          sudo mount /dev/github/runner /builder
+          sudo chown -R runner.runner /builder
+          df -Th
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with: 
+          path: origin
 
       - name: Setup Environment Variables
         run: |
@@ -124,22 +175,25 @@ jobs:
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
+            TARGET_NAME="armsr-armv8"
             echo "ARCH_1=arm64" >> $GITHUB_ENV
-            echo "ARCH_2=arm64" >> $GITHUB_ENV
+            echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           elif [ "$RELEASE_BRANCH" == "immortalwrt:23.05.1" ]; then
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
+            TARGET_NAME="armsr-armv8"
             echo "ARCH_1=arm64" >> $GITHUB_ENV
-            echo "ARCH_2=arm64" >> $GITHUB_ENV
+            echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           else
             echo "PROFILE=Default" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armvirt/64" >> $GITHUB_ENV
             echo "TARGET_NAME=armvirt-64" >> $GITHUB_ENV
+            TARGET_NAME="armvirt-64"
             echo "ARCH_1=arm64" >> $GITHUB_ENV
-            echo "ARCH_2=arm64" >> $GITHUB_ENV
+            echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
           fi
           echo "WORKING_DIR="${RELEASE_BRANCH%:*}"-imagebuilder-"$TARGET_NAME".Linux-x86_64" >> $GITHUB_ENV
@@ -150,11 +204,6 @@ jobs:
           echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
           echo "DATEMONTH=$(date +"%B-%Y" | awk '{print tolower($0)}')" >> $GITHUB_ENV
-      
-      - name: Checkout
-        uses: actions/checkout@v4
-        with: 
-          path: origin
 
       - name: Download Image Builder
         id: download
@@ -163,6 +212,11 @@ jobs:
           wget -nv "$RELEASE"
           tar -xJf *-imagebuilder-* && sync && rm -f *-imagebuilder-*.tar.xz && mv *-imagebuilder-* $WORKING_DIR && sync
           cp -r $GITHUB_WORKSPACE/origin/* $GITHUB_WORKSPACE/$WORKING_DIR
+          if [ "$TARGET" == "all" ]; then
+             mkdir -p /builder/$WORKING_DIR
+             ln -sf /builder/$WORKING_DIR $GITHUB_WORKSPACE/$WORKING_DIR
+             ln -sf /builder/$WORKING_DIR /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
+          fi
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Download External Packages
@@ -205,7 +259,7 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
 
-      - name: Compile Firmware
+      - name: Build Rootfs ${{ inputs.release_branch }}
         id: compile
         if: steps.scripts.outputs.status == 'success' && !cancelled()
         run: |
@@ -241,7 +295,7 @@ jobs:
           rm -rf $(ls . | grep -vE "^compiled_images$|^changelog_amlogic.md$" | xargs) 2>/dev/null
           df -hT ${PWD}
 
-      - name: Packaging OpenWrt
+      - name: Packaging ${{ inputs.release_branch }}
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
@@ -260,15 +314,19 @@ jobs:
           cd $WORKING_DIR
           for file in compiled_images/*rootfs.tar.gz; do mv "$file" ${{ env.PACKAGED_OUTPUTPATH }}; done
           cd ${{ env.PACKAGED_OUTPUTPATH }}
-          for file in *amlogic*.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" ).img.gz; done
+          for file in *.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" ).img.gz; done
           for file in *rootfs.tar.gz; do mv "$file" fri_$(basename "$file" .tar.gz)$( echo "_$TUNNEL" ).tar.gz; done
-          rm -r *.sha && sha256sum *.gz > sha256sums
+          if wget -q https://github.com/frizkyiman/friWrt-MyWrtBuilder/releases/download/amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/sha256sums; then
+             rm -r *.sha && sha256sum *.gz >> sha256sums
+          else
+             rm -r *.sha && sha256sum *.gz > sha256sums
+          fi
           ls -l
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Add changelog info to new release description
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
-        id: read_release
+        id: changelog
         shell: bash
         run: |
           cd $WORKING_DIR
@@ -276,7 +334,7 @@ jobs:
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
           r="${r//$'\r'/'%0D'}"  
-          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT
+          echo "CHANGELOG=$r" >> $GITHUB_OUTPUT
 
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -286,14 +344,16 @@ jobs:
           file_glob: true
           file: ${{ env.PACKAGED_OUTPUTPATH }}/*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: ophub/amlogic-${{ env.TARGET }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          tag: amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          release_name: amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           overwrite: true
           prerelease: ${{ env.PRE_RELEASE }}
           body: |
+            ![GitHub Downloads (all assets, specific tag)](https://img.shields.io/github/downloads/frizkyiman/friWrt-MyWrtBuilder/amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/total?style=for-the-badge&logo=Openwrt)
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
             
-            ${{ steps.read_release.outputs.RELEASE_BODY }}
+            ${{ steps.changelog.outputs.CHANGELOG }}
             
             See [here](https://github.com/frizkyiman/friWrt-MyWrtBuilder?tab=readme-ov-file#firmware-details) for more detail feature and other information.
             - Default IP: 192.168.1.1

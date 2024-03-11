@@ -111,6 +111,7 @@ jobs:
             echo "PROFILE=rpi-3" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2710" >> $GITHUB_ENV
             echo "TARGET_NAME=bcm27xx-bcm2710" >> $GITHUB_ENV
+            TARGET_NAME="bcm27xx-bcm2710"
             echo "ARCH_1=armv7" >> $GITHUB_ENV
             echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_cortex-a53" >> $GITHUB_ENV
@@ -118,6 +119,7 @@ jobs:
             echo "PROFILE=rpi-4" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=bcm27xx/bcm2711" >> $GITHUB_ENV
             echo "TARGET_NAME=bcm27xx-bcm2711" >> $GITHUB_ENV
+            TARGET_NAME="bcm27xx-bcm2711"
             echo "ARCH_1=arm64" >> $GITHUB_ENV
             echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_cortex-a72" >> $GITHUB_ENV
@@ -125,6 +127,7 @@ jobs:
             echo "PROFILE=friendlyarm_nanopi-r5s" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=rockchip/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=rockchip-armv8" >> $GITHUB_ENV
+            TARGET_NAME="rockchip-armv8"
             echo "ARCH_1=armv8" >> $GITHUB_ENV
             echo "ARCH_2=aarch64" >> $GITHUB_ENV
             echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
@@ -132,6 +135,7 @@ jobs:
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=x86/64" >> $GITHUB_ENV
             echo "TARGET_NAME=x86-64" >> $GITHUB_ENV
+            TARGET_NAME="x86-64"
             echo "ARCH_1=amd64" >> $GITHUB_ENV
             echo "ARCH_2=x86_64" >> $GITHUB_ENV
             echo "ARCH_3=x86_64" >> $GITHUB_ENV
@@ -242,7 +246,7 @@ jobs:
 
       - name: Add changelog info to new release description
         if: github.event.inputs.upload-artifacts == 'false'
-        id: read_release
+        id: changelog
         shell: bash
         run: |
           cd $WORKING_DIR
@@ -250,7 +254,7 @@ jobs:
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
           r="${r//$'\r'/'%0D'}"  
-          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT 
+          echo "CHANGELOG=$r" >> $GITHUB_OUTPUT 
           
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
@@ -261,13 +265,15 @@ jobs:
           file: ${{ env.WORKING_DIR }}/compiled_images//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          release_name: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           overwrite: true
           prerelease: ${{ env.PRE_RELEASE }}
           body: |
+            ![GitHub Downloads (all assets, specific tag)](https://img.shields.io/github/downloads/frizkyiman/friWrt-MyWrtBuilder/${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/total?style=for-the-badge&logo=Openwrt)
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
             
-            ${{ steps.read_release.outputs.RELEASE_BODY }}
+            ${{ steps.changelog.outputs.CHANGELOG }}
             
             See [here](https://github.com/frizkyiman/friWrt-MyWrtBuilder?tab=readme-ov-file#firmware-details) for more detail feature and other information.
             - Default IP: 192.168.1.1
