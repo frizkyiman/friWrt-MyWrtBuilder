@@ -45,8 +45,6 @@ Login info
 - Internet Detector and Lite Watchdog,
 - vnstat2 and Nlbwmon for Bandwith Monitoring,
 - Argon, RTA and Alpha Theme with some cool custom login image,
-- Modemmanager protocol for connecting 4g/5g modems (im using Dell DW5821e Snapdragon X20 LTE)
-- Modemmanager with auto-reconnect,
 - 3ginfo lite and Modeminfo, sms-tool, and other modem support app,
 - OLED Display support (only Raspberrry Pi 4B tested),
 - etc~
