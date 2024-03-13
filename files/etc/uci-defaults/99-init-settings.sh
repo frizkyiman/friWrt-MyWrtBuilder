@@ -55,6 +55,7 @@ uci -q delete dhcp.lan.ndp
 uci commit dhcp
 
 # configure WLAN
+echo "Setup Wireless if available"
 uci set wireless.@wifi-device[0].disabled='0'
 uci set wireless.@wifi-iface[0].disabled='0'
 uci set wireless.@wifi-iface[0].encryption='psk2'
@@ -69,9 +70,16 @@ else
   uci set wireless.@wifi-device[0].band='2g'
 fi
 uci commit wireless
-wifi up >/dev/null 2>&1
-if ! grep -q "wifi up" /etc/rc.local; then
-  sed -i '/exit 0/i wifi up' /etc/rc.local
+wifi reload && wifi up
+if iw dev | grep -q Interface; then
+  if ! grep -q "wifi up" /etc/rc.local; then
+    sed -i '/exit 0/i sleep 10 && wifi up' /etc/rc.local
+  fi
+  if ! grep -q "wifi up" /etc/crontabs/root; then
+    echo "0 */12 * * * wifi down && sleep 5 && wifi up" >> /etc/crontabs/root
+  fi
+else
+  echo "No wireless device detected."
 fi
 
 # custom repo and Disable opkg signature check
@@ -201,6 +209,6 @@ fi
 chmod +x /usr/bin/adguardhome
 #bash /usr/bin/adguardhome enable_agh
 
-echo "All first boot setup done!"
+echo "All first boot setup complete!"
 
 exit 0
