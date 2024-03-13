@@ -63,7 +63,7 @@ uci set wireless.@wifi-iface[0].key='friwrt2023'
 uci set wireless.@wifi-device[0].country='ID'
 if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
   uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
-  uci set wireless.@wifi-device[0].channel='161'
+  uci set wireless.@wifi-device[0].channel='149'
 else
   uci set wireless.@wifi-iface[0].ssid='friWrt_2g'
   uci set wireless.@wifi-device[0].channel='1'
