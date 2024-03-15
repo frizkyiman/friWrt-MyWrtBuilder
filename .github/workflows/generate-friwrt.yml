@@ -190,7 +190,7 @@ jobs:
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
               echo "VPN Client: $TUNNEL"
               bash scripts/tunnel_app.sh openclash-passwall-neko
-          elif [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" ]]; then
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "neko" ]]; then
               echo "VPN Client: $TUNNEL"
               bash scripts/tunnel_app.sh "$TUNNEL"
           elif [[ "$TUNNEL" == "all" && "$BRANCH" = "21.02.7" ]]; then 
