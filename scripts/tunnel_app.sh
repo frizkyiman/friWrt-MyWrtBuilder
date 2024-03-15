@@ -10,6 +10,12 @@ passwall_api="https://api.github.com/repos/xiaorouji/openwrt-passwall2/releases"
 passwall_file="passwall2_packages_ipk_$ARCH_3.zip"
 passwall_file_down="$(curl -s ${passwall_api} | grep "browser_download_url" | grep -oE "https.*${passwall_file}" | head -n 1)"
 passwall_ipk="https://github.com/xiaorouji/openwrt-passwall/releases/download/4.71-2/luci-app-passwall_4.71-2_all.ipk"
+
+# passwall2
+passwall2_api="https://api.github.com/repos/rtaserver/openwrt-passwall2/releases"
+passwall2_file="luci-23.05_luci-app-passwall2"
+passwall2_file_down="$(curl -s ${passwall_api} | grep "browser_download_url" | grep -oE "https.*${passwall_file}.*.ipk" | head -n 1)"
+
 passwall_ipk_packages=("https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/dns2socks_2.1-2_$ARCH_3.ipk"
                        "https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/dns2tcp_1.1.0-1_$ARCH_3.ipk"
                        "https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/chinadns-ng_2023.06.01-1_$ARCH_3.ipk"
@@ -34,6 +40,7 @@ elif [ "$1" == "passwall" ]; then
     wget "$passwall_file_down" -nv -P packages
     wget "$passwall_ipk" -nv -P packages
     wget "${passwall_ipk_packages[@]}" -nv -P packages
+    wget "${passwall2_file_down}" -nv -P packages
     unzip -qq packages/"$passwall_file" -d packages && rm packages/"$passwall_file"
     rm files/usr/bin/patchoc.sh
 elif [ "$1" == "openclash-passwall-neko" ]; then
@@ -46,6 +53,7 @@ elif [ "$1" == "openclash-passwall-neko" ]; then
     wget "$passwall_file_down" -nv -P packages
     wget "$passwall_ipk" -nv -P packages
     wget "${passwall_ipk_packages[@]}" -nv -P packages
+    wget "${passwall2_file_down}" -nv -P packages
     unzip -qq packages/"$passwall_file" -d packages && rm packages/"$passwall_file"
 fi 
 if [ "$?" -ne 0 ]; then
