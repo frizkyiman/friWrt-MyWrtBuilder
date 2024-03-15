@@ -28,7 +28,7 @@ if [ "$1" == "openclash" ]; then
     wget ${openclash_file_down} -nv -P packages
 elif [ "$1" == "neko" ]; then
     echo "Downloading Neko packages"
-    wget ${neko_file_down} -nv -P packages
+    wget "${neko_file_down}" -nv -P packages
 elif [ "$1" == "passwall" ]; then
     echo "Downloading Passwall packages ipk"
     wget "$passwall_file_down" -nv -P packages
@@ -41,7 +41,7 @@ elif [ "$1" == "openclash-passwall-neko" ]; then
     echo "Downloading Openclash packages"
     wget ${openclash_file_down} -nv -P packages
     echo "Downloading Neko packages"
-    wget ${neko_file_down} -nv -P packages
+    wget "${neko_file_down}" -nv -P packages
     echo "Downloading Passwall packages ipk"
     wget "$passwall_file_down" -nv -P packages
     wget "$passwall_ipk" -nv -P packages
