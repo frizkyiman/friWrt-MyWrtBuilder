@@ -199,7 +199,7 @@ jobs:
           else
               echo "No VPN Client selected"
           fi
-          if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall-neko" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; fi
+          if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall-neko" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; bash scripts/neko-core.sh; fi
           ls packages
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
