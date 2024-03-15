@@ -44,8 +44,14 @@ PACKAGES+=" samba4-server luci-app-samba4 aria2 ariang luci-app-aria2 luci-app-t
 # Docker
 PACKAGES+=" docker docker-compose dockerd luci-app-dockerman"
 
-# Bandwidth Monitoring
-PACKAGES+=" luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2"
+# Bandwidth And Network Monitoring
+PACKAGES+=" luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2 luci-app-netmonitor"
+
+# Base64 Encode Decode
+PACKAGES+=" luci-app-base64"
+
+# Mikhmon Fammily
+PACKAGES+=" luci-app-mikhmon luci-app-mikhmon4"
 
 # Argon Theme
 PACKAGES+=" luci-theme-argon luci-app-argon-config"
