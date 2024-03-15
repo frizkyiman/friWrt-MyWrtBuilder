@@ -40,8 +40,9 @@ on:
         options:
           - all
           - openclash
+          - neko
           - passwall
-          - openclash-passwall
+          - openclash-passwall-neko
           - no-tunnel
       clean:
         description: "Do 'make clean' for each run"
