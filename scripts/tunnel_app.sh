@@ -22,13 +22,14 @@ passwall_ipk_packages=("https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/
 neko_api="https://api.github.com/repos/nosignals/neko/releases"
 neko_file="luci-app-neko"
 neko_file_down="$(curl -s ${neko_api} | grep "browser_download_url" | grep -oE "https.*${neko_file}*_23_05.ipk" | head -n 1)"
+neko_ipk="https://github.com/nosignals/neko/releases/download/1.1.12-beta/luci-app-neko_1.1.12-beta_all_23_05.ipk"
 
 if [ "$1" == "openclash" ]; then
     echo "Downloading Openclash packages"
     wget ${openclash_file_down} -nv -P packages
 elif [ "$1" == "neko" ]; then
     echo "Downloading Neko packages"
-    wget "${neko_file_down}" -nv -P packages
+    wget "${neko_ipk}" -nv -P packages
 elif [ "$1" == "passwall" ]; then
     echo "Downloading Passwall packages ipk"
     wget "$passwall_file_down" -nv -P packages
