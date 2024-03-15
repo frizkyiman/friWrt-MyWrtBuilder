@@ -1,0 +1,73 @@
+#!/bin/bash
+
+echo "Current Path: $PWD"
+
+
+echo "Start Neko Core Download !"
+#core download url
+neko_dir="${2:-files/etc/neko}"
+ARCH_1="${3:-$ARCH_1}"
+
+core_ver="neko"
+url_core="https://github.com/nosignals/neko/releases/download/core_neko"
+url_geo="https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest"
+
+geoip_path="${neko_dir}/geoip.metadb"
+geosite_path="${neko_dir}/geosite.db"
+neko_bin="${neko_dir}/core/mihomo"
+
+mkdir -p "$neko_dir/core"
+
+rpid=`pgrep "neko/core"`
+if [[ -n $rpid ]] ; then
+    kill $rpid 
+fi
+
+echo "[ `date +%T` ] - Checking Files"
+
+files_check() {
+    case "$ARCH_1" in
+    aarch64)
+        ARCH_1="arm64"
+        ;;
+    arm)
+        ARCH_1="armv7"
+    	;;
+    x86_64)
+        ARCH_1="amd64"
+        ;;
+    mips)
+        ARCH_1="mips_24"
+    	;;
+    *)
+        ARCH_1="0"
+        ;;
+    esac
+    
+    if [ $ARCH_1 == "0" ] ; then
+        echo "[ `date +%T` ] - ERROR!!! Arch not supported"
+    else
+        if [ -f ${neko_bin} ]; then
+            echo "[ `date +%T` ] - Mihomo OK"
+        else
+            echo "[ `date +%T` ] - Downloading Mihomo Binary - $ARCH_1"
+            wget -q --no-check-certificate -O ${neko_dir}/core/mihomo.gz ${url_core}/mihomo-linux-${ARCH_1}-${core_ver}.gz
+            gzip -d ${neko_dir}/core/mihomo.gz
+        fi
+
+        if [ -f ${geoip_path} ]; then
+            echo "[ `date +%T` ] - GeoIP OK"
+        else
+            echo "[ `date +%T` ] - Downloading GeoIP"
+            wget -q --no-check-certificate -O ${geoip_path} ${url_geo}/geoip.metadb
+        fi
+
+        if [ -f ${geosite_path} ]; then
+            echo "[ `date +%T` ] - GeoSite OK"
+        else
+            echo "[ `date +%T` ] - Downloading GeoSite"
+            wget -q --no-check-certificate -O ${neko_dir} ${url_geo}/geosite.db
+        fi
+    fi
+    chmod +x $neko_dir/core/mihomo
+}
