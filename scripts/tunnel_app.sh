@@ -14,7 +14,7 @@ passwall_ipk="https://github.com/xiaorouji/openwrt-passwall/releases/download/4.
 # passwall2
 passwall2_api="https://api.github.com/repos/rtaserver/openwrt-passwall2/releases"
 passwall2_file="luci-23.05_luci-app-passwall2"
-passwall2_file_down="$(curl -s ${passwall_api} | grep "browser_download_url" | grep -oE "https.*${passwall_file}.*.ipk" | head -n 1)"
+passwall2_file_down="$(curl -s ${passwall2_api} | grep "browser_download_url" | grep -oE "https.*${passwall2_file}.*.ipk" | head -n 1)"
 
 passwall_ipk_packages=("https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/dns2socks_2.1-2_$ARCH_3.ipk"
                        "https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/dns2tcp_1.1.0-1_$ARCH_3.ipk"
