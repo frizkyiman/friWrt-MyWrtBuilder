@@ -18,9 +18,17 @@ passwall_ipk_packages=("https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/
                        "https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/ipt2socks_1.1.3-3_$ARCH_3.ipk"
                        "https://github.com/lrdrdn/my-opkg-repo/raw/main/$ARCH_3/pdnsd-alt_1.2.9b-par-3_$ARCH_3.ipk")
           
+# neko
+neko_api="https://api.github.com/repos/nosignals/neko/releases"
+neko_file="luci-app-neko"
+neko_file_down="$(curl -s ${neko_api} | grep "browser_download_url" | grep -oE "https.*${neko_file}*_23_05.ipk" | head -n 1)"
+
 if [ "$1" == "openclash" ]; then
     echo "Downloading Openclash packages"
     wget ${openclash_file_down} -nv -P packages
+elif [ "$1" == "neko" ]; then
+    echo "Downloading Neko packages"
+    wget ${neko_file_down} -nv -P packages
 elif [ "$1" == "passwall" ]; then
     echo "Downloading Passwall packages ipk"
     wget "$passwall_file_down" -nv -P packages
@@ -28,10 +36,12 @@ elif [ "$1" == "passwall" ]; then
     wget "${passwall_ipk_packages[@]}" -nv -P packages
     unzip -qq packages/"$passwall_file" -d packages && rm packages/"$passwall_file"
     rm files/usr/bin/patchoc.sh
-elif [ "$1" == "openclash-passwall" ]; then
+elif [ "$1" == "openclash-passwall-neko" ]; then
     echo "Installing Openclash and Passwall"
     echo "Downloading Openclash packages"
     wget ${openclash_file_down} -nv -P packages
+    echo "Downloading Neko packages"
+    wget ${neko_file_down} -nv -P packages
     echo "Downloading Passwall packages ipk"
     wget "$passwall_file_down" -nv -P packages
     wget "$passwall_ipk" -nv -P packages
