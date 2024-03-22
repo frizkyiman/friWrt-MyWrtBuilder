@@ -64,6 +64,11 @@ on:
         required: false
         default: "false"
         type: boolean
+      revision-tag:
+        description: "Revision img tag"
+        required: false
+        default: "false"
+        type: boolean
 
 env:
   RELEASE_BRANCH: ${{ inputs.release_branch }}
@@ -72,6 +77,7 @@ env:
   CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
   PRE_RELEASE: ${{ inputs.upload-prerelease }}
+  REVISION-TAG: ${{ inputs.revision-tag }}
 
 jobs:
   prebuild:
@@ -232,7 +238,12 @@ jobs:
             rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
             for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )_$DATE.img.gz; done
           fi
-          sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
+          if [ "$REVISION-TAG" == "true" ]; then for file in compiled_images/*.img.gz; do mv "$file" compiled_images/$(basename "$file" .img.gz)_rev.img.gz; done; fi
+          if wget -q https://github.com/frizkyiman/friWrt-MyWrtBuilder/releases/download/${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/sha256sums; then
+             sha256sum compiled_images/fri_*.img.gz >> compiled_images/sha256sums
+          else
+             sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
+          fi
           ls -l compiled_images
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
