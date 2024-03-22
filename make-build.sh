@@ -64,7 +64,7 @@ PACKAGES+=" luci-theme-rta luci-app-rtaconfig"
 PACKAGES+=" libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ctype php8-mod-fileinfo php8-mod-zip php8-mod-iconv php8-mod-mbstring coreutils-stat zoneinfo-asia"
 
 # CloudFlared Remote
-PACKAGES+=" cloudflared luci-app-cloudflared"
+#PACKAGES+=" cloudflared luci-app-cloudflared"
 
 # Misc and some custom .ipk files
 misc=""
