@@ -53,8 +53,6 @@ all-all https://github.com/rtaserver/RTA-Theme-OpenWrt/releases/download/v1.0.4/
 all-all https://github.com/derisamedia/luci-theme-alpha/releases/download/3.9.4/luci-theme-alpha_3.9.4-beta-9_all.ipk
 all-all https://github.com/derisamedia/luci-theme-alpha/releases/download/3.9.4/luci-app-alpha-config_1.4_all.ipk
 all-all https://github.com/rtaserver/rta-packages/releases/download/latest/luci-app-base64_1.0_all.ipk
-all-all https://github.com/rtaserver/rta-packages/releases/download/latest/luci-app-mikhmon4_1.1_all.ipk
-all-all https://github.com/rtaserver/rta-packages/releases/download/latest/luci-app-mikhmon_1.6_all.ipk
 all-all https://github.com/rtaserver/rta-packages/releases/download/latest/luci-app-netmonitor_1.0_all.ipk
 #
 ################################################################################

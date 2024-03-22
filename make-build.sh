@@ -51,9 +51,6 @@ PACKAGES+=" luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmo
 # Base64 Encode Decode
 PACKAGES+=" luci-app-base64"
 
-# Mikhmon Fammily
-PACKAGES+=" luci-app-mikhmon luci-app-mikhmon4"
-
 # Argon Theme
 PACKAGES+=" luci-theme-argon luci-app-argon-config"
 
