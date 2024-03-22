@@ -91,6 +91,11 @@ on:
         required: false
         default: "false"
         type: boolean
+      revision-tag:
+        description: "Revision img tag"
+        required: false
+        default: "false"
+        type: boolean
 
 env:
   TYPE: AMLOGIC
@@ -100,6 +105,7 @@ env:
   CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
   PRE_RELEASE: ${{ inputs.upload-prerelease }}
+  REVISION-TAG: ${{ inputs.revision-tag }}
 
 jobs:
   Generate:
@@ -316,6 +322,8 @@ jobs:
           cd ${{ env.PACKAGED_OUTPUTPATH }}
           for file in *.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" ).img.gz; done
           for file in *rootfs.tar.gz; do mv "$file" fri_$(basename "$file" .tar.gz)$( echo "_$TUNNEL" ).tar.gz; done
+          if [ "$REVISION-TAG" == "true" ]; then for file in *.img.gz; do mv "$file" $(basename "$file" .img.gz)_rev.img.gz; done; fi
+          if [ "$REVISION-TAG" == "true" ]; then for file in *rootfs.tar.gz; do mv "$file" $(basename "$file" .tar.gz)_rev.tar.gz; done; fi
           if wget -q https://github.com/frizkyiman/friWrt-MyWrtBuilder/releases/download/amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/sha256sums; then
              rm -r *.sha && sha256sum *.gz >> sha256sums
           else
