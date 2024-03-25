@@ -202,8 +202,13 @@ else
   service internet-detector restart
 fi
 
+# configurating neko
+if opkg list-installed | grep luci-app-neko > /dev/null; then
+  chmod +x /etc/neko/core/mihomo
+fi
+
 # adding new line for enable i2c oled display
-if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
+if grep -q "Raspberry Pi 4\|Raspberry Pi 3" /proc/cpuinfo; then
   echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
 fi
 
