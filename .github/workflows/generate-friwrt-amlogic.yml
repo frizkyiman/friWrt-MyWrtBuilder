@@ -179,7 +179,7 @@ jobs:
           elif [ "$TARGET" == "nanopi-r5s" ]; then
             echo "openwrt_board=rk3568" >> $GITHUB_ENV
           fi
-          if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ]; then
+          if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ] || [ "$RELEASE_BRANCH" == "openwrt:23.05.3" ]; then
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
