@@ -72,8 +72,8 @@ else
   uci set wireless.@wifi-device[0].band='2g'
 fi
 uci commit wireless
-wifi reload && wifi up
 if iw dev | grep -q Interface; then
+  wifi reload && wifi up
   if ! grep -q "wifi up" /etc/rc.local; then
     sed -i '/exit 0/i sleep 10 && wifi up' /etc/rc.local
   fi
