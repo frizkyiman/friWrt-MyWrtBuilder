@@ -31,8 +31,12 @@ elif [ "$2" == "neko" ]; then
     PACKAGES+=" $NEKO"
 elif [ "$2" == "passwall" ]; then
     PACKAGES+=" $PASSWALL"
+elif [ "$2" == "openclash-passwall" ]; then
+    PACKAGES+=" $([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4") $PASSWALL"
+elif [ "$2" == "neko-passwall" ]; then
+    PACKAGES+=" $NEKO $PASSWALL"
 elif [ "$2" == "openclash-passwall-neko" ]; then
-    PACKAGES+=" $([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4") $PASSWALL $NEKO"
+    PACKAGES+=" $([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4") $NEKO $PASSWALL"
 fi
 
 # Adguardhome
@@ -63,9 +67,6 @@ PACKAGES+=" luci-theme-rta luci-app-rtaconfig"
 # PHP8
 PACKAGES+=" libc php8 php8-fastcgi php8-fpm php8-mod-session php8-mod-ctype php8-mod-fileinfo php8-mod-zip php8-mod-iconv php8-mod-mbstring coreutils-stat zoneinfo-asia"
 
-# CloudFlared Remote
-#PACKAGES+=" cloudflared luci-app-cloudflared"
-
 # Misc and some custom .ipk files
 misc=""
 if [ "${RELEASE_BRANCH%:*}" == "openwrt" ]; then
@@ -87,9 +88,7 @@ elif [ "$ARCH_2" == "x86_64" ]; then
 fi
 
 if [ "$TYPE" == "AMLOGIC" ]; then
-    misc+=" luci-app-amlogic"
-    PACKAGES+=" ath9k-htc-firmware btrfs-progs hostapd hostapd-utils kmod-ath kmod-ath9k kmod-ath9k-common kmod-ath9k-htc \
-    kmod-cfg80211 kmod-crypto-acompress kmod-crypto-crc32c kmod-crypto-hash kmod-fs-btrfs kmod-mac80211 wireless-tools wpa-cli wpa-supplicant"
+    PACKAGES+=" luci-app-amlogic ath9k-htc-firmware btrfs-progs hostapd hostapd-utils kmod-ath kmod-ath9k kmod-ath9k-common kmod-ath9k-htc kmod-cfg80211 kmod-crypto-acompress kmod-crypto-crc32c kmod-crypto-hash kmod-fs-btrfs kmod-mac80211 wireless-tools wpa-cli wpa-supplicant"
 fi
 
 PACKAGES+=" $misc zram-swap adb parted losetup resize2fs luci luci-ssl block-mount luci-app-poweroff iperf3 luci-app-log luci-app-ramfree htop bash curl wget wget-ssl tar unzip unrar jq luci-app-ttyd nano httping screen"
