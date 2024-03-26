@@ -3,8 +3,7 @@
 echo "Current Path: $PWD"
 echo "Start Neko Core Download !"
 #core download url
-neko_dir="${2:-files/etc/neko}"
-ARCH_1="${3:-$ARCH_1}"
+neko_dir="files/etc/neko"
 
 core_ver="neko"
 url_core="https://github.com/nosignals/neko/releases/download/core_neko"
@@ -42,7 +41,5 @@ if [ -f ${geosite_path} ]; then
     echo "[ `date +%T` ] - GeoSite OK"
 else
     echo "[ `date +%T` ] - Downloading GeoSite"
-    wget -q --no-check-certificate -O ${neko_dir} ${url_geo}/geosite.db
+    wget -q --no-check-certificate -O ${geosite_path} ${url_geo}/geosite.db
 fi
-
-chmod +x $neko_dir/core/mihomo
