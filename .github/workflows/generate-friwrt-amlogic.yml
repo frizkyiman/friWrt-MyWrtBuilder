@@ -325,8 +325,8 @@ jobs:
           cd $WORKING_DIR
           for file in compiled_images/*rootfs.tar.gz; do mv "$file" ${{ env.PACKAGED_OUTPUTPATH }}; done
           cd ${{ env.PACKAGED_OUTPUTPATH }}
-          for file in *.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )$([ "$REVISION_TAG" == "true" ] && echo _rev).img.gz; done
-          for file in *rootfs.tar.gz; do mv "$file" fri_$(basename "$file" .tar.gz)$( echo "_$TUNNEL" )$([ "$REVISION_TAG" == "true" ] && echo _rev).tar.gz; done
+          for file in *.img.gz; do mv "$file" fri_$(basename "$file" .img.gz)$( echo "_$TUNNEL" )${REVISION_TAG:+_rev}.img.gz; done
+          for file in *rootfs.tar.gz; do mv "$file" fri_$(basename "$file" .tar.gz)$( echo "_$TUNNEL" )${REVISION_TAG:+_rev}.tar.gz; done
           if wget -q https://github.com/frizkyiman/friWrt-MyWrtBuilder/releases/download/amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/sha256sums; then
              rm -r *.sha && sha256sum *.gz >> sha256sums
           else
