@@ -80,7 +80,7 @@ env:
   CLEAN: ${{ inputs.clean }}
   TZ: Asia/Jakarta
   PRE_RELEASE: ${{ inputs.upload-prerelease }}
-  REVISION-TAG: ${{ inputs.revision-tag }}
+  REVISION_TAG: ${{ inputs.revision-tag }}
 
 jobs:
   prebuild:
