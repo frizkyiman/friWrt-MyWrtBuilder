@@ -15,7 +15,7 @@ dns:
     - 0.0.0.0
   port: 53
   anonymize_client_ip: false
-  ratelimit: 20
+  ratelimit: 50
   ratelimit_subnet_len_ipv4: 24
   ratelimit_subnet_len_ipv6: 56
   ratelimit_whitelist: []
@@ -28,14 +28,14 @@ dns:
     - 1.1.1.1
     - 208.67.222.222
     - #https://dns.bebasid.com/dns-query
+    - #https://dns.cloudflare.com/dns-query
+    - #https://dns.google/dns-query
   upstream_dns_file: ""
   bootstrap_dns:
     - 8.8.8.8
-    - 8.8.4.4
     - 9.9.9.9
-    - 9.9.9.10
     - 1.1.1.1
-    - 1.0.0.1
+    - 149.112.112.112
   fallback_dns:
     - 149.112.112.112
     - 1.0.0.1
@@ -55,9 +55,9 @@ dns:
   trusted_proxies:
     - 127.0.0.0/8
     - ::1/128
-  cache_size: 33554432
-  cache_ttl_min: 2400
-  cache_ttl_max: 0
+  cache_size: 8388608
+  cache_ttl_min: 3600
+  cache_ttl_max: 86400
   cache_optimistic: true
   bogus_nxdomain: []
   aaaa_disabled: false

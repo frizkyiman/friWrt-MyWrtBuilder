@@ -3,10 +3,11 @@
 exec > /root/setup.log 2>&1
 
 # dont remove!
-echo "Start first boot custom setup!"
-echo "$(date '+%A, %d %B %Y %T')"
-echo "Device Model: $(grep '\"name\":' /etc/board.json | sed 's/ \+/ /g' | awk -F'\"' '{print $4}')"
-echo "Processor: $(grep "model name" /proc/cpuinfo | awk -F ": " '{print $2}' | head -n 1 && grep "Hardware" /proc/cpuinfo | awk -F ": " '{print $2}')"
+echo "Installed Time: $(date '+%A, %d %B %Y %T')"
+echo "###############################################"
+echo "Processor: $(ubus call system board | grep '\"system\"' | sed 's/ \+/ /g' | awk -F'\"' '{print $4}')"
+echo "Device Model: $(ubus call system board | grep '\"model\"' | sed 's/ \+/ /g' | awk -F'\"' '{print $4}')"
+echo "Device Board: $(ubus call system board | grep '\"board_name\"' | sed 's/ \+/ /g' | awk -F'\"' '{print $4}')"
 sed -i "s#_('Firmware Version'),(L.isObject(boardinfo.release)?boardinfo.release.description+' / ':'')+(luciversion||''),#_('Firmware Version'),(L.isObject(boardinfo.release)?boardinfo.release.description+' build by friWrt [Ouc3kNF6]':''),#g" /www/luci-static/resources/view/status/include/10_system.js
 if grep -q "ImmortalWrt" /etc/openwrt_release; then
   sed -i "s/\(DISTRIB_DESCRIPTION='ImmortalWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
@@ -15,6 +16,8 @@ elif grep -q "OpenWrt" /etc/openwrt_release; then
   sed -i "s/\(DISTRIB_DESCRIPTION='OpenWrt [0-9]*\.[0-9]*\.[0-9]*\).*'/\1'/g" /etc/openwrt_release
   echo Branch version: "$(grep 'DISTRIB_DESCRIPTION=' /etc/openwrt_release | awk -F"'" '{print $2}')"
 fi
+echo "Tunnel Installed: $(opkg list-installed | grep -e luci-app-openclash -e luci-app-neko -e luci-app-passwall | awk '{print $1}' | tr '\n' ' ')"
+echo "###############################################"
 
 # Set login root password
 (echo "friwrt"; sleep 1; echo "friwrt") | passwd > /dev/null
@@ -55,23 +58,36 @@ uci -q delete dhcp.lan.ndp
 uci commit dhcp
 
 # configure WLAN
+echo "Setup Wireless if available"
 uci set wireless.@wifi-device[0].disabled='0'
 uci set wireless.@wifi-iface[0].disabled='0'
 uci set wireless.@wifi-iface[0].encryption='psk2'
 uci set wireless.@wifi-iface[0].key='friwrt2023'
 uci set wireless.@wifi-device[0].country='ID'
-if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
+if grep -q "Raspberry Pi 4\|Raspberry Pi 3" /proc/cpuinfo; then
   uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
-  uci set wireless.@wifi-device[0].channel='161'
+  uci set wireless.@wifi-device[0].channel='149'
+  uci set wireless.radio0.htmode='HT40'
+  uci set wireless.radio0.band='5g'
 else
   uci set wireless.@wifi-iface[0].ssid='friWrt_2g'
   uci set wireless.@wifi-device[0].channel='1'
   uci set wireless.@wifi-device[0].band='2g'
 fi
 uci commit wireless
-wifi up >/dev/null 2>&1
-if ! grep -q "wifi up" /etc/rc.local; then
-  sed -i '/exit 0/i wifi up' /etc/rc.local
+wifi reload && wifi up
+if iw dev | grep -q Interface; then
+  if ! grep -q "wifi up" /etc/rc.local; then
+    sed -i '/exit 0/i # remove if you dont use wireless' /etc/rc.local
+    sed -i '/exit 0/i sleep 10 && wifi up' /etc/rc.local
+  fi
+  if ! grep -q "wifi up" /etc/crontabs/root; then
+    echo "# remove if you dont use wireless" >> /etc/crontabs/root
+    echo "0 */12 * * * wifi down && sleep 5 && wifi up" >> /etc/crontabs/root
+    service cron restart
+  fi
+else
+  echo "No wireless device detected."
 fi
 
 # custom repo and Disable opkg signature check
@@ -138,6 +154,7 @@ uci set nlbwmon.@nlbwmon[0].database_directory='/etc/nlbwmon'
 uci set nlbwmon.@nlbwmon[0].commit_interval='3h'
 uci set nlbwmon.@nlbwmon[0].refresh_interval='60s'
 uci commit nlbwmon
+bash /etc/init.d/nlbwmon restart
 
 # setup auto vnstat database backup
 chmod +x /etc/init.d/vnstat_backup
@@ -191,8 +208,13 @@ else
   service internet-detector restart
 fi
 
+# configurating neko
+if opkg list-installed | grep luci-app-neko > /dev/null; then
+  chmod +x /etc/neko/core/mihomo
+fi
+
 # adding new line for enable i2c oled display
-if grep -q "Raspberry Pi 4" /proc/cpuinfo; then
+if grep -q "Raspberry Pi 4\|Raspberry Pi 3" /proc/cpuinfo; then
   echo -e "\ndtparam=i2c1=on\ndtparam=spi=on\ndtparam=i2s=on" >> /boot/config.txt
 fi
 
@@ -200,6 +222,6 @@ fi
 chmod +x /usr/bin/adguardhome
 #bash /usr/bin/adguardhome enable_agh
 
-echo "All first boot setup done!"
+echo "All first boot setup complete!"
 
 exit 0
