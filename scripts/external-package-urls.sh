@@ -9,7 +9,7 @@ files=(
     "libmbim|https://downloads.openwrt.org/releases/23.05.3/packages/$ARCH_3/packages"
     "libqmi|https://downloads.openwrt.org/releases/23.05.3/packages/$ARCH_3/packages"
     #"sms-tool|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/packages"
-    "sms-tool|https://downloads.openwrt.org/releases/23.05.3packages/$ARCH_3/packages"
+    "sms-tool|https://downloads.openwrt.org/releases/23.05.3/packages/$ARCH_3/packages"
 )
 
 for entry in "${files[@]}"; do
