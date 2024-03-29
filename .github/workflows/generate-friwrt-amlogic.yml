@@ -18,7 +18,7 @@ on:
       release_branch:
         description: "Select the release branch:"
         required: true
-        default: "openwrt:23.05.2"
+        default: "openwrt:23.05.3"
         type: choice
         options:
           - openwrt:21.02.7
@@ -26,6 +26,7 @@ on:
           - openwrt:23.05.3
           - immortalwrt:21.02.7
           - immortalwrt:23.05.1
+          - immortalwrt:23.05.2
       target:
         description: "Select device board"
         required: false
@@ -181,15 +182,7 @@ jobs:
           elif [ "$TARGET" == "nanopi-r5s" ]; then
             echo "openwrt_board=rk3568" >> $GITHUB_ENV
           fi
-          if [ "$RELEASE_BRANCH" == "openwrt:23.05.2" ] || [ "$RELEASE_BRANCH" == "openwrt:23.05.3" ]; then
-            echo "PROFILE=generic" >> $GITHUB_ENV
-            echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
-            echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
-            TARGET_NAME="armsr-armv8"
-            echo "ARCH_1=arm64" >> $GITHUB_ENV
-            echo "ARCH_2=aarch64" >> $GITHUB_ENV
-            echo "ARCH_3=aarch64_generic" >> $GITHUB_ENV
-          elif [ "$RELEASE_BRANCH" == "immortalwrt:23.05.1" ]; then
+          if [ "$(echo "${RELEASE_BRANCH#*:}" | cut -d'.' -f1)" == "23" ]; then
             echo "PROFILE=generic" >> $GITHUB_ENV
             echo "TARGET_SYSTEM=armsr/armv8" >> $GITHUB_ENV
             echo "TARGET_NAME=armsr-armv8" >> $GITHUB_ENV
