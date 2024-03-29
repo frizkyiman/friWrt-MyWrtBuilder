@@ -20,6 +20,8 @@ fi
 if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ]; then
     echo "$BRANCH"
     rm files/usr/lib/lua/luci/model/cbi/dockerman/networks.lua
+    rm files/etc/uci-defaults/70-rootpt-resize
+    rm files/etc/uci-defaults/80-rootfs-resize
 elif [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "23" ]; then
     echo "$BRANCH"
 fi
