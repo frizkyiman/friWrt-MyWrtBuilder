@@ -3,6 +3,7 @@
 **Changelog** (30-03-2024):
 - update openwrt to 23.05.3 latest branch,
 - update immortalwrt to 23.05.2 latest branch,
+- wifi on, maybe (?)
 - add Neko and Passwall2 with new tunnel option,
 - update core script back to download latest mihomo meta core,
 - add Base62, Netmonitor packages,
