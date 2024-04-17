@@ -157,6 +157,8 @@ uci commit nlbwmon
 bash /etc/init.d/nlbwmon restart
 
 # setup auto vnstat database backup
+sed -i 's/;DatabaseDir "\/var\/lib\/vnstat"/DatabaseDir "\/etc\/vnstat"/' /etc/vnstat.conf
+mkdir -p /etc/vnstat
 chmod +x /etc/init.d/vnstat_backup
 bash /etc/init.d/vnstat_backup enable
 
