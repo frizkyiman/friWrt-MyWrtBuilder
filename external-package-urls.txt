@@ -39,10 +39,10 @@
 #
 all-all https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk
 all-all https://github.com/4IceG/luci-app-sms-tool-js/releases/download/2.0.20-20240201/luci-app-sms-tool-js_2.0.20-20240201_all.ipk
-all-all https://github.com/4IceG/luci-app-modemband/releases/download/1.0.24-20240201/luci-app-modemband_1.0.24-20240201_all.ipk
-all-all https://github.com/4IceG/luci-app-modemband/releases/download/1.0.24-20240201/modemband_20240130_all.ipk
+all-all https://github.com/4IceG/luci-app-modemband/releases/download/1.0.25-20240330/luci-app-modemband_1.0.25-20240330_all.ipk
+all-all https://github.com/4IceG/luci-app-modemband/releases/download/1.0.25-20240330/modemband_20240330_all.ipk
 all-all https://github.com/4IceG/luci-app-lite-watchdog/releases/download/1.0.15-20240102/luci-app-lite-watchdog_1.0.15-20240102_all.ipk
-all-all https://github.com/4IceG/luci-app-3ginfo-lite/releases/download/1.0.61-20240102/luci-app-3ginfo-lite_1.0.61-20240102_all.ipk
+all-all https://github.com/4IceG/luci-app-3ginfo-lite/releases/download/1.0.65-20240330/luci-app-3ginfo-lite_1.0.65-20240330_all.ipk
 arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
 armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/atinout_0.9.1_aarch64_cortex-a53.ipk
 armv8 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
