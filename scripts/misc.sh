@@ -17,7 +17,7 @@ elif [[ "$BASE" == "immortalwrt" ]]; then
     fi
 fi
 
-if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ]; then
+if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] || [ "$TYPE" == "AMLOGIC" ]; then
     echo "$BRANCH"
     rm files/etc/uci-defaults/70-rootpt-resize
     rm files/etc/uci-defaults/80-rootfs-resize
@@ -25,10 +25,10 @@ elif [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "23" ]; then
     echo "$BRANCH"
 fi
 
-if [ "$TYPE" == "AMLOGIC" ]; then
-   rm files/etc/uci-defaults/70-rootpt-resize
-   rm files/etc/uci-defaults/80-rootfs-resize
-fi
+#if [ "$TYPE" == "AMLOGIC" ]; then
+#   rm files/etc/uci-defaults/70-rootpt-resize
+#   rm files/etc/uci-defaults/80-rootfs-resize
+#fi
 
 if [ "$TARGET" == "Raspberry Pi 4B" ]; then
     rm packages/speedtest-web_1.1.5_x86_64.ipk
