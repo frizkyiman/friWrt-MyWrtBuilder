@@ -19,7 +19,6 @@ fi
 
 if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ]; then
     echo "$BRANCH"
-    rm files/usr/lib/lua/luci/model/cbi/dockerman/networks.lua
     rm files/etc/uci-defaults/70-rootpt-resize
     rm files/etc/uci-defaults/80-rootfs-resize
 elif [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "23" ]; then
@@ -29,6 +28,18 @@ fi
 if [ "$TYPE" == "AMLOGIC" ]; then
    rm files/etc/uci-defaults/70-rootpt-resize
    rm files/etc/uci-defaults/80-rootfs-resize
+fi
+
+if [ "$TARGET" == "Raspberry Pi 4B" ]; then
+    rm packages/speedtest-web_1.1.5_x86_64.ipk
+elif [ "$TARGET" == "x86-64" ]; then
+    rm packages/speedtest-web_1.1.5_aarch64_cortex-a72.ipk
+    rm packages/luci-app-oled_1.0_all.ipk
+else
+    rm packages/speedtest-web_1.1.5_x86_64.ipk
+    rm packages/speedtest-web_1.1.5_aarch64_cortex-a72.ipk
+    rm packages/luci-app-speedtest-web_1.0-1_all.ipk
+    rm packages/luci-app-oled_1.0_all.ipk
 fi
 
 # custom script files urls
