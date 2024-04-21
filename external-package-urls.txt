@@ -61,6 +61,7 @@ all-all https://github.com/rtaserver/rta-packages/releases/download/latest/luci-
 #
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-tinyfm_2.6_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
+all https://github.com/lrdrdn/my-opkg-repo/blob/main/generic/modeminfo_0.3.6-1_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-mmconfig_0.0.5-4_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/internet-detector_1.0-3_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-internet-detector_1.0-1_all.ipk
@@ -80,6 +81,7 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-theme-argon_2.3
 #
 old-21.02 https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-tinyfm_2.5_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1.2-0_all.ipk
+old-21.02 https://github.com/lrdrdn/my-opkg-repo/blob/21.02/generic/modeminfo_0.3.6-1_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-mmconfig_0.0.5-4_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/internet-detector_1.0-3_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-internet-detector_1.0-1_all.ipk
