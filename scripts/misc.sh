@@ -17,18 +17,17 @@ elif [[ "$BASE" == "immortalwrt" ]]; then
     fi
 fi
 
-if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] || [ "$TYPE" == "AMLOGIC" ]; then
-    echo "$BRANCH"
+if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] || [ "$TYPE" == "AMLOGIC" ] || [ "$ROOTFS_SQUASHFS" == "true" ]; then
     rm files/etc/uci-defaults/70-rootpt-resize
     rm files/etc/uci-defaults/80-rootfs-resize
+fi
+
+# add yout custom command for specific target and release branch version here
+if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ]; then
+    echo "$BRANCH"
 elif [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "23" ]; then
     echo "$BRANCH"
 fi
-
-#if [ "$TYPE" == "AMLOGIC" ]; then
-#   rm files/etc/uci-defaults/70-rootpt-resize
-#   rm files/etc/uci-defaults/80-rootfs-resize
-#fi
 
 if [ "$TARGET" == "Raspberry Pi 4B" ]; then
     rm packages/speedtest-web_1.1.5_x86_64.ipk
