@@ -114,7 +114,7 @@ filters:
     name: HaGeZi's Multi PRO
     id: 1702484664
   - enabled: true
-    url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.light.txt
+    url: https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt
     name: HaGeZi's Threat Intelligence Feeds Light
     id: 1702484665
   - enabled: true
