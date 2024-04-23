@@ -59,6 +59,8 @@ all-all https://github.com/rtaserver/rta-packages/releases/download/latest/luci-
 #      Branch version snapshots and 23.05 custom external package urls list    #
 ################################################################################
 #
+all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/internet-detector_1.0-3_all.ipk
+all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-internet-detector_1.0-1_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/modeminfo_0.3.6-1_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-mmconfig_0.0.5-4_all.ipk
@@ -69,6 +71,8 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-ramfree_1.0
 #          Old Branch version 21.02 custom external package urls list          #
 ################################################################################
 #
+old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/internet-detector_1.0-3_all.ipk
+old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-internet-detector_1.0-1_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1.2-0_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/modeminfo_0.3.7-0_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-mmconfig_0.0.5-4_all.ipk
