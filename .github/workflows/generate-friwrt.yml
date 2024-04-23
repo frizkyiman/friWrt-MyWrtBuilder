@@ -45,6 +45,7 @@ on:
           - openclash
           - neko
           - passwall
+          - neko-openclash
           - openclash-passwall
           - neko-passwall
           - openclash-passwall-neko
@@ -94,7 +95,7 @@ jobs:
       - id: set-matrix
         run: |
           if [ "${{ inputs.target }}" == "all" ]; then
-             echo "target=['Raspberry Pi 3B','Raspberry Pi 4B','x86-64']" >> $GITHUB_OUTPUT
+             echo "target=['Raspberry Pi 3B','Raspberry Pi 4B','NanoPi-R2S','x86-64']" >> $GITHUB_OUTPUT
           else
              echo "target=['${{ inputs.target }}']" >> $GITHUB_OUTPUT
           fi
@@ -209,7 +210,7 @@ jobs:
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
               echo "VPN Client: $TUNNEL"
               bash scripts/tunnel_app.sh openclash-passwall-neko
-          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "neko" ]]; then
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "neko" ]]; then
               echo "VPN Client: $TUNNEL"
               bash scripts/tunnel_app.sh "$TUNNEL"
           elif [[ "$TUNNEL" == "all" && "$BRANCH" = "21.02.7" ]]; then 
@@ -220,7 +221,7 @@ jobs:
           fi
           if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall" ]; then bash scripts/clash-core.sh; fi
           if [ "$TUNNEL" = "neko" ] || [ "$TUNNEL" = "neko-passwall" ]; then bash scripts/neko_core.sh; fi
-          if [ "$TUNNEL" = "openclash-passwall-neko" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; bash scripts/neko_core.sh; fi
+          if [ "$TUNNEL" = "openclash-passwall-neko" ] || [ "$TUNNEL" == "neko-openclash" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; bash scripts/neko_core.sh; fi
           ls packages
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
@@ -232,7 +233,7 @@ jobs:
           cd $WORKING_DIR
           mkdir -p compiled_images
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then
-            for t in openclash-passwall neko-passwall openclash-passwall-neko openclash passwall neko no-tunnel; do
+            for t in openclash-passwall neko-passwall neko-openclash openclash-passwall-neko openclash passwall neko no-tunnel; do
               echo "Compiling with VPN Client: $t"
               if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
               time bash make-build.sh $PROFILE $t
@@ -247,7 +248,7 @@ jobs:
               rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
               for file in bin/targets/"$TARGET_SYSTEM"/*-"$TARGET_NAME"-*.img.gz; do mv "$file" compiled_images/fri_$(basename "$file" .img.gz)$( echo "_$t" )_$DATE$([ "$REVISION_TAG" == "true" ] && echo _rev).img.gz; done
             done
-          elif [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "no-tunnel" ]]; then
+          elif [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "no-tunnel" ]]; then
             echo "Compiling with VPN Client: $TUNNEL"
             bash make-build.sh $PROFILE $TUNNEL
             rm -rf bin/targets/"$TARGET_SYSTEM"/*.{json,manifest,bin,*-rootfs*,*factory*,sha256sums}
