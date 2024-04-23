@@ -126,6 +126,17 @@ jobs:
           sudo apt-get -qq update
           sudo apt-get -qq install build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip tar gzip qemu-utils mkisofs
           sudo timedatectl set-timezone "$TZ"
+
+      - name: Checking Tunnel Option
+        id: tunnelopt
+        run: |
+          if [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "${RELEASE_BRANCH#*:}" == "21.02.7" ]]; then
+            echo "Cannot continue the process because the selected tunnel $TUNNEL"
+            echo "only support for newer branch with fw4 firewall!"
+            exit 1
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
           
       - name: Initialization environment (deep)
         id: init
@@ -173,17 +184,6 @@ jobs:
         uses: actions/checkout@v4
         with: 
           path: origin
-
-      - name: Checking Tunnel Option
-        id: tunnelopt
-        run: |
-          if [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" == "21.02.7"; then
-            echo "Cannot continue the process because the selected tunnel $TUNNEL"
-            echo "only support for newer branch with fw4 firewall!"
-            exit 1
-          else
-            echo "status=success" >> $GITHUB_OUTPUT
-          fi
 
       - name: Setup Environment Variables
         if: steps.tunnelopt.outputs.status == 'success' && !cancelled()
