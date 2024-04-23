@@ -81,6 +81,7 @@ on:
           - openclash
           - neko
           - passwall
+          - neko-openclash
           - openclash-passwall
           - neko-passwall
           - openclash-passwall-neko
@@ -173,7 +174,19 @@ jobs:
         with: 
           path: origin
 
+      - name: Checking Tunnel Option
+        id: tunnelopt
+        run: |
+          if [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" == "21.02.7"; then
+            echo "Cannot continue the process because the selected tunnel $TUNNEL"
+            echo "only support for newer branch with fw4 firewall!"
+            exit 1
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup Environment Variables
+        if: steps.tunnelopt.outputs.status == 'success' && !cancelled()
         run: |
           if [ "$TARGET" == "all" ]; then
             echo "openwrt_board=all" >> $GITHUB_ENV
@@ -247,7 +260,7 @@ jobs:
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
               echo "VPN Client: $TUNNEL"
               bash scripts/tunnel_app.sh openclash-passwall-neko
-          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "neko" ]]; then
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "neko" ]]; then
               echo "VPN Client: $TUNNEL"
               bash scripts/tunnel_app.sh "$TUNNEL"
           elif [[ "$TUNNEL" == "all" && "$BRANCH" = "21.02.7" ]]; then 
@@ -258,7 +271,7 @@ jobs:
           fi
           if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall" ]; then bash scripts/clash-core.sh; fi
           if [ "$TUNNEL" = "neko" ] || [ "$TUNNEL" = "neko-passwall" ]; then bash scripts/neko_core.sh; fi
-          if [ "$TUNNEL" = "openclash-passwall-neko" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; bash scripts/neko_core.sh; fi
+          if [ "$TUNNEL" = "openclash-passwall-neko" ] || [ "$TUNNEL" == "neko-openclash" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; bash scripts/neko_core.sh; fi
           ls packages
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
@@ -270,7 +283,7 @@ jobs:
           cd $WORKING_DIR
           mkdir -p compiled_images
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then
-            for t in openclash-passwall neko-passwall openclash-passwall-neko openclash passwall neko no-tunnel; do
+            for t in openclash-passwall neko-passwall neko-openclash openclash-passwall-neko openclash passwall neko no-tunnel; do
               echo "Compiling with VPN Client: $t"
               if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
               time bash make-build.sh $PROFILE $t
@@ -283,7 +296,7 @@ jobs:
               time bash make-build.sh $PROFILE $t
               for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images; done
             done
-          elif [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "no-tunnel" ]]; then
+          elif [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "no-tunnel" ]]; then
             echo "Compiling with VPN Client: $TUNNEL"
             bash make-build.sh $PROFILE $TUNNEL
             for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images; done
@@ -348,7 +361,7 @@ jobs:
           file_glob: true
           file: ${{ env.PACKAGED_OUTPUTPATH }}/*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          tag: amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}-$([ "$REVISION_TAG" == "true" ] && echo _rev)
           release_name: amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
           overwrite: true
           prerelease: ${{ env.PRE_RELEASE }}
