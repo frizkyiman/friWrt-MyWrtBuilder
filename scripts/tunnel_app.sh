@@ -44,6 +44,12 @@ elif [ "$1" == "passwall" ]; then
     wget "${passwall2_file_down}" -nv -P packages
     unzip -qq packages/"$passwall_file" -d packages && rm packages/"$passwall_file"
     rm files/usr/bin/patchoc.sh
+elif [ "$1" == "neko-openclash" ]; then
+    echo "Installing Neko and Openclash"
+    echo "Downloading Neko packages"
+    wget "${neko_file_down}" -nv -P packages
+    echo "Downloading Openclash packages"
+    wget ${openclash_file_down} -nv -P packages
 elif [ "$1" == "openclash-passwall" ]; then
     echo "Installing Openclash and Passwall"
     echo "Downloading Openclash packages"
@@ -80,5 +86,6 @@ fi
 if [ "$?" -ne 0 ]; then
     echo "Error: Download or extraction failed."
     exit 1
+else
+    echo "Download complete."
 fi
-echo "Done!"
