@@ -50,7 +50,7 @@ PACKAGES+=" samba4-server luci-app-samba4 aria2 ariang luci-app-aria2 luci-app-t
 PACKAGES+=" docker docker-compose dockerd luci-app-dockerman"
 
 # Bandwidth And Network Monitoring
-PACKAGES+=" luci-app-internet-detector internet-detector internet-detector-mod-modem-restart nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2 luci-app-netmonitor"
+PACKAGES+=" luci-app-internet-detector internet-detector nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2 luci-app-netmonitor"
 
 # Speedtest
 PACKAGES+=" luci-app-netspeedtest librespeed-go python3-speedtest-cli iperf3"
