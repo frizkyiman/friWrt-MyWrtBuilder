@@ -34,18 +34,14 @@ files=(
 for entry in "${files[@]}"; do
     IFS="|" read -r filename base_url <<< "$entry"
     echo "Processing file: $filename"
-    file_url=$(curl -sL "$base_url" | grep -oE "$filename[0-9a-zA-Z\._~-]*\.ipk")
-    if [ -n "$file_url" ]; then
-        if [[ " ${files[*]} " == *" $filename|"* ]]; then
+    file_urls=$(curl -sL "$base_url" | grep -oE "$filename[0-9a-zA-Z\._~-]*\.ipk")
+    for file_url in $file_urls; do
+        if [[ "$file_url" == "$filename"_* ]]; then
             echo "Downloading $file_url"
             echo "from $base_url/$file_url"
             curl -Lo "packages/$file_url" "$base_url/$file_url"
             echo "Download complete."
-        else
-            echo "File $file_url is not in the allowed list. Skipping this download."
+            break
         fi
-    else
-        echo "Failed to retrieve $filename filename from $base_url. Exiting."
-        exit 1
-    fi
+    done
 done
