@@ -34,7 +34,7 @@ files=(
 for entry in "${files[@]}"; do
     IFS="|" read -r filename base_url <<< "$entry"
     echo "Processing file: $filename"
-    file_url=$(curl -sL "$base_url" | grep -oE "$filename[0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
+    file_url=$(curl -sL "$base_url" | grep -oE "$filename[0-9a-zA-Z\._~-]*\.ipk")
     if [ -n "$file_url" ]; then
         if [[ " ${files[*]} " == *" $filename|"* ]]; then
             echo "Downloading $file_url"
