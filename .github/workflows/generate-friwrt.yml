@@ -111,6 +111,18 @@ jobs:
         target: ${{fromJSON(needs.prebuild.outputs.target)}}
 
     steps:
+      - name: Checking Tunnel Option
+        id: tunnelopt
+        run: |
+          if [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "${RELEASE_BRANCH#*:}" == "21.02.7" ]]; then
+            echo "Cannot continue the process because the selected tunnel [$TUNNEL]"
+            echo "only support for newer branch with fw4 firewall!"
+            exit 1
+          else
+            echo "Selected tunnel option: [$TUNNEL]"
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
+          
       - name: Initialization System Environment
         run: |
           sudo apt-get -qq update
@@ -260,6 +272,7 @@ jobs:
              sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
           fi
           ls -l compiled_images
+          echo "RELEASE_TAG=$PROFILE-$BASE-$BRANCH-$DATEMONTH-$([ "$REVISION_TAG" == "true" ] && echo rev)" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
@@ -267,7 +280,7 @@ jobs:
         if: github.event.inputs.upload-artifacts == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          name: ${{ env.RELEASE_TAG }}
           path: ${{ env.WORKING_DIR }}/compiled_images//*
 
       - name: Add changelog info to new release description
@@ -290,12 +303,12 @@ jobs:
           file_glob: true
           file: ${{ env.WORKING_DIR }}/compiled_images//*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
-          release_name: ${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          tag: ${{ env.RELEASE_TAG }}
+          release_name: ${{ env.RELEASE_TAG }}
           overwrite: true
           prerelease: ${{ env.PRE_RELEASE }}
           body: |
-            ![GitHub Downloads (all assets, specific tag)](https://img.shields.io/github/downloads/frizkyiman/friWrt-MyWrtBuilder/${{ env.PROFILE }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/total?style=for-the-badge&logo=Openwrt)
+            ![GitHub Downloads (all assets, specific tag)](https://img.shields.io/github/downloads/frizkyiman/friWrt-MyWrtBuilder/${{ env.RELEASE_TAG }}/total?style=for-the-badge&logo=Openwrt)
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
             
