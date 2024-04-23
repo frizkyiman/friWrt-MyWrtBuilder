@@ -30,31 +30,19 @@ elif [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "23" ]; then
 fi
 
 if [ "$TARGET" == "Raspberry Pi 4B" ]; then
-    rm packages/speedtest-web_1.1.5_x86_64.ipk
+    echo "$TARGET"
 elif [ "$TARGET" == "x86-64" ]; then
-    rm packages/speedtest-web_1.1.5_aarch64_cortex-a72.ipk
     rm packages/luci-app-oled_1.0_all.ipk
 else
-    rm packages/speedtest-web_1.1.5_x86_64.ipk
-    rm packages/speedtest-web_1.1.5_aarch64_cortex-a72.ipk
-    rm packages/luci-app-speedtest-web_1.0-1_all.ipk
     rm packages/luci-app-oled_1.0_all.ipk
 fi
 
 # custom script files urls
 echo "Downloading custom script" 
-speedtest="https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-$ARCH_2.tgz"
 sync_time="https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/sbin/sync_time.sh"
 clock="https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/usr/bin/clock"
 repair_ro="https://raw.githubusercontent.com/frizkyiman/fix-read-only/main/install2.sh"
 mount_hdd="https://raw.githubusercontent.com/frizkyiman/auto-mount-hdd/main/mount_hdd"
-
-if wget --no-check-certificate -nv -P files "$speedtest"; then
-   tar -zxf files/ookla-speedtest-1.2.0-linux-"$ARCH_2".tgz -C files/usr/bin
-   rm files/ookla-speedtest-1.2.0-linux-"$ARCH_2".tgz && rm files/usr/bin/speedtest.md
-else
-    echo "Failed to download and extract speedtest files!"
-fi
 
 wget --no-check-certificate -nv -P files/sbin "$sync_time"
 wget --no-check-certificate -nv -P files/usr/bin "$clock"
