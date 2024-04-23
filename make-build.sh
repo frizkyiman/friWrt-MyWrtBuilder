@@ -31,6 +31,8 @@ elif [ "$2" == "neko" ]; then
     PACKAGES+=" $NEKO"
 elif [ "$2" == "passwall" ]; then
     PACKAGES+=" $PASSWALL"
+elif [ "$2" == "neko-openclash" ]; then
+    PACKAGES+=" $([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4") $NEKO"
 elif [ "$2" == "openclash-passwall" ]; then
     PACKAGES+=" $([ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] && echo "$OPENCLASH_FW3" || echo "$OPENCLASH_FW4") $PASSWALL"
 elif [ "$2" == "neko-passwall" ]; then
