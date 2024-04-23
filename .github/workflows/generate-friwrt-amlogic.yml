@@ -126,6 +126,7 @@ jobs:
             echo "only support for newer branch with fw4 firewall!"
             exit 1
           else
+            echo "Selected tunnel option: [$TUNNEL]"
             echo "status=success" >> $GITHUB_OUTPUT
           fi
           
@@ -218,7 +219,6 @@ jobs:
           echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
           echo "DATETIME=$(date +'%Y.%m.%d-%H:%M:%S')" >> $GITHUB_ENV
           echo "DATEMONTH=$(date +"%B-%Y" | awk '{print tolower($0)}')" >> $GITHUB_ENV
-          echo "RELEASE_TAG=amlogic-${{ env.openwrt_board }}-${RELEASE_BRANCH%:*}-${RELEASE_BRANCH#*:}-$(date +"%B-%Y" | awk '{print tolower($0)}')-$([ "$REVISION_TAG" == "true" ] && echo rev)" >> $GITHUB_ENV
 
       - name: Download Image Builder
         id: download
@@ -347,6 +347,7 @@ jobs:
         shell: bash
         run: |
           cd $WORKING_DIR
+          echo "RELEASE_TAG=amlogic-${{ env.openwrt_board }}-${RELEASE_BRANCH%:*}-${RELEASE_BRANCH#*:}-$DATEMONTH-$([ "$REVISION_TAG" == "true" ] && echo rev)" >> $GITHUB_ENV
           r=$(awk '/^\*\*Changelog\*\*/ {if(found) exit; found=1} found' changelog_amlogic.md)
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
@@ -362,7 +363,7 @@ jobs:
           file: ${{ env.PACKAGED_OUTPUTPATH }}/*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
           tag: ${{ env.RELEASE_TAG }}
-          release_name: amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          release_name: ${{ env.RELEASE_TAG }}
           overwrite: true
           prerelease: ${{ env.PRE_RELEASE }}
           body: |
