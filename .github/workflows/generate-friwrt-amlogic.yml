@@ -339,7 +339,7 @@ jobs:
              rm -r *.sha && sha256sum *.gz > sha256sums
           fi
           ls -l
-          echo "RELEASE_TAG=amlogic-${{ env.openwrt_board }}-$BASE-$BRANCH-$DATEMONTH-$([ "$REVISION_TAG" == "true" ] && echo rev)" >> $GITHUB_ENV
+          echo "RELEASE_TAG=amlogic-${{ env.openwrt_board }}-$BASE-$BRANCH-$DATEMONTH$([ "$REVISION_TAG" == "true" ] && echo -rev)" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Add changelog info to new release description
