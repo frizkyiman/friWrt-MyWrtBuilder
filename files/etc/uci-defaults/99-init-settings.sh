@@ -35,8 +35,6 @@ uci commit system
 
 # configure wan interface
 echo "Setup WAN and LAN Interface"
-rm /usr/lib/ModemManager/connection.d/10-report-down
-chmod +x /usr/lib/ModemManager/connection.d/10-report-down-and-reconnect
 uci set network.lan.ipaddr="192.168.1.1"
 uci set network.wan=interface 
 uci set network.wan.proto='modemmanager'
