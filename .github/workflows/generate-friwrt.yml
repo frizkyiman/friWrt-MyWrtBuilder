@@ -99,6 +99,16 @@ jobs:
           else
              echo "target=['${{ inputs.target }}']" >> $GITHUB_OUTPUT
           fi
+          
+      - name: Checking Tunnel Option
+        run: |
+          if [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "${RELEASE_BRANCH#*:}" == "21.02.7" ]]; then
+            echo "Cannot continue the process because the selected tunnel [ $TUNNEL ]"
+            echo "only support for newer branch with fw4 firewall!"
+            exit 1
+          else
+            echo "Selected tunnel option: [ $TUNNEL ]"
+          fi
 
   Generate:
     needs: prebuild
@@ -110,19 +120,7 @@ jobs:
       matrix:
         target: ${{fromJSON(needs.prebuild.outputs.target)}}
 
-    steps:
-      - name: Checking Tunnel Option
-        id: tunnelopt
-        run: |
-          if [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "${RELEASE_BRANCH#*:}" == "21.02.7" ]]; then
-            echo "Cannot continue the process because the selected tunnel [$TUNNEL]"
-            echo "only support for newer branch with fw4 firewall!"
-            exit 1
-          else
-            echo "Selected tunnel option: [$TUNNEL]"
-            echo "status=success" >> $GITHUB_OUTPUT
-          fi
-          
+    steps:      
       - name: Initialization System Environment
         run: |
           sudo apt-get -qq update
@@ -272,7 +270,7 @@ jobs:
              sha256sum compiled_images/fri_*.img.gz > compiled_images/sha256sums
           fi
           ls -l compiled_images
-          echo "RELEASE_TAG=$PROFILE-$BASE-$BRANCH-$DATEMONTH-$([ "$REVISION_TAG" == "true" ] && echo rev)" >> $GITHUB_ENV
+          echo "RELEASE_TAG=$PROFILE-$BASE-$BRANCH-$DATEMONTH$([ "$REVISION_TAG" == "true" ] && echo -rev)" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage after compilation: \n$(df -hT ${PWD}) \n"
 
