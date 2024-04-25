@@ -20,6 +20,7 @@ fi
 if [ "$(echo "$BRANCH" | cut -d'.' -f1)" == "21" ] || [ "$TYPE" == "AMLOGIC" ] || [ "$ROOTFS_SQUASHFS" == "true" ]; then
     rm files/etc/uci-defaults/70-rootpt-resize
     rm files/etc/uci-defaults/80-rootfs-resize
+    rm files/etc/sysupgrade.conf
 fi
 
 # add yout custom command for specific target and release branch version here
