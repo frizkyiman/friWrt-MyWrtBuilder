@@ -106,6 +106,7 @@ uninstall_openclash() {
 setup() {
     case "$1" in
         reinstall)
+            uninstall_openclash
             install_openclash
             ;;
         install-core)
