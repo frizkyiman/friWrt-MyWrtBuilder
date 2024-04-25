@@ -165,7 +165,6 @@ sed -i 's/services/nas/g' /usr/lib/lua/luci/controller/aria2.lua 2>/dev/null || 
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-samba4.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-hd-idle.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-disks-info.json
-sed -i 's/services/status/g' /usr/share/luci/menu.d/luci-app-log.json
 sed -i 's/services/modem/g' /usr/share/luci/menu.d/luci-app-lite-watchdog.json
 
 # setup misc settings
@@ -179,7 +178,6 @@ chmod +x /sbin/free.sh
 chmod +x /usr/bin/neofetch
 chmod +x /usr/bin/clock
 chmod +x /usr/bin/mount_hdd
-chmod +x /usr/bin/speedtest
 chmod +x /usr/bin/openclash.sh
 chmod +x /usr/bin/cek_sms.sh
 
