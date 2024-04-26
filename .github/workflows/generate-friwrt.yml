@@ -232,6 +232,7 @@ jobs:
           if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall" ]; then bash scripts/clash-core.sh; fi
           if [ "$TUNNEL" = "neko" ] || [ "$TUNNEL" = "neko-passwall" ]; then bash scripts/neko_core.sh; fi
           if [ "$TUNNEL" = "openclash-passwall-neko" ] || [ "$TUNNEL" == "neko-openclash" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; bash scripts/neko_core.sh; fi
+          echo "Total custom packages: $(ls -1 packages | wc -l)"
           ls packages
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
