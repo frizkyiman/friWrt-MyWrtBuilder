@@ -42,7 +42,7 @@ echo "#"
 for entry in "${files1[@]}"; do
     IFS="|" read -r filename1 base_url <<< "$entry"
     echo "Processing file: $filename1"
-    file_urls=$(curl -sL "$base_url" | grep -oE "${filename1}_[0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
+    file_urls=$(curl -sL "$base_url" | grep -oE "${filename1}_[0-9a-zA-Z\._~-]*\.ipk" | sort -V | tail -n 1)
     for file_url in $file_urls; do
         if [ ! -z "$file_url" ]; then
             echo "Downloading $file_url"
@@ -86,7 +86,7 @@ echo "#"
 for entry in "${files2[@]}"; do
     IFS="|" read -r filename2 base_url <<< "$entry"
     echo "Processing file: $filename2"
-    file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/${filename2}_[_0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
+    file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/${filename2}_[_0-9a-zA-Z\._~-]*\.ipk" | sort -V | tail -n 1)
     for file_url in $file_urls; do
         if [ ! -z "$file_url" ]; then
             echo "Downloading $(basename "$file_url")"
@@ -117,7 +117,7 @@ done
 #)
 #
 #IFS="|" read -r filename1 base_url <<< "$entry"
-#file_urls=$(curl -sL "$base_url" | grep -oE "${filename1}_[0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
+#file_urls=$(curl -sL "$base_url" | grep -oE "${filename1}_[0-9a-zA-Z\._~-]*\.ipk" | sort -V | tail -n 1)
 #echo "file name: $filename1"
 #echo "remote file name: $file_urls"
 #echo "download url: $base_url/$file_urls"
@@ -130,7 +130,7 @@ done
 #)
 #
 #IFS="|" read -r filename2 base_url <<< "$entry"
-#file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/${filename2}_[_0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
+#file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/${filename2}_[_0-9a-zA-Z\._~-]*\.ipk" | sort -V | tail -n 1)
 #echo "file name: $filename2"
 #echo "remote file name: $(basename "$file_urls")"
 #echo "download url: $file_urls"
