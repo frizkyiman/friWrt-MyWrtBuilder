@@ -18,7 +18,7 @@ kmod-usb-uhci kmod-usb2 kmod-usb-ehci kmod-usb-net-ipheth usbmuxd libusbmuxd-uti
 kmod-phy-broadcom kmod-phylib-broadcom kmod-tg3"
 
 # Modem Tools
-PACKAGES+=" luci-app-modeminfo modeminfo atinout luci-app-modemband modemband luci-app-mmconfig sms-tool luci-app-sms-tool-js luci-app-lite-watchdog luci-app-3ginfo-lite picocom minicom"
+PACKAGES+=" modeminfo luci-app-modeminfo atinout modemband luci-app-modemband luci-app-mmconfig sms-tool luci-app-sms-tool-js luci-app-lite-watchdog luci-app-3ginfo-lite picocom minicom"
 
 # Tunnel option
 OPENCLASH_FW3="coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun unzip luci-compat luci luci-base luci-app-openclash"
@@ -52,10 +52,10 @@ PACKAGES+=" samba4-server luci-app-samba4 aria2 ariang luci-app-aria2 luci-app-t
 PACKAGES+=" docker docker-compose dockerd luci-app-dockerman"
 
 # Bandwidth And Network Monitoring
-PACKAGES+=" luci-app-internet-detector internet-detector internet-detector-mod-modem-restart nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2 luci-app-netmonitor"
+PACKAGES+=" internet-detector luci-app-internet-detector internet-detector-mod-modem-restart nlbwmon luci-app-nlbwmon vnstat2 vnstati2 luci-app-vnstat2 luci-app-netmonitor"
 
 # Speedtest
-PACKAGES+=" luci-app-netspeedtest librespeed-go python3-speedtest-cli iperf3"
+PACKAGES+=" librespeed-go python3-speedtest-cli iperf3 luci-app-netspeedtest"
 
 # Base64 Encode Decode
 PACKAGES+=" luci-app-base64"
