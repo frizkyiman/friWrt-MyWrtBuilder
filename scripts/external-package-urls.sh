@@ -3,6 +3,7 @@
 # Put file name and url base.
 
 # Download packages from official snapshots, stable repo's urls and custom repo's.
+{
 files1=(
     #"luci-proto-modemmanager|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/luci"
     #"luci-proto-mbim|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/luci"
@@ -56,27 +57,28 @@ for entry in "${files1[@]}"; do
         fi
     done
 done
-
+}
 
 # Download custom packages from github release api urls
+{
 if [ "$TYPE" == "AMLOGIC" ]; then
     echo "Adding [luci-app-amlogic] from bulider script type."
-    files2+=("luci-app-amlogic|https://api.github.com/repos/ophub/luci-app-amlogic/releases")
+    files2+=("luci-app-amlogic|https://api.github.com/repos/ophub/luci-app-amlogic/releases/latest")
 fi
 
 files2+=(
-    "luci-app-adguardhome|https://api.github.com/repos/kongfl888/luci-app-adguardhome/releases"
-    "luci-app-sms-tool-js|https://api.github.com/repos/4IceG/luci-app-sms-tool-js/releases"
-    "luci-app-modemband|https://api.github.com/repos/4IceG/luci-app-modemband/releases"
-    "modemband|https://api.github.com/repos/4IceG/luci-app-modemband/releases"
-    "luci-app-lite-watchdog|https://api.github.com/repos/4IceG/luci-app-lite-watchdog/releases"
-    "luci-app-3ginfo-lite|https://api.github.com/repos/4IceG/luci-app-3ginfo-lite/releases"
+    "luci-app-adguardhome|https://api.github.com/repos/kongfl888/luci-app-adguardhome/releases/latest"
+    "luci-app-sms-tool-js|https://api.github.com/repos/4IceG/luci-app-sms-tool-js/releases/latest"
+    "luci-app-modemband|https://api.github.com/repos/4IceG/luci-app-modemband/releases/latest"
+    "modemband|https://api.github.com/repos/4IceG/luci-app-modemband/releases/latest"
+    "luci-app-lite-watchdog|https://api.github.com/repos/4IceG/luci-app-lite-watchdog/releases/latest"
+    "luci-app-3ginfo-lite|https://api.github.com/repos/4IceG/luci-app-3ginfo-lite/releases/latest"
     "luci-app-netmonitor|https://api.github.com/repos/rtaserver/rta-packages/releases"
     "luci-app-base64|https://api.github.com/repos/rtaserver/rta-packages/releases"
-    "luci-theme-rta|https://api.github.com/repos/rtaserver/RTA-Theme-OpenWrt/releases"
-    "luci-app-rtaconfig|https://api.github.com/repos/rtaserver/RTA-Theme-OpenWrt/releases"
-    "luci-theme-alpha|https://api.github.com/repos/derisamedia/luci-theme-alpha/releases"
-    "luci-app-alpha-config|https://api.github.com/repos/derisamedia/luci-theme-alpha/releases"
+    "luci-theme-rta|https://api.github.com/repos/rtaserver/RTA-Theme-OpenWrt/releases/latest"
+    "luci-app-rtaconfig|https://api.github.com/repos/rtaserver/RTA-Theme-OpenWrt/releases/latest"
+    "luci-theme-alpha|https://api.github.com/repos/derisamedia/luci-theme-alpha/releases/latest"
+    "luci-app-alpha-config|https://api.github.com/repos/derisamedia/luci-theme-alpha/releases/latest"
 )
 
 echo "#########################################"
@@ -100,7 +102,7 @@ for entry in "${files2[@]}"; do
         fi
     done
 done
-
+}
 
 #################################################################################################################################
 
@@ -110,27 +112,33 @@ done
 # format for github release: "PACKAGE-NAME|https://api.github.com/repos/GITHUBUSER/REPO-NAME/releases"
 
 # official and custom repo
+#{
 #BRANCH="23.05.3"
 #ARCH_3="x86_64"
 #files1=(
 #    "sms-tool|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/packages"
 #)
-#
-#IFS="|" read -r filename1 base_url <<< "$entry"
-#file_urls=$(curl -sL "$base_url" | grep -oE "${filename1}_[0-9a-zA-Z\._~-]*\.ipk" | sort -V | tail -n 1)
-#echo "file name: $filename1"
-#echo "remote file name: $file_urls"
-#echo "download url: $base_url/$file_urls"
+#for entry in "${files2[@]}"; do
+#   IFS="|" read -r filename1 base_url <<< "$entry"
+#   file_urls=$(curl -sL "$base_url" | grep -oE "${filename1}_[0-9a-zA-Z\._~-]*\.ipk" | sort -V | tail -n 1)
+#   echo "file name: $filename1"
+#   echo "remote file name: $file_urls"
+#   echo "download url: $base_url/$file_urls"
+#done
+#}
 
 # github release
+#{
 #BRANCH="23.05.3"
 #ARCH_3="x86_64"
 #files2=(
 #    "luci-app-sms-tool-js|https://api.github.com/repos/4IceG/luci-app-sms-tool-js/releases"
 #)
-#
-#IFS="|" read -r filename2 base_url <<< "$entry"
-#file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/${filename2}_[_0-9a-zA-Z\._~-]*\.ipk" | sort -V | tail -n 1)
-#echo "file name: $filename2"
-#echo "remote file name: $(basename "$file_urls")"
-#echo "download url: $file_urls"
+#for entry in "${files2[@]}"; do
+#   IFS="|" read -r filename2 base_url <<< "$entry"
+#   file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/${filename2}_[_0-9a-zA-Z\._~-]*\.ipk" | sort -V | tail -n 1)
+#   echo "file name: $filename2"
+#   echo "remote file name: $(basename "$file_urls")"
+#   echo "download url: $file_urls"
+#done
+#}
