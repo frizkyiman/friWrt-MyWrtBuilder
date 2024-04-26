@@ -1,8 +1,8 @@
 #!/bin/bash
-# This script for custom download the latest packages version from snapshots/stable repo's url and github release.
+# This script for custom download the latest packages version from snapshots/stable repo's url and github releases.
 # Put file name and url base.
 
-# Download packages from official snapshots and stable repo's urls
+# Download packages from official snapshots, stable repo's urls and custom repo's.
 files=(
     #"luci-proto-modemmanager|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/luci"
     #"luci-proto-mbim|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/luci"
@@ -35,20 +35,24 @@ files=(
     "luci-app-ramfree|https://downloads.staging.immortalwrt.org/snapshots/packages/$ARCH_3/luci"
 )
 
+echo "###########################################################"
+echo "Downloading packages from official repo's and custom repo's"
+echo "###########################################################"
+echo "#"
 for entry in "${files[@]}"; do
-    IFS="|" read -r filename base_url <<< "$entry"
-    echo "Processing file: $filename"
-    file_urls=$(curl -sL "$base_url" | grep -oE "$filename[0-9a-zA-Z\._~-]*\.ipk")
-    for file_url in "$file_urls"; do
-        if [[ "$file_url" == "$filename"_* ]]; then
+    IFS="|" read -r filename1 base_url <<< "$entry"
+    echo "Processing file: $filename1"
+    file_urls=$(curl -sL "$base_url" | grep -oE "${filename1}_[0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
+    for file_url in $file_urls; do
+        if [ ! -z "$file_url" ]; then
             echo "Downloading $file_url"
             echo "from $base_url/$file_url"
             curl -Lo "packages/$file_url" "$base_url/$file_url"
-            echo "[$filename] downloaded successfully!."
-            echo ""
+            echo "Packages [$filename1] downloaded successfully!."
+            echo "#"
             break
         else
-            echo "Failed to retrieve packages [$filename] because it's different from $base_url/$file_url. Retrying before exit..."
+            echo "Failed to retrieve packages [$filename1] because it's different from $base_url/$file_url. Retrying before exit..."
         fi
     done
 done
@@ -75,44 +79,46 @@ files+=(
     "luci-app-alpha-config|https://api.github.com/repos/derisamedia/luci-theme-alpha/releases"
 )
 
+echo "#########################################"
+echo "Downloading packages from github releases"
+echo "#########################################"
+echo "#"
 for entry in "${files[@]}"; do
-    IFS="|" read -r filename base_url <<< "$entry"
-    echo "Processing file: $filename"
-    file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/$filename[0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
-    for file_url in "$file_urls"; do
-        file_name=$(basename "$file_urls")
-        if [[ "$file_name" == "$filename"_* ]]; then
-            echo "Downloading $file_name"
+    IFS="|" read -r filename2 base_url <<< "$entry"
+    echo "Processing file: $filename2"
+    file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/${filename2}_[_0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
+    for file_url in $file_urls; do
+        if [ ! -z "$file_url" ]; then
+            echo "Downloading $(basename "$file_url")"
             echo "from $file_url"
-            curl -Lo "packages/$file_name" "$file_url"
-            echo "[$filename] downloaded successfully!."
-            echo ""
+            curl -Lo "packages/$(basename "$file_url")" "$file_url"
+            echo "Packages [$filename2] downloaded successfully!."
+            echo "#"
             break
         else
-            echo "Failed to retrieve packages [$filename] because it's different from $file_url. Retrying before exit..."
+            echo "Failed to retrieve packages [$filename2] because it's different from $file_url. Retrying before exit..."
         fi
     done
 done
 
 
-==============================================================================================================================================
+#################################################################################################################################
 
 # for testing download url before commiting
 # remove comment# then copy to your terminal for testing it
 # format for offical repo: "PACKAGE-NAME|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/packages"
 # format for github release: "PACKAGE-NAME|https://api.github.com/repos/GITHUBUSER/REPO-NAME/releases"
 
-# official repo
+# official and custom repo
 #BRANCH="23.05.3"
 #ARCH_3="x86_64"
 #files=(
 #    "sms-tool|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/packages"
 #)
 #
-#IFS="|" read -r filename base_url <<< "$entry"
-#file_urls=$(curl -sL "$base_url" | grep -oE "$filename[0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
-#file_name=$(basename "$file_urls")
-#echo "file name: $filename"
+#IFS="|" read -r filename1 base_url <<< "$entry"
+#file_urls=$(curl -sL "$base_url" | grep -oE "${filename1}_[0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
+#echo "file name: $filename1"
 #echo "remote file name: $file_urls"
 #echo "download url: $base_url/$file_urls"
 
@@ -123,9 +129,8 @@ done
 #    "luci-app-sms-tool-js|https://api.github.com/repos/4IceG/luci-app-sms-tool-js/releases"
 #)
 #
-#IFS="|" read -r filename base_url <<< "$entry"
-#file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/$filename[0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
-#file_name=$(basename "$file_urls")
-#echo "file name: $filename"
-#echo "remote file name: $file_name"
+#IFS="|" read -r filename2 base_url <<< "$entry"
+#file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/${filename2}_[_0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
+#echo "file name: $filename2"
+#echo "remote file name: $(basename "$file_urls")"
 #echo "download url: $file_urls"
