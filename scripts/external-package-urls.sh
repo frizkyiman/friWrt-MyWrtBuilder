@@ -3,7 +3,7 @@
 # Put file name and url base.
 
 # Download packages from official snapshots, stable repo's urls and custom repo's.
-files=(
+files1=(
     #"luci-proto-modemmanager|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/luci"
     #"luci-proto-mbim|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/luci"
     #"modemmanager|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/packages"
@@ -39,7 +39,7 @@ echo "###########################################################"
 echo "Downloading packages from official repo's and custom repo's"
 echo "###########################################################"
 echo "#"
-for entry in "${files[@]}"; do
+for entry in "${files1[@]}"; do
     IFS="|" read -r filename1 base_url <<< "$entry"
     echo "Processing file: $filename1"
     file_urls=$(curl -sL "$base_url" | grep -oE "${filename1}_[0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
@@ -61,10 +61,10 @@ done
 # Download custom packages from github release api urls
 if [ "$TYPE" == "AMLOGIC" ]; then
     echo "Adding [luci-app-amlogic] from bulider script type."
-    files+=("luci-app-amlogic|https://api.github.com/repos/ophub/luci-app-amlogic/releases")
+    files2+=("luci-app-amlogic|https://api.github.com/repos/ophub/luci-app-amlogic/releases")
 fi
 
-files+=(
+files2+=(
     "luci-app-adguardhome|https://api.github.com/repos/kongfl888/luci-app-adguardhome/releases"
     "luci-app-sms-tool-js|https://api.github.com/repos/4IceG/luci-app-sms-tool-js/releases"
     "luci-app-modemband|https://api.github.com/repos/4IceG/luci-app-modemband/releases"
@@ -83,7 +83,7 @@ echo "#########################################"
 echo "Downloading packages from github releases"
 echo "#########################################"
 echo "#"
-for entry in "${files[@]}"; do
+for entry in "${files2[@]}"; do
     IFS="|" read -r filename2 base_url <<< "$entry"
     echo "Processing file: $filename2"
     file_urls=$(curl -s "$base_url" | grep "browser_download_url" | grep -oE "https.*/${filename2}_[_0-9a-zA-Z\._~-]*\.ipk" | head -n 1)
@@ -112,7 +112,7 @@ done
 # official and custom repo
 #BRANCH="23.05.3"
 #ARCH_3="x86_64"
-#files=(
+#files1=(
 #    "sms-tool|https://downloads.openwrt.org/snapshots/packages/$ARCH_3/packages"
 #)
 #
@@ -125,7 +125,7 @@ done
 # github release
 #BRANCH="23.05.3"
 #ARCH_3="x86_64"
-#files=(
+#files2=(
 #    "luci-app-sms-tool-js|https://api.github.com/repos/4IceG/luci-app-sms-tool-js/releases"
 #)
 #
