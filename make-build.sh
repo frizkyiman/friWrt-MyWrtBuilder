@@ -46,7 +46,7 @@ PACKAGES+=" luci-app-adguardhome ca-certificates ca-bundle tar unzip bind-tools"
 
 # NAS and Hard disk tools
 PACKAGES+=" luci-app-diskman luci-app-hd-idle luci-app-disks-info smartmontools kmod-usb-storage kmod-usb-storage-uas ntfs-3g"
-PACKAGES+=" samba4-server luci-app-samba4 aria2 ariang luci-app-aria2 luci-app-tinyfilemanager"
+PACKAGES+=" samba4-server luci-app-samba4 aria2 ariang luci-app-aria2 luci-app-tinyfm"
 
 # Docker
 PACKAGES+=" docker docker-compose dockerd luci-app-dockerman"
