@@ -34,6 +34,7 @@ uci add_list system.ntp.server="time.google.com"
 uci commit system
 
 # configure wan interface
+chmod +x /usr/lib/ModemManager/connection.d/10-report-down
 echo "Setup WAN and LAN Interface"
 uci set network.lan.ipaddr="192.168.1.1"
 uci set network.wan=interface 
