@@ -92,7 +92,8 @@ jobs:
     outputs:
       target: ${{ steps.set-matrix.outputs.target }}
     steps:
-      - id: set-matrix
+      - name: Set Matrix Run
+        id: set-matrix
         run: |
           if [ "${{ inputs.target }}" == "all" ]; then
              echo "target=['Raspberry Pi 3B','Raspberry Pi 4B','NanoPi-R2S','x86-64']" >> $GITHUB_OUTPUT
