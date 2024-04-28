@@ -5,17 +5,14 @@
 modem_info=$(mmcli -L | awk -F']' '/Modem/{print $2}' | sed 's/^[ \t]*//')
 modem_id=$(mmcli -L | awk -F'/Modem/' 'NF>1{print $2; exit}' | awk '{print $1}')
 sms_list=$(mmcli -m "$modem_id" --messaging-list-sms)
-sms_ids=$(echo "$sms_list" | awk -F'/SMS/' 'NF>1{print $2}' | awk '{print $1}')
 
 log_file="/root/sms_message.log"
-max_file_size=1000000 # 1 MB
+max_file_size=500000 # 0.5 MB
 
 if [ -z "$modem_id" ]; then
     echo "Error: Modem not found."
     exit 1
-fi
-
-if [ -z "$sms_list" ]; then
+elif [ -z "$sms_list" ]; then
     echo "No SMS messages were found from modem [$modem_info]"
     exit 0
 else
@@ -24,14 +21,12 @@ else
    echo "$sms_list"
 fi
 
-for sms_id in $sms_ids; do
+echo "$sms_list" | while IFS= read -r sms_info; do
+    sms_id=$(echo "$sms_info" | awk -F'/SMS/' 'NF>1{print $2}' | awk '{print $1}')
     message=$(mmcli -m "$modem_id" --sms "$sms_id")
-    echo "$message"
     if [ -n "$message" ]; then
-        temp_file=$(mktemp)
-        echo "$message" > "$temp_file"
-        cat "$log_file" >> "$temp_file"
-        mv "$temp_file" "$log_file"
+        echo "$message" | tee temp_message.log
+        cat "$log_file" >> temp_message.log && mv temp_message.log "$log_file"
     fi
 done
 
