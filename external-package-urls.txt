@@ -37,6 +37,7 @@
 #             All Branch version custom external package urls list             #
 ################################################################################
 #
+all all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/modeminfo_0.3.6-1_all.ipk
 arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
 armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/atinout_0.9.1_aarch64_cortex-a53.ipk
 armv8 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
