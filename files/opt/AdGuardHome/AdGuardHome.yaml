@@ -20,16 +20,16 @@ dns:
   ratelimit_subnet_len_ipv6: 56
   ratelimit_whitelist: []
   refuse_any: true
-  upstream_dns:
+ upstream_dns:
     - '[/pool.ntp.org/]1.1.1.1'
     - '[/id.pool.ntp.org/]8.8.8.8'
     - 8.8.8.8
     - 9.9.9.9
     - 1.1.1.1
     - 208.67.222.222
-    - #https://dns.bebasid.com/dns-query
-    - #https://dns.cloudflare.com/dns-query
-    - #https://dns.google/dns-query
+    - '#https://dns.bebasid.com/dns-query'
+    - '#https://dns.cloudflare.com/dns-query'
+    - '#https://dns.google/dns-query'
   upstream_dns_file: ""
   bootstrap_dns:
     - 8.8.8.8
@@ -41,10 +41,9 @@ dns:
     - 1.0.0.1
     - 8.8.4.4
     - 208.67.220.220
-    - #https://dns.cloudflare.com/dns-query
-    - #https://dns.google/dns-query
-  all_servers: true
-  fastest_addr: false
+    - '#https://dns.cloudflare.com/dns-query'
+    - '#https://dns.google/dns-query'
+  upstream_mode: parallel
   fastest_timeout: 1s
   allowed_clients: []
   disallowed_clients: []
@@ -79,6 +78,8 @@ dns:
   dns64_prefixes: []
   serve_http3: false
   use_http3_upstreams: false
+  serve_plain_dns: true
+  hostsfile_enabled: true
 tls:
   enabled: false
   server_name: ""
@@ -95,12 +96,14 @@ tls:
   private_key_path: ""
   strict_sni_check: false
 querylog:
+  dir_path: ""
   ignored: []
   interval: 720h
   size_memory: 1000
   enabled: true
   file_enabled: true
 statistics:
+  dir_path: ""
   ignored: []
   interval: 720h
   enabled: true
@@ -201,4 +204,4 @@ os:
   group: ""
   user: ""
   rlimit_nofile: 0
-schema_version: 27
+schema_version: 28
