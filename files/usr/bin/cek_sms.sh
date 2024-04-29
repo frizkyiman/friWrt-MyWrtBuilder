@@ -9,26 +9,26 @@ sms_list=$(mmcli -m "$modem_id" --messaging-list-sms)
 log_file="/root/sms_message.log"
 max_file_size=500000 # 0.5 MB
 
-if [ -z "$modem_id" ]; then
+if [ "$(mmcli -L)" == "No modems were found" ]; then
     echo "Error: Modem not found."
     exit 1
-elif [ -z "$sms_list" ]; then
+elif [ "$sms_list" = "No sms messages were found" ]; then
     echo "No SMS messages were found from modem [$modem_info]"
     exit 0
 else
-   echo "SMS received from modem [$modem_info]"
-   echo "SMS Message list:"
-   echo "$sms_list"
-fi
+    echo "SMS received from modem [$modem_info]"
+    echo "SMS Message list:"
+    echo "$sms_list"
 
-echo "$sms_list" | while IFS= read -r sms_info; do
-    sms_id=$(echo "$sms_info" | awk -F'/SMS/' 'NF>1{print $2}' | awk '{print $1}')
-    message=$(mmcli -m "$modem_id" --sms "$sms_id")
-    if [ -n "$message" ]; then
-        echo "$message" | tee temp_message.log
-        cat "$log_file" >> temp_message.log && mv temp_message.log "$log_file"
-    fi
-done
+    echo "$sms_list" | while IFS= read -r sms_info; do
+        sms_id=$(echo "$sms_info" | awk -F'/SMS/' 'NF>1{print $2}' | awk '{print $1}')
+        message=$(mmcli -m "$modem_id" --sms "$sms_id")
+        if [ -n "$message" ]; then
+            echo "$message" | tee temp_message.log
+            cat "$log_file" >> temp_message.log && mv temp_message.log "$log_file"
+        fi
+    done
+fi
 
 file_size=$(stat -c%s "$log_file")
 if [ "$file_size" -gt "$max_file_size" ]; then
