@@ -20,7 +20,7 @@ dns:
   ratelimit_subnet_len_ipv6: 56
   ratelimit_whitelist: []
   refuse_any: true
- upstream_dns:
+  upstream_dns:
     - '[/pool.ntp.org/]1.1.1.1'
     - '[/id.pool.ntp.org/]8.8.8.8'
     - 8.8.8.8
