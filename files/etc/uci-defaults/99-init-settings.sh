@@ -180,6 +180,17 @@ chmod +x /usr/bin/clock
 chmod +x /usr/bin/mount_hdd
 chmod +x /usr/bin/openclash.sh
 chmod +x /usr/bin/cek_sms.sh
+chmod +x /lib/netifd/dhcp-get-server.sh
+chmod +x /lib/netifd/dhcp.script
+chmod +x /lib/netifd/dhcpv6.script
+chmod +x /lib/netifd/ppp6-up
+chmod +x /lib/netifd/ppp-down
+chmod +x /lib/netifd/ppp6-down
+chmod +x /lib/netifd/ppp-up
+chmod +x /lib/netifd/wireless/mac80211.sh
+chmod +x /lib/netifd/proto/dhcp.sh
+chmod +x /lib/nefitd/proto/dhcpv6.sh
+chmod +x /lib/netifd/proto/ppp.sh
 
 # configurating openclash
 if opkg list-installed | grep luci-app-openclash > /dev/null; then
