@@ -209,7 +209,7 @@ detect_mac80211() {
 			set wireless.default_${name}.device=${name}
 			set wireless.default_${name}.network=lan
 			set wireless.default_${name}.mode=ap
-			set wireless.default_${name}.ssid=Friwrt
+			set wireless.default_${name}.ssid=friWrt_2g
 			set wireless.default_${name}.encryption=psk2
                         set wireless.default_${name}.key=friwrt2024
 EOF
