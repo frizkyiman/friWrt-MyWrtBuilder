@@ -51,6 +51,7 @@ amlogic https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-mmconfig_0.0.5-4_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-poweroff_20200726_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-tinyfm_2.6_all.ipk
+all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
 #
 ################################################################################
 #          Old Branch version 21.02 custom external package urls list          #
@@ -59,4 +60,5 @@ all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-tinyfm_2.6_
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-mmconfig_0.0.5-4_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-poweroff_20200726_all.ipk
 old-21.02 https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-tinyfm_2.5_all.ipk
+old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1.2-0_all.ipk
 #
