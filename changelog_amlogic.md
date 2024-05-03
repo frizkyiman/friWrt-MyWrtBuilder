@@ -1,9 +1,10 @@
 # What's New!
 
-**Changelog** (24-04-2024):
+**Changelog** (03-05-2024):
+- add wifi on for HGP, unknown for BH (experimental) [PR#18](https://github.com/frizkyiman/friWrt-MyWrtBuilder/pull/18)
 - add new tunnel option; neko-openclash,
 - update several packages,
-- - add new script cek_sms.sh for modem rakitan,
+- add new script cek_sms.sh for modem rakitan,
 - replace some packages source,
 - fix and tweak some script,
 - update and fix bug on builder script,
