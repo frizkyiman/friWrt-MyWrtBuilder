@@ -61,7 +61,7 @@ echo "Setup Wireless if available"
 uci set wireless.@wifi-device[0].disabled='0'
 uci set wireless.@wifi-iface[0].disabled='0'
 uci set wireless.@wifi-iface[0].encryption='psk2'
-uci set wireless.@wifi-iface[0].key='friwrt2023'
+uci set wireless.@wifi-iface[0].key='friwrt2024'
 uci set wireless.@wifi-device[0].country='ID'
 if grep -q "Raspberry Pi 4\|Raspberry Pi 3" /proc/cpuinfo; then
   uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
@@ -76,14 +76,16 @@ fi
 uci commit wireless
 wifi reload && wifi up
 if iw dev | grep -q Interface; then
-  if ! grep -q "wifi up" /etc/rc.local; then
-    sed -i '/exit 0/i # remove if you dont use wireless' /etc/rc.local
-    sed -i '/exit 0/i sleep 10 && wifi up' /etc/rc.local
-  fi
-  if ! grep -q "wifi up" /etc/crontabs/root; then
-    echo "# remove if you dont use wireless" >> /etc/crontabs/root
-    echo "0 */12 * * * wifi down && sleep 5 && wifi up" >> /etc/crontabs/root
-    service cron restart
+  if grep -q "Raspberry Pi 4\|Raspberry Pi 3" /proc/cpuinfo; then
+    if ! grep -q "wifi up" /etc/rc.local; then
+      sed -i '/exit 0/i # remove if you dont use wireless' /etc/rc.local
+      sed -i '/exit 0/i sleep 10 && wifi up' /etc/rc.local
+    fi
+    if ! grep -q "wifi up" /etc/crontabs/root; then
+      echo "# remove if you dont use wireless" >> /etc/crontabs/root
+      echo "0 */12 * * * wifi down && sleep 5 && wifi up" >> /etc/crontabs/root
+      service cron restart
+    fi
   fi
 else
   echo "No wireless device detected."
