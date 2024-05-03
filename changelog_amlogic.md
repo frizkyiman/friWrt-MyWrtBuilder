@@ -5,6 +5,7 @@
 - add new tunnel option; neko-openclash,
 - update several packages,
 - add new script cek_sms.sh for modem rakitan,
+- add and replace some packagas,
 - replace some packages source,
 - fix and tweak some script,
 - update and fix bug on builder script,
