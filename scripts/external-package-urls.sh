@@ -16,7 +16,6 @@ files1=(
     "modemmanager|https://downloads.openwrt.org/releases/packages-23.05/$ARCH_3/packages"
     "libmbim|https://downloads.openwrt.org/releases/packages-23.05/$ARCH_3/packages"
     "libqmi|https://downloads.openwrt.org/releases/packages-23.05/$ARCH_3/packages"
-    "xmm-modem|https://openwrt.132lan.ru/packages/$(echo "$BRANCH" | cut -d'.' -f1-2)/packages/$ARCH_3/modemfeed"
     #"sms-tool|https://downloads.openwrt.org/releases/packages-23.05/$ARCH_3/packages"
     "luci-app-argon-config|https://fantastic-packages.github.io/packages/releases/$(echo "$BRANCH" | cut -d'.' -f1-2)/packages/$ARCH_3/luci"
     "luci-theme-argon|https://fantastic-packages.github.io/packages/releases/$(echo "$BRANCH" | cut -d'.' -f1-2)/packages/$ARCH_3/luci"
