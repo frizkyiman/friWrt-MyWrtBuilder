@@ -38,6 +38,10 @@ else
     rm packages/luci-app-oled_1.0_all.ipk
 fi
 
+if [ "$TYPE" != "AMLOGIC" ]; then
+    rm -rf files/lib
+fi
+
 # custom script files urls
 echo "Downloading custom script" 
 sync_time="https://raw.githubusercontent.com/frizkyiman/auto-sync-time/main/sbin/sync_time.sh"
