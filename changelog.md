@@ -1,9 +1,10 @@
 # What's New!
 
-**Changelog** (24-04-2024):
+**Changelog** (03-05-2024):
 - add new tunnel option; neko-openclash,
 - add new script cek_sms.sh for modem rakitan,
 - update several packages,
+- add and replace some packagas,
 - replace some packages source,
 - fix and tweak some script,
 - update and fix bug on builder script,
