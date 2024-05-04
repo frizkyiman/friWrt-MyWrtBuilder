@@ -378,7 +378,7 @@ jobs:
             - Default username: root
             - Default password: friwrt
             - Default WIFI name: friWrt_2g | friWrt_5g (if device supported)
-            - Default WIFI password: friwrt2023 (if device supported)
+            - Default WIFI password: friwrt2024 (if device supported)
             
             ### Install to EMMC
             - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
