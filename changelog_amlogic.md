@@ -1,6 +1,6 @@
 # What's New!
 
-**Changelog** (03-05-2024):
+**Changelog** (05-05-2024):
 - add wifi on for HGP, unknown for BH (experimental) [PR#18](https://github.com/frizkyiman/friWrt-MyWrtBuilder/pull/18)
 - add new tunnel option; neko-openclash,
 - update several packages,
