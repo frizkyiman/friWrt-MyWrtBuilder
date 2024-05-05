@@ -34,16 +34,15 @@ uci add_list system.ntp.server="time.google.com"
 uci commit system
 
 # configure wan interface
+chmod +x /usr/lib/ModemManager/connection.d/10-report-down
 echo "Setup WAN and LAN Interface"
-rm /usr/lib/ModemManager/connection.d/10-report-down
-chmod +x /usr/lib/ModemManager/connection.d/10-report-down-and-reconnect
 uci set network.lan.ipaddr="192.168.1.1"
 uci set network.wan=interface 
 uci set network.wan.proto='modemmanager'
 uci set network.wan.device='/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1'
 uci set network.wan.apn='internet'
 uci set network.wan.auth='none'
-uci set network.wan.iptype='ipv4v6'
+uci set network.wan.iptype='ipv4'
 uci set network.tethering=interface
 uci set network.tethering.proto='dhcp'
 uci set network.tethering.device='usb0'
@@ -62,7 +61,7 @@ echo "Setup Wireless if available"
 uci set wireless.@wifi-device[0].disabled='0'
 uci set wireless.@wifi-iface[0].disabled='0'
 uci set wireless.@wifi-iface[0].encryption='psk2'
-uci set wireless.@wifi-iface[0].key='friwrt2023'
+uci set wireless.@wifi-iface[0].key='friwrt2024'
 uci set wireless.@wifi-device[0].country='ID'
 if grep -q "Raspberry Pi 4\|Raspberry Pi 3" /proc/cpuinfo; then
   uci set wireless.@wifi-iface[0].ssid='friWrt_5g'
@@ -77,14 +76,16 @@ fi
 uci commit wireless
 wifi reload && wifi up
 if iw dev | grep -q Interface; then
-  if ! grep -q "wifi up" /etc/rc.local; then
-    sed -i '/exit 0/i # remove if you dont use wireless' /etc/rc.local
-    sed -i '/exit 0/i sleep 10 && wifi up' /etc/rc.local
-  fi
-  if ! grep -q "wifi up" /etc/crontabs/root; then
-    echo "# remove if you dont use wireless" >> /etc/crontabs/root
-    echo "0 */12 * * * wifi down && sleep 5 && wifi up" >> /etc/crontabs/root
-    service cron restart
+  if grep -q "Raspberry Pi 4\|Raspberry Pi 3" /proc/cpuinfo; then
+    if ! grep -q "wifi up" /etc/rc.local; then
+      sed -i '/exit 0/i # remove if you dont use wireless' /etc/rc.local
+      sed -i '/exit 0/i sleep 10 && wifi up' /etc/rc.local
+    fi
+    if ! grep -q "wifi up" /etc/crontabs/root; then
+      echo "# remove if you dont use wireless" >> /etc/crontabs/root
+      echo "0 */12 * * * wifi down && sleep 5 && wifi up" >> /etc/crontabs/root
+      service cron restart
+    fi
   fi
 else
   echo "No wireless device detected."
@@ -157,6 +158,8 @@ uci commit nlbwmon
 bash /etc/init.d/nlbwmon restart
 
 # setup auto vnstat database backup
+sed -i 's/;DatabaseDir "\/var\/lib\/vnstat"/DatabaseDir "\/etc\/vnstat"/' /etc/vnstat.conf
+mkdir -p /etc/vnstat
 chmod +x /etc/init.d/vnstat_backup
 bash /etc/init.d/vnstat_backup enable
 
@@ -164,14 +167,11 @@ bash /etc/init.d/vnstat_backup enable
 sed -i 's/services/nas/g' /usr/lib/lua/luci/controller/aria2.lua 2>/dev/null || sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-aria2.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-samba4.json
 sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-hd-idle.json
-sed -i 's/services/nas/g' /usr/share/luci/menu.d/luci-app-disks-info.json
-sed -i 's/services/status/g' /usr/share/luci/menu.d/luci-app-log.json
 sed -i 's/services/modem/g' /usr/share/luci/menu.d/luci-app-lite-watchdog.json
 
 # setup misc settings
 sed -i 's/\[ -f \/etc\/banner \] && cat \/etc\/banner/#&/' /etc/profile
 sed -i 's/\[ -n "$FAILSAFE" \] && cat \/etc\/banner.failsafe/& || \/usr\/bin\/neofetch/' /etc/profile
-chmod +x /usr/share/3ginfo-lite/modem/413c81d7
 chmod +x /root/fix-tinyfm.sh && bash /root/fix-tinyfm.sh
 chmod +x /root/install2.sh && bash /root/install2.sh
 chmod +x /sbin/sync_time.sh
@@ -179,8 +179,8 @@ chmod +x /sbin/free.sh
 chmod +x /usr/bin/neofetch
 chmod +x /usr/bin/clock
 chmod +x /usr/bin/mount_hdd
-chmod +x /usr/bin/speedtest
 chmod +x /usr/bin/openclash.sh
+chmod +x /usr/bin/cek_sms.sh
 
 # configurating openclash
 if opkg list-installed | grep luci-app-openclash > /dev/null; then

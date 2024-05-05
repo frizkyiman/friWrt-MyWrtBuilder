@@ -81,6 +81,7 @@ on:
           - openclash
           - neko
           - passwall
+          - neko-openclash
           - openclash-passwall
           - neko-passwall
           - openclash-passwall-neko
@@ -117,8 +118,20 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+      - name: Checking Tunnel Option
+        id: tunnelopt
+        run: |
+          if [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "${RELEASE_BRANCH#*:}" == "21.02.7" ]]; then
+            echo "Cannot continue the process because the selected tunnel [$TUNNEL]"
+            echo "only support for newer branch with fw4 firewall!"
+            exit 1
+          else
+            echo "Selected tunnel option: [$TUNNEL]"
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
+          
       - name: Initialization environment (normal)
-        if: github.event.inputs.target != 'all'
+        if: github.event.inputs.target != 'all' && steps.tunnelopt.outputs.status == 'success' && !cancelled()
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
@@ -128,7 +141,7 @@ jobs:
           
       - name: Initialization environment (deep)
         id: init
-        if: github.event.inputs.target == 'all'
+        if: github.event.inputs.target == 'all' && steps.tunnelopt.outputs.status == 'success' && !cancelled()
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
@@ -227,7 +240,6 @@ jobs:
         run: |
           cd $WORKING_DIR
           bash scripts/external-package-urls.sh
-          bash scripts/amlogic_service.sh
           if [[ "$BRANCH" == "21.02.7" ]]; then
              grep -E "^all-all|^old-21.02|^amlogic-$tags|^amlogic" external-package-urls.txt | awk '{print $2}' > output_url.txt
           else
@@ -247,7 +259,7 @@ jobs:
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then 
               echo "VPN Client: $TUNNEL"
               bash scripts/tunnel_app.sh openclash-passwall-neko
-          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "neko" ]]; then
+          elif [[ ("$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "neko" ]]; then
               echo "VPN Client: $TUNNEL"
               bash scripts/tunnel_app.sh "$TUNNEL"
           elif [[ "$TUNNEL" == "all" && "$BRANCH" = "21.02.7" ]]; then 
@@ -258,7 +270,8 @@ jobs:
           fi
           if [ "$TUNNEL" = "openclash" ] || [ "$TUNNEL" = "openclash-passwall" ]; then bash scripts/clash-core.sh; fi
           if [ "$TUNNEL" = "neko" ] || [ "$TUNNEL" = "neko-passwall" ]; then bash scripts/neko_core.sh; fi
-          if [ "$TUNNEL" = "openclash-passwall-neko" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; bash scripts/neko_core.sh; fi
+          if [ "$TUNNEL" = "openclash-passwall-neko" ] || [ "$TUNNEL" == "neko-openclash" ] || [ "$TUNNEL" = "all" ]; then bash scripts/clash-core.sh; bash scripts/neko_core.sh; fi
+          echo "Total custom packages: $(find packages -type f -name "*.ipk" | wc -l)"
           ls packages
           echo "status=success" >> $GITHUB_OUTPUT
           echo -e "Server space usage before starting to compile: \n$(df -hT ${PWD}) \n"
@@ -270,7 +283,7 @@ jobs:
           cd $WORKING_DIR
           mkdir -p compiled_images
           if [[ "$TUNNEL" == "all" && "$BRANCH" != "21.02.7" ]]; then
-            for t in openclash-passwall neko-passwall openclash-passwall-neko openclash passwall neko no-tunnel; do
+            for t in openclash-passwall neko-passwall neko-openclash openclash-passwall-neko openclash passwall neko no-tunnel; do
               echo "Compiling with VPN Client: $t"
               if [ "$CLEAN" == "true" ]; echo "Start 'make clean' before building images."; then make clean; fi
               time bash make-build.sh $PROFILE $t
@@ -283,7 +296,7 @@ jobs:
               time bash make-build.sh $PROFILE $t
               for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images; done
             done
-          elif [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "no-tunnel" ]]; then
+          elif [[ ("$TUNNEL" == "neko" || "$TUNNEL" == "passwall" || "$TUNNEL" == "openclash-passwall" || "$TUNNEL" == "neko-passwall" || "$TUNNEL" == "neko-openclash" || "$TUNNEL" == "openclash-passwall-neko") && "$BRANCH" != "21.02.7" || "$TUNNEL" == "openclash" || "$TUNNEL" == "no-tunnel" ]]; then
             echo "Compiling with VPN Client: $TUNNEL"
             bash make-build.sh $PROFILE $TUNNEL
             for file in bin/targets/"$TARGET_SYSTEM"/*rootfs.tar.gz; do mv "$file" compiled_images; done
@@ -328,12 +341,13 @@ jobs:
           ls -l
           echo "status=success" >> $GITHUB_OUTPUT
 
-      - name: Add changelog info to new release description
+      - name: Add changelog info and set tag name to new release
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         id: changelog
         shell: bash
         run: |
           cd $WORKING_DIR
+          echo "RELEASE_TAG=amlogic-${{ env.openwrt_board }}-$BASE-$BRANCH-$DATEMONTH$([ "$REVISION_TAG" == "true" ] && echo -rev)" >> $GITHUB_ENV
           r=$(awk '/^\*\*Changelog\*\*/ {if(found) exit; found=1} found' changelog_amlogic.md)
           r="${r//'%'/'%25'}"
           r="${r//$'\n'/'%0A'}"
@@ -348,12 +362,12 @@ jobs:
           file_glob: true
           file: ${{ env.PACKAGED_OUTPUTPATH }}/*
           asset_name: ${{ github.event.repository.name }}-${{ github.sha }}
-          tag: amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
-          release_name: amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}
+          tag: ${{ env.RELEASE_TAG }}
+          release_name: ${{ env.RELEASE_TAG }}
           overwrite: true
           prerelease: ${{ env.PRE_RELEASE }}
           body: |
-            ![GitHub Downloads (all assets, specific tag)](https://img.shields.io/github/downloads/frizkyiman/friWrt-MyWrtBuilder/amlogic-${{ env.openwrt_board }}-${{ env.BASE }}-${{ env.BRANCH }}-${{ env.DATEMONTH }}/total?style=for-the-badge&logo=Openwrt)
+            ![GitHub Downloads (all assets, specific tag)](https://img.shields.io/github/downloads/frizkyiman/friWrt-MyWrtBuilder/${{ env.RELEASE_TAG }}/total?style=for-the-badge&logo=Openwrt)
             ### friWrt ${{ env.BASE }}-${{ env.BRANCH }} Image information
             Build date: ${{ env.DATETIME }}
             
@@ -364,7 +378,7 @@ jobs:
             - Default username: root
             - Default password: friwrt
             - Default WIFI name: friWrt_2g | friWrt_5g (if device supported)
-            - Default WIFI password: friwrt2023 (if device supported)
+            - Default WIFI password: friwrt2024 (if device supported)
             
             ### Install to EMMC
             - Login to OpenWrt → System → Amlogic Service → Install OpenWrt

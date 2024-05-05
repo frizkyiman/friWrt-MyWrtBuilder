@@ -37,59 +37,28 @@
 #             All Branch version custom external package urls list             #
 ################################################################################
 #
-all-all https://github.com/kongfl888/luci-app-adguardhome/releases/download/v1.8-20221120/luci-app-adguardhome_1.8-20221120_all.ipk
-all-all https://github.com/4IceG/luci-app-sms-tool-js/releases/download/2.0.20-20240201/luci-app-sms-tool-js_2.0.20-20240201_all.ipk
-all-all https://github.com/4IceG/luci-app-modemband/releases/download/1.0.24-20240201/luci-app-modemband_1.0.24-20240201_all.ipk
-all-all https://github.com/4IceG/luci-app-modemband/releases/download/1.0.24-20240201/modemband_20240130_all.ipk
-all-all https://github.com/4IceG/luci-app-lite-watchdog/releases/download/1.0.15-20240102/luci-app-lite-watchdog_1.0.15-20240102_all.ipk
-all-all https://github.com/4IceG/luci-app-3ginfo-lite/releases/download/1.0.61-20240102/luci-app-3ginfo-lite_1.0.61-20240102_all.ipk
+all-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/modeminfo_0.3.6-1_all.ipk
 arm64 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a72/atinout_0.9.1_aarch64_cortex-a72.ipk
 armv7 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_cortex-a53/atinout_0.9.1_aarch64_cortex-a53.ipk
 armv8 https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
 x86 https://github.com/lrdrdn/my-opkg-repo/raw/main/x86_64/atinout_0.9.1_x86_64.ipk
 amlogic https://github.com/lrdrdn/my-opkg-repo/raw/main/aarch64_generic/atinout_0.9.1_aarch64_generic.ipk
-all-all https://github.com/rtaserver/RTA-Theme-OpenWrt/releases/download/v1.0.4/luci-theme-rta_1.0.4_all.ipk
-all-all https://github.com/rtaserver/RTA-Theme-OpenWrt/releases/download/v1.0.4/luci-app-rtaconfig_1.0.2_all.ipk
-all-all https://github.com/derisamedia/luci-theme-alpha/releases/download/3.9.4/luci-theme-alpha_3.9.4-beta-9_all.ipk
-all-all https://github.com/derisamedia/luci-theme-alpha/releases/download/3.9.4/luci-app-alpha-config_1.4_all.ipk
-all-all https://github.com/rtaserver/rta-packages/releases/download/latest/luci-app-base64_1.0_all.ipk
-all-all https://github.com/rtaserver/rta-packages/releases/download/latest/luci-app-netmonitor_1.0_all.ipk
 #
 ################################################################################
 #      Branch version snapshots and 23.05 custom external package urls list    #
 ################################################################################
 #
+all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-mmconfig_0.0.5-4_all.ipk
+all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-poweroff_20200726_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-tinyfm_2.6_all.ipk
 all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/xmm-modem_0.1.2-0_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-mmconfig_0.0.5-4_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/internet-detector_1.0-3_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-internet-detector_1.0-1_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-diskman_v0.2.13_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-disks-info_0.4-2_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-poweroff_20200726_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-log_0.6-2_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-temp-status_0.3-5_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-cpu-status-mini_0.1-5_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-ramfree_1.0_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-app-argon-config_1.0_all.ipk
-all https://github.com/lrdrdn/my-opkg-repo/raw/main/generic/luci-theme-argon_2.3.1_all.ipk
 #
 ################################################################################
 #          Old Branch version 21.02 custom external package urls list          #
 ################################################################################
 #
+old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-mmconfig_0.0.5-4_all.ipk
+old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-poweroff_20200726_all.ipk
 old-21.02 https://github.com/helmiau/helmiwrt-packages/releases/download/ipk/luci-app-tinyfm_2.5_all.ipk
 old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/xmm-modem_0.1.2-0_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-mmconfig_0.0.5-4_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/internet-detector_1.0-3_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-internet-detector_1.0-1_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-diskman_v0.2.13_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-disks-info_0.4-2_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-poweroff_20200726_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-log_0.6-2_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-temp-status_0.3-5_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-cpu-status-mini_0.1-5_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-ramfree_1.0_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-app-argon-config_1.0_all.ipk
-old-21.02 https://github.com/lrdrdn/my-opkg-repo/raw/21.02/generic/luci-theme-argon_2.3.1_all.ipk
 #

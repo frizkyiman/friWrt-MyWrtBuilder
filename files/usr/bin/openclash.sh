@@ -48,7 +48,7 @@ install_openclash() {
         echo -e "${SUCCESS} The [ $(basename "${openclash_file_down}") ] is downloaded successfully."
         echo -e "${INFO} Start installing [ ${openclash_file} ]"
         [ "$opkg_updated" = false ] && { opkg update || { echo -e "${ERROR} Failed to update opkg!"; exit 1; }; opkg_updated=true; }
-        if opkg install /root/*openclash*.ipk --force-reinstall; then
+        if opkg install /root/*openclash*.ipk; then
             patch_openclash
             [ "${?}" -eq "0" ] && echo -e "${SUCCESS} Openclash successfully installed and patched." || echo -e "${ERROR} Failed to apply patch! Check for errors during patching."
             echo "Installed version: $(opkg list-installed | grep openclash)"
@@ -106,6 +106,7 @@ uninstall_openclash() {
 setup() {
     case "$1" in
         reinstall)
+            uninstall_openclash
             install_openclash
             ;;
         install-core)

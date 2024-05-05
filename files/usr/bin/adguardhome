@@ -92,8 +92,14 @@ install_adguardhome_core() {
     latest_version=$(curl -sSL "$agh_api/latest" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1)
     echo -e "${INFO} Downloading AdGuardHome core..."
     [ ! -d "/opt" ] && mkdir -p /opt
-    if [ -d "/opt/AdGuardHome" ]; then
-      find "/opt/AdGuardHome" -type f ! -name '*.yaml' -exec rm {} \;
+    if [ -e "/opt/AdGuardHome_linux_$ARCH.tar.gz" ] || [ -d "/opt/AdGuardHome" ]; then
+        if [ -e "/opt/AdGuardHome_linux_$ARCH.tar.gz" ]; then
+            echo -e "${INFO} Previous download exists, removing..."
+            rm "/opt/AdGuardHome_linux_$ARCH.tar.gz"
+        fi
+        if [ -d "/opt/AdGuardHome" ]; then
+            find "/opt/AdGuardHome" -type f ! -name '*.yaml' -exec rm {} \;
+        fi
     fi
     if wget -nv "$agh_file_down" -P /opt; then
       echo -e "${INFO} Extracting core..."
