@@ -8,6 +8,7 @@ sms_list=$(mmcli -m "$modem_id" --messaging-list-sms)
 
 log_file="/root/sms_message.log"
 max_file_size=524288 #0.5MB
+[ ! -d "$log_file" ] && touch "$log_file"
 
 if [ "$(mmcli -L)" == "No modems were found" ]; then
     echo "Error: Modem not found."
