@@ -102,6 +102,29 @@ done
 }
 
 #################################################################################################################################
+# Download custom packages from external-package-urls.txt
+
+echo "###################################################"
+echo "Downloading packages from external-package-urls.txt"
+echo "###################################################"
+echo "#"
+[ "$ARCH_1" == "amd64" ] && ARCH_1=x86
+if [[ "$BRANCH" == "21.02.7" ]]; then
+    if [[ "$TYPE" == "AMLOGIC" ]]; then
+      grep -E "^all-all|^old-21.02|^amlogic-21.02|^amlogic" external-package-urls.txt | awk '{print $2}' > output_url.txt
+    else
+      grep -E "^all-all|^old-21.02|^$ARCH_1-21.02|^$ARCH_1" external-package-urls.txt | awk '{print $2}' > output_url.txt
+    fi
+else
+    if [[ "$TYPE" == "AMLOGIC" ]]; then
+      grep -E "^all-all|^all|^amlogic" external-package-urls.txt | grep -vE "^amlogic-21.02" | awk '{print $2}' > output_url.txt
+    else
+      grep -E "^all-all|^all|^$ARCH_1" external-package-urls.txt | grep -vE "^$ARCH_1-21.02" | awk '{print $2}' > output_url.txt
+    fi
+fi
+wget --no-check-certificate -i output_url.txt -nv -P packages
+
+#################################################################################################################################
 
 # for testing download url before commiting
 # remove comment# then copy to your terminal for testing it
