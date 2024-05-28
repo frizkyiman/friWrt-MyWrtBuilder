@@ -240,12 +240,6 @@ jobs:
         run: |
           cd $WORKING_DIR
           bash scripts/external-package-urls.sh
-          if [[ "$BRANCH" == "21.02.7" ]]; then
-             grep -E "^all-all|^old-21.02|^amlogic-$tags|^amlogic" external-package-urls.txt | awk '{print $2}' > output_url.txt
-          else
-             grep -E "^all-all|^all|^amlogic" external-package-urls.txt | grep -vE "^amlogic-21.02" | awk '{print $2}' > output_url.txt
-          fi
-          wget --no-check-certificate -i output_url.txt -nv -P packages
           echo "status=success" >> $GITHUB_OUTPUT
          
       - name: Run Patch and DIY Scripts
